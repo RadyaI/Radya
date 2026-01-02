@@ -30,6 +30,10 @@
     "rehype-highlight": "^7.0.2",
     "sweetalert2": "^11.26.17"
   },
+  "overrides": {
+    "react": "$react",
+    "react-dom": "$react-dom"
+  },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "babel-plugin-react-compiler": "1.0.0",

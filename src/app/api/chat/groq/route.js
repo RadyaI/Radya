@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import Groq from "groq-sdk";
-import { SYSTEM_PROMPT } from "@/components/tools/AiChat/persona"; 
+import { PERSONAS } from "@/components/tools/AiChat/persona"; 
 
 const API_KEY = process.env.NEXT_PUBLIC_GROQ_API_KEY;
 
@@ -10,12 +10,14 @@ export async function POST(req) {
     }
 
     try {
-        const { history } = await req.json();
+        const { history, persona = 'radya' } = await req.json();
 
         const groq = new Groq({ apiKey: API_KEY });
         
+        const systemPrompt = PERSONAS[persona] || PERSONAS['radya'];
+
         const groqMessages = [
-            { role: "system", content: SYSTEM_PROMPT },
+            { role: "system", content: systemPrompt },
             ...history.map(msg => ({ 
                 role: msg.role === "model" ? "assistant" : "user", 
                 content: msg.text 

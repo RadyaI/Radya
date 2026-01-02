@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
-import { SYSTEM_PROMPT } from "@/components/tools/AiChat/persona";
+import { PERSONAS } from "@/components/tools/AiChat/persona";
 
 const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
@@ -10,10 +10,12 @@ export async function POST(req) {
     }
 
     try {
-        const { history } = await req.json();
+        const { history, persona = 'radya' } = await req.json();
 
         const ai = new GoogleGenAI({ apiKey: API_KEY });
         
+        const selectedPersona = PERSONAS[persona] || PERSONAS['radya'];
+
         const chatHistory = history
             .map(msg => `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.text}`)
             .join('\n');
@@ -22,15 +24,17 @@ export async function POST(req) {
             model: "gemini-2.5-flash-lite", 
             contents: `
                 Role & Persona:
-                ${SYSTEM_PROMPT}
+                ${selectedPersona}
 
                 History Percakapan (Jangan lupa konteks ini):
                 ${chatHistory}
                 
-                (Jawablah respon terakhir dari User di atas dengan singkat dan jelas)
+                (Jawablah respon terakhir dari User di atas dengan singkat dan jelas sesuai persona yang ditentukan)
             `,
         });
-        return NextResponse.json({ text: response.text });
+
+
+        return NextResponse.json({ text: response.text }); 
 
     } catch (error) {
         console.error("Gemini API Error:", error);

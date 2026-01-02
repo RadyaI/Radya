@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { X, Send, Bot, Loader2, Sparkles, Zap } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import './custom.css'
 
 export default function Assistant() {
     const [isOpen, setIsOpen] = useState(false);

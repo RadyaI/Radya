@@ -3,16 +3,17 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 // Import icon dari Lucide
-import { 
-  Wrench, 
-  Home, 
-  User, 
-  Globe, 
-  Briefcase, 
-  Mail, 
-  BookOpen 
+import {
+    Wrench,
+    Home,
+    User,
+    Globe,
+    Briefcase,
+    Mail,
+    BookOpen
 } from "lucide-react";
 import Loader from "./loader";
+import Link from "next/link";
 
 export default function Menu({ onLeftSelectChange, onRightSelectChange }) {
 
@@ -38,8 +39,8 @@ export default function Menu({ onLeftSelectChange, onRightSelectChange }) {
     // Helper buat class biar rapi dan aman dari error spasi
     const getBtnClass = (isActive, side) => {
         const base = "group relative w-full h-12 flex flex-col justify-center items-center transition-all duration-300 cursor-pointer";
-        const activeColor = side === 'left' 
-            ? "text-blue-400 border-l-2 border-blue-400 bg-blue-500/10" 
+        const activeColor = side === 'left'
+            ? "text-blue-400 border-l-2 border-blue-400 bg-blue-500/10"
             : "text-purple-400 border-r-2 border-purple-400 bg-purple-500/10";
         const inactiveColor = "text-gray-500 hover:text-gray-200 hover:bg-white/5";
 
@@ -54,7 +55,7 @@ export default function Menu({ onLeftSelectChange, onRightSelectChange }) {
 
                 {/* --- LEFT MENU (Home, About, Blog) --- */}
                 <div className="w-full flex flex-col gap-6 items-center justify-center flex-1 border-b border-white/10">
-                    
+
                     <div className={getBtnClass(leftSelect === "1", 'left')} onClick={() => handleSelect('left', "1")}>
                         <Home className="w-5 h-5 mb-1 group-hover:scale-110 transition-transform" />
                         <span className="text-[10px] font-bold tracking-wider">HOME</span>
@@ -73,9 +74,9 @@ export default function Menu({ onLeftSelectChange, onRightSelectChange }) {
                 </div>
 
                 {/* --- TOOLS BUTTON (Center) --- */}
-                <div
-                    className="relative group my-3 p-3 rounded-xl transition-all duration-300 hover:bg-yellow-500/10 text-gray-700 hover:text-yellow-400 cursor-pointer"
-                    onClick={() => router.push('/tools')}
+                <Link
+                    href="/tools"
+                    className="relative group my-3 p-3 rounded-xl transition-all duration-300 hover:bg-yellow-500/10 text-gray-700 hover:text-yellow-400 cursor-pointer block"
                 >
                     <Wrench className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
 
@@ -86,11 +87,11 @@ export default function Menu({ onLeftSelectChange, onRightSelectChange }) {
                             <div className="absolute top-[-4px] left-1/2 -translate-x-1/2 border-l-4 border-r-4 border-b-4 border-l-transparent border-r-transparent border-b-yellow-500"></div>
                         </div>
                     </div>
-                </div>
+                </Link>
 
                 {/* --- RIGHT MENU (Work, Mail, Guest) --- */}
                 <div className="w-full flex flex-col gap-6 items-center justify-center flex-1 border-t border-white/10">
-                    
+
                     <div className={getBtnClass(rightSelect === "1", 'right')} onClick={() => handleSelect('right', "1")}>
                         <Briefcase className="w-5 h-5 mb-1 group-hover:scale-110 transition-transform" />
                         <span className="text-[10px] font-bold tracking-wider">WORK</span>

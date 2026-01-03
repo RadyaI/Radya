@@ -5,6 +5,7 @@ import { db } from "@/config/firebase";
 import { useRouter } from "next/navigation";
 import 'animate.css';
 import { format } from "date-fns";
+import Link from "next/link";
 
 export default function Blog() {
     const router = useRouter();
@@ -73,7 +74,6 @@ export default function Blog() {
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                // Ambil data dari Firebase, urutkan terbaru
                 const q = query(collection(db, "articles"), orderBy("createdAt", "desc"));
                 const querySnapshot = await getDocs(q);
 
@@ -82,20 +82,18 @@ export default function Blog() {
                     return {
                         id: doc.id,
                         title: data.title,
-                        slug: data.slug, // Penting buat link
+                        slug: data.slug,
                         date: data.createdAt ? format(new Date(data.createdAt.seconds * 1000), "MMM d, yyyy") : "New",
                         read: "5 min read",
-                        link: `/blog/${data.slug}`, // Link internal router
+                        link: `/blog/${data.slug}`,
                         type: "internal",
                         tags: data.tags || ["Article"]
                     };
                 });
 
-                // GABUNG: Firebase di atas, Medium di bawah
                 setBlogs([...firebaseArticles, ...mediumBlogs]);
             } catch (error) {
                 console.error("Gagal ambil blog:", error);
-                // Kalau error, tetep tampilin medium
                 setBlogs(mediumBlogs);
             } finally {
                 setLoading(false);
@@ -116,7 +114,6 @@ export default function Blog() {
 
     return (
         <div className="h-full relative overflow-hidden bg-[#0a0a0a]">
-            {/* STYLE SCROLLBAR LAMA LO PASTIIN ADA DISINI */}
             <style>{`
                 .scroll-left-container { direction: rtl; overflow-y: auto; height: 100%; padding-left: 8px; }
                 .content-fix { direction: ltr; }
@@ -135,7 +132,6 @@ export default function Blog() {
                                 <h3 className="text-2xl font-bold text-white">Archive Logs.</h3>
                             </div>
                         </div>
-                        {/* Hidden button buat masuk admin page (klik pojok kanan atas tulisan Archive) */}
                         <button onClick={() => router.push('/write')} className="opacity-0 hover:opacity-10 w-4 h-4 bg-red-500 rounded-full"></button>
                     </div>
 
@@ -148,10 +144,16 @@ export default function Blog() {
                                 const theme = getTheme(tag);
                                 const isInternal = item.type === "internal";
 
+                                const Component = isInternal ? Link : 'a';
+
+                                const linkProps = isInternal
+                                    ? { href: item.link }
+                                    : { href: item.link, target: "_blank", rel: "noopener noreferrer" };
+
                                 return (
-                                    <div
+                                    <Component
                                         key={idx}
-                                        onClick={() => isInternal ? router.push(item.link) : window.open(item.link, '_blank')}
+                                        {...linkProps}
                                         className="group relative block p-5 rounded-2xl bg-[#111] border border-white/5 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer animate__animated animate__fadeInUp"
                                         style={{ animationDelay: `${idx * 50}ms` }}
                                     >
@@ -161,7 +163,6 @@ export default function Blog() {
                                             <div className={`flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-bold tracking-widest ${theme.bg} ${theme.color} ${theme.border} border`}>
                                                 <Hash className="w-3 h-3" /> {tag}
                                             </div>
-                                            {/* Penanda Internal / External */}
                                             {isInternal ? (
                                                 <div className="bg-purple-500/20 text-purple-400 p-1 rounded-full animate-pulse" title="Radya's Original">
                                                     <Feather className="w-3 h-3" />
@@ -183,7 +184,7 @@ export default function Blog() {
                                                 <Clock className="w-3 h-3" /> <span>{item.read}</span>
                                             </div>
                                         </div>
-                                    </div>
+                                    </Component>
                                 );
                             })}
                         </div>

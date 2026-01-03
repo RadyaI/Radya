@@ -1,6 +1,6 @@
 "use client"
 
-import { ShieldCheck, Binary, Keyboard, ArrowUpRight, Palette, ScanLine, Zap, Gauge } from "lucide-react";
+import { ShieldCheck, Binary, Keyboard, ArrowUpRight, Palette, ScanLine, Zap, Gauge, Pen, LucideKanbanSquareDashed, File, Signature } from "lucide-react";
 import Cursor from "../cursor";
 import Link from "next/link";
 
@@ -76,7 +76,17 @@ export default function ToolsGallery() {
             color: "from-red-600 to-rose-600",
             rotate: "hover:rotate-1",
             delay: "animate-delay-1000"
-        }
+        },
+        {
+            id: 8,
+            title: "SignPDF",
+            desc: "Tanda tangan pdf online, client side 100% aman, tidak tersimpan di server",
+            link: "/signpdf",
+            icon: Signature,
+            color: "from-blue-600 to-pink-600",
+            rotate: "hover:rotate-1",
+            delay: "animate-delay-1000"
+        },
     ];
 
     return (

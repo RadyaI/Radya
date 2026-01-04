@@ -132,7 +132,6 @@ export default function Blog() {
                                 <h3 className="text-2xl font-bold text-white">Archive Logs.</h3>
                             </div>
                         </div>
-                        <button onClick={() => router.push('/write')} className="opacity-0 hover:opacity-10 w-4 h-4 bg-red-500 rounded-full"></button>
                     </div>
 
                     {loading ? (

@@ -110,7 +110,7 @@ export default function SignPdfClient() {
           <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <FileText className="text-blue-600" />
-              <h1 className="font-bold text-lg">SignPDF <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full ml-1">Beta</span></h1>
+              <h1 className="font-bold text-lg">SignPDF <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full ml-1">v1.0</span></h1>
             </div>
 
             {file && (

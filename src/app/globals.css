@@ -60,3 +60,19 @@
   animation: scanline 3s linear infinite;
   background: linear-gradient(to bottom, transparent, #22c55e, transparent);
 }
+
+.scrollbar-pdf::-webkit-scrollbar{
+    width: 5px;
+    height: 5px;
+}
+
+.scrollbar-pdf::-webkit-scrollbar-track{
+  display: none;
+}
+
+.scrollbar-pdf::-webkit-scrollbar-thumb{
+  width: 5px;
+  height: 5px;
+  background-color: #efefef;
+  border-radius: 100px;
+}

@@ -16,6 +16,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
+const version:Number = 1.1;
+
 export default function SignPdfClient() {
   const [file, setFile] = useState<File | null>(null);
   const [numPages, setNumPages] = useState<number>(0);
@@ -110,7 +112,7 @@ export default function SignPdfClient() {
           <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <FileText className="text-blue-600" />
-              <h1 className="font-bold text-lg">SignPDF <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full ml-1">v1.0</span></h1>
+              <h1 className="font-bold text-lg">SignPDF <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full ml-1">v{version}</span></h1>
             </div>
 
             {file && (
@@ -233,8 +235,9 @@ export default function SignPdfClient() {
                 </div>
               </div>
 
-              <div className="flex-1 w-full bg-zinc-200 dark:bg-zinc-800/50 rounded-2xl p-4 lg:p-8 flex justify-center min-h-[600px] overflow-auto">
-                <div className="relative shadow-2xl" ref={pdfWrapperRef}>
+              <div className="scrollbar-pdf flex-1 w-full bg-zinc-200 dark:bg-zinc-800/50 rounded-2xl p-4 lg:p-8 flex min-h-[600px] overflow-auto">
+
+                <div className="relative shadow-2xl m-auto" ref={pdfWrapperRef}>
                   <Document
                     file={file}
                     onLoadSuccess={({ numPages }) => setNumPages(numPages)}

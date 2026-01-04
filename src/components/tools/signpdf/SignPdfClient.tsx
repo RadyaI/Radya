@@ -16,7 +16,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
-const version:Number = 1.1;
+const version:number = 1.1;
 
 export default function SignPdfClient() {
   const [file, setFile] = useState<File | null>(null);

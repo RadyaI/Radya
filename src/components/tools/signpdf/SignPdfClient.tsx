@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import SignatureItem from "./SignatureItem";
 import SignatureModal from "./SignatureModal";
-import { embedSignatureAndSave, SignatureData } from "@/lib/pdfUtils";
+import { embedSignatureAndSave, SignatureData } from "@/lib/signpdf/pdfUtils";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 

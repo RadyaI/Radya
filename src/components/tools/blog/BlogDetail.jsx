@@ -227,7 +227,7 @@ export default function BlogDetail() {
                     {isAdmin && (
                         <div className="p-4 rounded-xl border border-red-500/20 bg-red-500/5 space-y-2">
                             <p className="text-[10px] font-bold text-red-400 uppercase tracking-widest">Admin Zone</p>
-                            <button onClick={() => router.push(`/write?edit=${post.slug}`)} className="w-full flex items-center gap-2 text-xs font-bold text-red-400 hover:text-red-300">
+                            <button onClick={() => router.push(`/blog/write?edit=${post.slug}`)} className="w-full flex items-center gap-2 text-xs font-bold text-red-400 hover:text-red-300">
                                 <Edit className="w-3 h-3" /> Edit Post
                             </button>
                             <button onClick={handleDelete} className="w-full flex items-center gap-2 text-xs font-bold text-red-400 hover:text-red-300">

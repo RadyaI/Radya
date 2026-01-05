@@ -129,7 +129,7 @@ export default function NotFound() {
 
                     <motion.div variants={itemVariants} style={{ translateZ: 100 }} className="flex flex-col sm:flex-row gap-4 mt-10">
                         <button
-                            onClick={() => router.back()} // ✅ Pakai Router Next.js
+                            onClick={() => router.back()}
                             className="group relative px-8 py-3 bg-transparent overflow-hidden rounded-lg"
                         >
                             <div className="absolute inset-0 w-0 bg-cyan-600 transition-all duration-[400ms] ease-out group-hover:w-full"></div>
@@ -139,7 +139,7 @@ export default function NotFound() {
                         </button>
 
                         <Link
-                            href="/" // ✅ Pakai Link Component Next.js
+                            href="/"
                             className="relative group px-8 py-3 bg-white text-black rounded-lg font-bold overflow-hidden"
                         >
                             <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-cyan-400 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>

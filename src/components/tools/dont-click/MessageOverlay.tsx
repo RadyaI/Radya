@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ChaosLevel } from "@/lib/dontClickUtils";
+import { ChaosLevel } from "@/lib/dont-click/dontClickUtils";
 
 interface MessageOverlayProps {
   message: string | null;

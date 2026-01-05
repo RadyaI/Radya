@@ -9,7 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${baseUrl}/signpdf`,
+      url: `${baseUrl}/tools/signpdf`,
       lastModified: new Date(),
       priority: 0.9,
     },

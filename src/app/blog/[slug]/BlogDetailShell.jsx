@@ -10,27 +10,15 @@ import Swal from 'sweetalert2';
 import 'animate.css';
 
 import hljs from 'highlight.js';
-import 'highlight.js/styles/atom-one-dark.css'; 
+import 'highlight.js/styles/atom-one-dark.css';
 import { useRouter } from "next/navigation";
 
-export default function BlogDetail({ initialPost }) {
+export default function BlogDetail({ post, children }) {
     const router = useRouter();
-    const [post, setPost] = useState(initialPost);
     const [isDark, setIsDark] = useState(true);
     const [isAdmin, setIsAdmin] = useState(false);
     const [scrollProgress, setScrollProgress] = useState(0);
     const contentRef = useRef(null);
-
-    const processContent = (content) => {
-        if (!content) return "";
-
-        const codeBlockRegex = /```(\w+)?\s*([\s\S]*?)\s*```/g;
-
-        return content.replace(codeBlockRegex, (match, lang, code) => {
-            const language = lang || 'plaintext';
-            return `<pre><code class="language-${language}">${code.trim()}</code></pre>`;
-        });
-    };
 
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
@@ -53,10 +41,10 @@ export default function BlogDetail({ initialPost }) {
                 button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
 
                 button.addEventListener('click', async () => {
-                    const code = block.innerText; 
+                    const code = block.innerText;
                     await navigator.clipboard.writeText(code);
                     toast.success("Code copied! 📋", { style: { background: '#333', color: '#fff' } });
-                    
+
                     button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
                     setTimeout(() => {
                         button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
@@ -67,7 +55,7 @@ export default function BlogDetail({ initialPost }) {
                 pre.appendChild(button);
             });
         }
-    }, [post?.content]); 
+    }, [post?.content]);
 
     const handleScroll = () => {
         if (contentRef.current) {
@@ -98,8 +86,6 @@ export default function BlogDetail({ initialPost }) {
     };
 
     if (!post) return null;
-
-    const finalHtml = processContent(post.content);
 
     return (
         <div className={`h-screen w-full fixed inset-0 z-50 overflow-hidden font-sans flex flex-col transition-colors duration-300 ${isDark ? 'bg-[#050505] text-gray-200' : 'bg-gray-50 text-gray-800'}`}>
@@ -224,7 +210,7 @@ export default function BlogDetail({ initialPost }) {
                             <div className="flex flex-wrap gap-2 mb-6">
                                 {post.tags && post.tags.map((tag, i) => (
                                     <span key={i} className={`px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase border ${isDark ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-100 text-blue-700 border-blue-200'}`}>
-                                            #{tag}
+                                        #{tag}
                                     </span>
                                 ))}
                             </div>
@@ -239,7 +225,11 @@ export default function BlogDetail({ initialPost }) {
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Calendar className="w-4 h-4" />
-                                    <span>{post.createdAt?.seconds ? format(new Date(post.createdAt.seconds * 1000), "MMM d, yyyy") : "Draft"}</span>
+                                    <span>
+                                        {post.createdAt
+                                            ? format(new Date(post.createdAt), "MMM d, yyyy")
+                                            : "Draft"}
+                                    </span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Clock className="w-4 h-4" />
@@ -250,10 +240,7 @@ export default function BlogDetail({ initialPost }) {
 
                         <hr className={`my-10 border-dashed ${isDark ? 'border-white/10' : 'border-black/10'}`} />
 
-                        <div
-                            className="article-content"
-                            dangerouslySetInnerHTML={{ __html: finalHtml }}
-                        />
+                        {children}
 
                         <div className={`mt-20 p-8 rounded-2xl text-center border ${isDark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'}`}>
                             <p className="text-lg font-bold mb-2">Thanks for reading!</p>
@@ -287,8 +274,8 @@ export default function BlogDetail({ initialPost }) {
                                 {post.tags && post.tags.length > 0 ? (
                                     post.tags.map((t, i) => (
                                         <span key={i} className={`text-xs px-2 py-1 rounded cursor-default border transition-colors ${isDark
-                                                ? 'bg-blue-500/10 text-blue-400 border-blue-500/20 hover:bg-blue-500/20'
-                                                : 'bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-200'
+                                            ? 'bg-blue-500/10 text-blue-400 border-blue-500/20 hover:bg-blue-500/20'
+                                            : 'bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-200'
                                             }`}>
                                             #{t}
                                         </span>

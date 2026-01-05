@@ -1,6 +1,6 @@
 "use client"
 
-import { ShieldCheck, Binary, Keyboard, ArrowUpRight, Palette, ScanLine, Zap, Gauge, Pen, LucideKanbanSquareDashed, File, Signature } from "lucide-react";
+import { ShieldCheck, Binary, Keyboard, ArrowUpRight, Palette, ScanLine, Zap, Gauge, Pen, LucideKanbanSquareDashed, File, Signature, AlertTriangle, Rocket } from "lucide-react";
 import Cursor from "../cursor";
 import Link from "next/link";
 
@@ -87,11 +87,31 @@ export default function ToolsGallery() {
             rotate: "hover:rotate-1",
             delay: "animate-delay-1000"
         },
+        {
+            id: 9,
+            title: "Don't Click",
+            desc: "Ada tombol jangan diklik (klik aja gapapa).",
+            link: "/dont-click",
+            icon: AlertTriangle,
+            color: "from-neutral-800 to-red-600",
+            rotate: "hover:-rotate-2",
+            delay: "animate-delay-1100"
+        },
+        {
+            id: 10,
+            title: "Gravity Playground",
+            desc: "Simulasi icon. Kamu bisa Drag, lempar, dan matiin gravitasinya.",
+            link: "/gravity",
+            icon: Rocket,
+            color: "from-indigo-500 to-violet-600",
+            rotate: "hover:rotate-2",
+            delay: "animate-delay-1200"
+        }
     ];
 
     return (
         <>
-            <Cursor/>
+            <Cursor />
             <div className="min-h-screen w-full bg-[#050505] text-white relative overflow-hidden font-sans selection:bg-white/20">
 
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>

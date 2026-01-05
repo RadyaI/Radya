@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react";
-import { collection, query, where, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 import { auth, db } from "../../../config/firebase";
 import { ArrowLeft, Calendar, User, Moon, Sun, Edit, Trash2, Share2, Loader2, Hash, Clock } from "lucide-react";
 import { format } from "date-fns";
@@ -11,13 +11,11 @@ import 'animate.css';
 
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css'; 
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-export default function BlogDetail() {
-    const { slug } = useParams();
+export default function BlogDetail({ initialPost }) {
     const router = useRouter();
-    const [post, setPost] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [post, setPost] = useState(initialPost);
     const [isDark, setIsDark] = useState(true);
     const [isAdmin, setIsAdmin] = useState(false);
     const [scrollProgress, setScrollProgress] = useState(0);
@@ -35,30 +33,10 @@ export default function BlogDetail() {
     };
 
     useEffect(() => {
-        const fetchPost = async () => {
-            try {
-                const q = query(collection(db, "articles"), where("slug", "==", slug));
-                const querySnapshot = await getDocs(q);
-                if (!querySnapshot.empty) {
-                    const docData = querySnapshot.docs[0];
-                    setPost({ id: docData.id, ...docData.data() });
-                } else {
-                    toast.error("Artikel 404 Not Found 🤖");
-                    router.push("/");
-                }
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         auth.onAuthStateChanged((user) => {
             if (user?.email === "radyaiftikhar@gmail.com") setIsAdmin(true);
         });
-
-        fetchPost();
-    }, [slug, router]);
+    }, []);
 
     useEffect(() => {
         if (post?.content && contentRef.current) {
@@ -119,13 +97,6 @@ export default function BlogDetail() {
         })
     };
 
-    if (loading) return (
-        <div className={`h-screen w-full flex flex-col items-center justify-center ${isDark ? 'bg-[#050505]' : 'bg-gray-50'}`}>
-            <Loader2 className={`w-10 h-10 animate-spin ${isDark ? 'text-blue-500' : 'text-black'}`} />
-            <p className="mt-4 font-mono text-sm opacity-50">Fetching Data...</p>
-        </div>
-    );
-
     if (!post) return null;
 
     const finalHtml = processContent(post.content);
@@ -149,7 +120,6 @@ export default function BlogDetail() {
                 .custom-scroll::-webkit-scrollbar-thumb { background: ${isDark ? '#333' : '#ccc'}; border-radius: 10px; }
                 .custom-scroll::-webkit-scrollbar-thumb:hover { background: ${isDark ? '#555' : '#999'}; }
 
-                /* TYPOGRAPHY OVERRIDES UNTUK HTML DARI DB */
                 .article-content h1 { font-size: 2.25rem; font-weight: 800; margin-top: 2rem; margin-bottom: 1rem; line-height: 1.2; letter-spacing: -0.02em; }
                 .article-content h2 { font-size: 1.75rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; letter-spacing: -0.01em; color: ${isDark ? '#fff' : '#111'}; }
                 .article-content h3 { font-size: 1.5rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
@@ -160,7 +130,6 @@ export default function BlogDetail() {
                 .article-content ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1.5rem; }
                 .article-content blockquote { border-left: 4px solid #3b82f6; padding-left: 1.5rem; font-style: italic; background: ${isDark ? '#1a1a1a' : '#f3f4f6'}; padding: 1rem; border-radius: 0 8px 8px 0; margin-bottom: 1.5rem; }
                 
-                /* CODE BLOCK STYLING */
                 .article-content pre { 
                     background: #1e1e1e !important; 
                     color: #abb2bf;
@@ -177,7 +146,6 @@ export default function BlogDetail() {
                     font-size: 0.9em; 
                 }
 
-                /* Highlight.js conflict fix */
                 .article-content :not(pre) > code {
                     background: ${isDark ? '#334155' : '#e2e8f0'};
                     color: ${isDark ? '#e2e8f0' : '#0f172a'};
@@ -256,7 +224,7 @@ export default function BlogDetail() {
                             <div className="flex flex-wrap gap-2 mb-6">
                                 {post.tags && post.tags.map((tag, i) => (
                                     <span key={i} className={`px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase border ${isDark ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-100 text-blue-700 border-blue-200'}`}>
-                                        #{tag}
+                                            #{tag}
                                     </span>
                                 ))}
                             </div>

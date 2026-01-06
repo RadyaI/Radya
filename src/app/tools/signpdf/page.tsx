@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import PdfLoader from '@/components/tools/signpdf/PdfLoader';
 
-const baseUrl = 'https://radya.vercel.app';
+const baseUrl = 'https://radya.my.id';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Tanda Tangan PDF Gratis & Aman',
     description: 'Edit dan tanda tangan dokumen PDF langsung di browser kamu. Privasi 100% terjaga.',
-    url: '/signpdf',
+    url: '/tools/signpdf',
     siteName: 'Radya Personal Web',
     locale: 'id_ID',
     type: 'website',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     images: ['/SignPdf.svg'],
   },
   alternates: {
-    canonical: '/signpdf', 
+    canonical: '/tools/signpdf', 
   },
   robots: {
     index: true,

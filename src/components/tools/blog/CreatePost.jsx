@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import { collection, addDoc, updateDoc, doc, serverTimestamp, getDocs, query, where } from "firebase/firestore";
-import { auth, db } from "../../../config/firebase";
+import { auth, db } from "../../../lib/firebase";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Save, ArrowLeft, PenTool, Loader2 } from "lucide-react";
 import toast, { Toaster } from 'react-hot-toast';

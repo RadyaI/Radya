@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ChaosLevel } from "@/lib/dont-click/dontClickUtils";
+import { ChaosLevel } from "@/utils/dont-click/dontClickUtils";
 
 interface ButtonCoreProps {
   clickCount: number;

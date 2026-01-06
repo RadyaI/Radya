@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { deleteDoc, doc } from "firebase/firestore";
-import { auth, db } from "../../../config/firebase";
+import { auth, db } from "../../../lib/firebase";
 import { ArrowLeft, Calendar, User, Moon, Sun, Edit, Trash2, Share2, Loader2, Hash, Clock } from "lucide-react";
 import { format } from "date-fns";
 import toast, { Toaster } from 'react-hot-toast';

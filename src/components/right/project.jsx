@@ -11,7 +11,7 @@ export default function Project() {
             desc: "Yes, this is the website you are currently viewing.",
             tech: "React",
             color: "#61DAFB",
-            live_link: "https://radya.vercel.app",
+            live_link: "https://radya.my.id",
             repo_link: "https://github.com/RadyaI/portfolio-web",
             tag: ["React", "Firebase", "Tailwind"],
         },
@@ -27,16 +27,26 @@ export default function Project() {
         },
         {
             no: 3,
-            title: "Student API",
-            desc: "REST API providing CRUD operations for student entity. Built for learning purposes.",
-            tech: "Javascript",
-            color: "#F7DF1E",
-            live_link: "https://radya-api.vercel.app/student",
-            repo_link: "https://github.com/RadyaI/student-api-fastify",
-            tag: ["Fastify", "api"],
+            title: "SignPdf",
+            desc: "online pdf signature, client side 100% secure, not stored.",
+            tech: "Nextjs",
+            color: "#0070F3",
+            live_link: "/tools/signpdf",
+            repo_link: "-",
+            tag: ["pdf-lib-plus-encrypt", "react-signature-canvas", "Nextjs"]
         },
         {
             no: 4,
+            title: "Speed Typer",
+            desc: "Finger speed test. Stop-on-error mode & dynamic word bank (ID/EN).",
+            tech: "Nextjs",
+            color: "#0070F3",
+            live_link: "/tools/speedtyper",
+            repo_link: "-",
+            tag: ["Typing Test", "Word per Minute", "Nextjs"]
+        },
+        {
+            no: 5,
             title: "Send Email API",
             desc: "API service to send emails efficiently using MailerSend.",
             tech: "Typescript",
@@ -46,17 +56,17 @@ export default function Project() {
             tag: ["Fastify", "Typescript", "api"],
         },
         {
-            no: 5,
-            title: "CryptoJS Demo",
-            desc: "Encryption & Decryption playground/demo using CryptoJS library.",
+            no: 6,
+            title: "CryptoLab",
+            desc: "Encryption & Decryption playground/demo.",
             tech: "Javascript",
             color: "#F7DF1E",
-            live_link: "https://demo-enkripsi.radya.fun",
+            live_link: "/tools/cryptolab",
             repo_link: "https://github.com/RadyaI/encryption-decryption",
-            tag: ["Vue", "Crypto-Js", "JS"],
+            tag: ["Base64", "URL Encoder", "JWT Debugger", "Hashing", "Classic Cipher"],
         },
         {
-            no: 6,
+            no: 7,
             title: "Cara Bertanya",
             desc: "Don't ask to ask! A guide on how to ask programming questions properly.",
             tech: "React",
@@ -66,7 +76,7 @@ export default function Project() {
             tag: ["Javascript", "Tailwind", "Guide"],
         },
         {
-            no: 7,
+            no: 8,
             title: "Online Polling",
             desc: "Real-time polling app. Create polls, invite friends, vote instantly.",
             tech: "React",
@@ -76,7 +86,7 @@ export default function Project() {
             tag: ["React", "Firebase"],
         },
         {
-            no: 8,
+            no: 9,
             title: "Uareshort",
             desc: "Efficient URL shortener with analytics tracking. Built with Prisma & MySQL.",
             tech: "Typescript",
@@ -86,23 +96,13 @@ export default function Project() {
             tag: ["Express", "TS", "MySQL"],
         },
         {
-            no: 9,
+            no: 10,
             title: "YourList API",
             desc: "TodoList API with auth & task categorization.",
             tech: "Typescript",
             color: "#3b82f6",
             live_link: "-",
             repo_link: "https://github.com/RadyaI/yourlist-api",
-            tag: ["Express", "TS", "MySQL"],
-        },
-        {
-            no: 10,
-            title: "User Analytics API",
-            desc: "API for managing user data and tracking engagement activities.",
-            tech: "Typescript",
-            color: "#3b82f6",
-            live_link: "-",
-            repo_link: "https://github.com/RadyaI/user-analytics-api",
             tag: ["Express", "TS", "MySQL"],
         },
     ]);
@@ -169,15 +169,17 @@ export default function Project() {
                                 </div>
 
                                 <div className="flex gap-3 pl-4 pt-4 border-t border-white/5">
-                                    <a 
-                                        href={item.repo_link} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        className="flex items-center gap-2 px-4 py-2 text-xs font-bold bg-[#1a1a1a] hover:bg-[#222] border border-white/10 rounded-lg text-gray-300 hover:text-white transition"
-                                    >
-                                        <Github className="w-3 h-3" />
-                                        <span>Code</span>
-                                    </a>
+                                    {item.repo_link !== "-" && (
+                                        <a 
+                                            href={item.repo_link} 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-2 px-4 py-2 text-xs font-bold bg-[#1a1a1a] hover:bg-[#222] border border-white/10 rounded-lg text-gray-300 hover:text-white transition"
+                                        >
+                                            <Github className="w-3 h-3" />
+                                            <span>Code</span>
+                                        </a>
+                                    )}
 
                                     {item.live_link !== "-" && (
                                         <a 

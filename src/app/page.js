@@ -1,7 +1,7 @@
 import Assistant from "@/components/tools/AiChat/Assistant"
 import Dashboard from "../components/dashboard"
 
-const baseUrl = 'https://radya.vercel.app';
+const baseUrl = 'https://radya.my.id';
 
 export const metadata = {
   metadataBase: new URL(baseUrl),

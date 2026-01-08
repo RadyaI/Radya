@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     title: "Don't Click The Button",
     description:
       "A harmless button. Or is it? A fun interactive experiment on the web.",
-    url: "https://radya.vercel.app/dont-click",
+    url: "https://radya.my.id/tools/dont-click",
     siteName: "Radya Personal Web",
     type: "website",
   },

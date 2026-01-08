@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import CryptoJS from 'crypto-js';
-import { db } from "../../config/firebase";
+import { db } from "../../lib/firebase";
 import {
     collection,
     addDoc,

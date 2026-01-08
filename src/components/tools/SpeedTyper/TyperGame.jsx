@@ -56,9 +56,18 @@ export default function TyperGame() {
         if (gameState === "finished") return;
 
         const val = e.target.value;
+        const now = Date.now();
+
+        let currentStartTime = startTime;
 
         if (gameState === "idle") {
-            startGame();
+            setGameState("playing");
+            currentStartTime = now;
+            setStartTime(now);      
+
+            timerRef.current = setInterval(() => {
+                calculateWPM(); 
+            }, 500);
         }
 
         if (val.length < userInput.length) {
@@ -72,6 +81,14 @@ export default function TyperGame() {
         if (nextChar === targetChar) {
             setUserInput(val);
             setIsError(false);
+
+            if (currentStartTime) {
+                const timeInMinutes = (now - currentStartTime) / 60000;
+                if (timeInMinutes > 0) {
+                    const currentWPM = Math.round((val.length / 5) / timeInMinutes);
+                    setWpm(currentWPM);
+                }
+            }
             
             if (val.length === targetText.length) {
                 finishGame();

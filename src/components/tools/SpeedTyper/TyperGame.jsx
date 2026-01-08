@@ -4,22 +4,50 @@ import { generateParagraph } from "./snippets";
 import { RefreshCcw, Trophy, Moon, Sun, Languages } from "lucide-react";
 
 export default function TyperGame() {
-    const [gameState, setGameState] = useState("idle"); 
+    const [gameState, setGameState] = useState("idle");
     const [targetText, setTargetText] = useState("");
     const [userInput, setUserInput] = useState("");
     const [startTime, setStartTime] = useState(null);
     const [wpm, setWpm] = useState(0);
-    const [isError, setIsError] = useState(false); 
-    
+    const [isError, setIsError] = useState(false);
+
     const [isDarkMode, setIsDarkMode] = useState(false);
-    const [lang, setLang] = useState('id'); 
+    const [lang, setLang] = useState('id');
 
     const inputRef = useRef(null);
-    const timerRef = useRef(null);
+    const [time, setTime] = useState(0);
+
+    useEffect(() => {
+        let interval = null;
+        if (gameState === "playing") {
+            interval = setInterval(() => {
+                setTime((prev) => prev + 1);
+            }, 1000);
+        } else {
+            clearInterval(interval);
+        }
+        return () => clearInterval(interval);
+    }, [gameState]);
+
+    useEffect(() => {
+        let interval = null;
+        if (gameState === "playing" && startTime) {
+            interval = setInterval(() => {
+                const now = Date.now();
+                const durationInMinutes = (now - startTime) / 60000;
+
+                if (durationInMinutes < 0.001) return;
+
+                const currentWPM = Math.round((userInput.length / 5) / durationInMinutes);
+                setWpm(currentWPM < 0 || !isFinite(currentWPM) ? 0 : currentWPM);
+            }, 500);
+        }
+        return () => clearInterval(interval);
+    }, [gameState, startTime, userInput]);
 
     useEffect(() => {
         resetGame();
-    }, [lang]); 
+    }, [lang]);
 
     const resetGame = () => {
         const data = generateParagraph(lang, 30);
@@ -27,29 +55,11 @@ export default function TyperGame() {
         setUserInput("");
         setGameState("idle");
         setWpm(0);
+        setTime(0);
+        setStartTime(null);
         setIsError(false);
-        if (timerRef.current) clearInterval(timerRef.current);
-        
+
         setTimeout(() => inputRef.current?.focus(), 100);
-    };
-
-    const startGame = () => {
-        setGameState("playing");
-        setStartTime(Date.now());
-        
-        timerRef.current = setInterval(() => {
-            calculateWPM();
-        }, 500);
-    };
-
-    const calculateWPM = () => {
-        if (!startTime) return;
-        const now = Date.now();
-        const timeInMinutes = (now - startTime) / 60000;
-        const charCount = userInput.length; 
-        const wordCount = charCount / 5; 
-        const currentWPM = Math.round(wordCount / timeInMinutes);
-        setWpm(currentWPM < 0 || currentWPM === Infinity ? 0 : currentWPM);
     };
 
     const handleInput = (e) => {
@@ -58,16 +68,9 @@ export default function TyperGame() {
         const val = e.target.value;
         const now = Date.now();
 
-        let currentStartTime = startTime;
-
         if (gameState === "idle") {
             setGameState("playing");
-            currentStartTime = now;
-            setStartTime(now);      
-
-            timerRef.current = setInterval(() => {
-                calculateWPM(); 
-            }, 500);
+            setStartTime(now);
         }
 
         if (val.length < userInput.length) {
@@ -82,14 +85,14 @@ export default function TyperGame() {
             setUserInput(val);
             setIsError(false);
 
-            if (currentStartTime) {
-                const timeInMinutes = (now - currentStartTime) / 60000;
-                if (timeInMinutes > 0) {
-                    const currentWPM = Math.round((val.length / 5) / timeInMinutes);
+            if (startTime) {
+                const durationInMinutes = (now - startTime) / 60000;
+                if (durationInMinutes > 0) {
+                    const currentWPM = Math.round((val.length / 5) / durationInMinutes);
                     setWpm(currentWPM);
                 }
             }
-            
+
             if (val.length === targetText.length) {
                 finishGame();
             }
@@ -100,12 +103,14 @@ export default function TyperGame() {
     };
 
     const finishGame = () => {
-        clearInterval(timerRef.current);
         setGameState("finished");
-        
-        const timeInMinutes = (Date.now() - startTime) / 60000;
-        const finalWPM = Math.round((targetText.length / 5) / timeInMinutes);
-        setWpm(finalWPM);
+
+        if (startTime) {
+            const now = Date.now();
+            const timeInMinutes = (now - startTime) / 60000;
+            const finalWPM = Math.round((targetText.length / 5) / timeInMinutes);
+            setWpm(finalWPM);
+        }
     };
 
     const theme = isDarkMode ? {
@@ -132,9 +137,9 @@ export default function TyperGame() {
 
     return (
         <div className={`w-full min-h-screen flex flex-col items-center justify-center p-4 md:p-10 relative overflow-hidden ${theme.bg} transition-colors duration-500`}>
-            
+
             <div className="absolute top-6 right-6 flex gap-3 z-50">
-                <button 
+                <button
                     onClick={() => setLang(l => l === 'id' ? 'en' : 'id')}
                     className={`flex items-center gap-2 px-3 py-2 rounded-lg font-bold text-xs uppercase tracking-wider transition-all
                         ${isDarkMode ? 'bg-[#222] text-white hover:bg-[#333]' : 'bg-white text-black hover:bg-gray-100'}
@@ -144,7 +149,7 @@ export default function TyperGame() {
                     {lang}
                 </button>
 
-                <button 
+                <button
                     onClick={() => setIsDarkMode(!isDarkMode)}
                     className={`p-2 rounded-lg transition-all
                         ${isDarkMode ? 'bg-[#222] text-yellow-400 hover:bg-[#333]' : 'bg-white text-gray-800 hover:bg-gray-100'}
@@ -154,7 +159,7 @@ export default function TyperGame() {
                 </button>
             </div>
 
-            <div 
+            <div
                 onClick={() => inputRef.current?.focus()}
                 className={`
                     relative w-full max-w-4xl min-h-[400px] 
@@ -171,6 +176,9 @@ export default function TyperGame() {
                         <p className={`text-xs ${theme.dimText} mt-1 uppercase tracking-widest`}>
                             Mode: Stop-On-Error • Lang: {lang === 'id' ? 'Indonesia' : 'English'}
                         </p>
+                        <p className={`text-xs ${theme.dimText} mt-1 uppercase tracking-widest`}>
+                            {time} {lang === "id" ? "Detik" : "Second"}
+                        </p>
                     </div>
 
                     <div className="flex flex-col items-end">
@@ -182,11 +190,11 @@ export default function TyperGame() {
                 <div className="flex-1 relative text-xl md:text-2xl leading-relaxed font-mono outline-none cursor-text select-none mt-4">
                     <p className="break-words">
                         {targetText.split("").map((char, index) => {
-                            let colorClass = theme.dimText; 
+                            let colorClass = theme.dimText;
                             if (index < userInput.length) {
-                                colorClass = theme.highlight; 
+                                colorClass = theme.highlight;
                             }
-                            
+
                             const isCursor = index === userInput.length;
 
                             return (
@@ -212,7 +220,7 @@ export default function TyperGame() {
                 />
 
                 <div className={`mt-auto pt-6 border-t-2 ${theme.border} border-dashed flex justify-between items-center z-30`}>
-                     <button 
+                    <button
                         onClick={resetGame}
                         className={`flex items-center gap-2 text-sm font-bold transition-colors group
                             ${theme.dimText} hover:${theme.text}
@@ -237,7 +245,7 @@ export default function TyperGame() {
                     >
                         <Trophy className="w-16 h-16 text-yellow-500 mb-4" />
                         <h2 className="text-3xl font-black uppercase mb-2 font-mono">Completed!</h2>
-                        
+
                         <div className="grid grid-cols-2 gap-4 w-full mb-6 mt-4">
                             <div className={`p-3 rounded ${isDarkMode ? 'bg-[#111]' : 'bg-gray-100'}`}>
                                 <div className="text-xs text-gray-500 uppercase">Speed</div>
@@ -249,7 +257,7 @@ export default function TyperGame() {
                             </div>
                         </div>
 
-                        <button 
+                        <button
                             onClick={resetGame}
                             className={`w-full py-3 font-bold rounded hover:opacity-90 transition-all uppercase tracking-widest
                                 ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'}

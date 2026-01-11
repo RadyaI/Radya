@@ -12,7 +12,7 @@ export default function Assistant() {
     ]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    
+
     const [provider, setProvider] = useState("groq");
 
     const messagesEndRef = useRef(null);
@@ -21,31 +21,74 @@ export default function Assistant() {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages, isOpen]);
 
-    const fetchAIResponse = async (history, currentProvider) => {
-        const endpoint = currentProvider === "gemini" ? "/api/chat/gemini" : "/api/chat/groq";
-        
+    const fetchAIResponse = async (history, provider) => {
+        const endpoint =
+            provider === "gemini"
+                ? "/api/chat/gemini"
+                : "/api/chat/groq";
+
         const response = await fetch(endpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ history, persona: "radya" }),
+            body: JSON.stringify({
+                history,
+                persona: "radya",
+            }),
         });
 
+        // HANDLE ERROR RESPONSE
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || "Server Error");
+            let errorMessage = "Terjadi kesalahan pada server.";
+
+            try {
+                const errorData = await response.json();
+
+                switch (response.status) {
+                    case 400:
+                        errorMessage = "Format pesan tidak valid.";
+                        break;
+
+                    case 413:
+                        errorMessage =
+                            "Pesan sudah terlalu panjang. refresh dulu yaa.";
+                        break;
+
+                    case 429:
+                        errorMessage =
+                            "Kamu terlalu cepat kirim pesan. Tunggu sebentar ya ⏳";
+                        break;
+
+                    case 500:
+                        errorMessage =
+                            "Waduh AInya lagi bermasalah. Coba lagi nanti.";
+                        break;
+
+                    default:
+                        errorMessage =
+                            errorData?.error ??
+                            "Terjadi kesalahan tidak diketahui.";
+                }
+            } catch {
+                errorMessage = "Server error. Coba lagi nanti.";
+            }
+
+            const error = new Error(errorMessage);
+            error.status = response.status;
+            throw error;
         }
 
         const data = await response.json();
         return data.text;
     };
 
+
     const handleSend = async () => {
         if (!input.trim() || isLoading) return;
 
-        const userText = input;
-        const newUserMessage = { role: "user", text: userText };
-        
-        const updatedHistory = [...messages, newUserMessage];
+        const userText = input.trim();
+        const userMessage = { role: "user", text: userText };
+
+        const updatedHistory = [...messages, userMessage];
         setMessages(updatedHistory);
         setInput("");
         setIsLoading(true);
@@ -57,14 +100,20 @@ export default function Assistant() {
                 try {
                     replyText = await fetchAIResponse(updatedHistory, "gemini");
                 } catch (geminiError) {
-                    console.error("Gemini Error:", geminiError);
-                    
-                    setMessages(prev => [...prev, { 
-                        role: "model", 
-                        text: "⚠️ **Waduh Gemini lagi error/limit.**\n\n*Bentar ya, switch ke Llama (Groq)...*" 
-                    }]);
-                    setProvider("groq"); 
-                    
+                    console.warn("Gemini Error:", geminiError);
+
+                    setMessages(prev => [
+                        ...prev,
+                        {
+                            role: "model",
+                            text:
+                                "⚠️ **Gemini lagi bermasalah / kena limit.**\n\n" +
+                                "*Aku pindahin ke model lain ya, bentar...*",
+                        },
+                    ]);
+
+                    setProvider("groq");
+
                     replyText = await fetchAIResponse(updatedHistory, "groq");
                 }
             } else {
@@ -72,16 +121,32 @@ export default function Assistant() {
             }
 
             if (replyText) {
-                setMessages(prev => [...prev, { role: "model", text: replyText }]);
+                setMessages(prev => [
+                    ...prev,
+                    { role: "model", text: replyText },
+                ]);
             }
 
-        } catch (error) {
-            console.error("Final Error:", error);
-            setMessages(prev => [...prev, { role: "model", text: "Yah sori, server lagi sibuk banget nih. Coba refresh atau tunggu bentar ya!" }]);
+        } catch (finalError) {
+            console.error("Final Error:", finalError);
+
+            let friendlyMessage =
+                "Yah, lagi ada masalah di server. Coba lagi nanti ya 😥";
+
+            if (finalError.status === 429) {
+                friendlyMessage =
+                    "⏳ Kamu terlalu cepat kirim pesan. Tunggu sebentar ya.";
+            }
+
+            setMessages(prev => [
+                ...prev,
+                { role: "model", text: friendlyMessage },
+            ]);
         } finally {
             setIsLoading(false);
         }
     };
+
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') handleSend();
@@ -98,8 +163,8 @@ export default function Assistant() {
             `}>
 
                 <div className="cursor-pointer p-4 bg-white/5 border-b border-white/10 flex justify-between items-center">
-                    <div 
-                        className="flex items-center gap-2 cursor-pointer group select-none" 
+                    <div
+                        className="flex items-center gap-2 cursor-pointer group select-none"
                         onClick={() => setProvider(provider === 'gemini' ? 'groq' : 'gemini')}
                         title="Klik buat ganti Model AI"
                     >

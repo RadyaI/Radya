@@ -89,14 +89,13 @@ export async function POST(req) {
             Role & Persona:
             ${selectedPersona}
 
-            Conversation History (keep this context):
+            History Percakapan (Jangan lupa konteks ini):
             ${chatHistory}
 
-            Respond to the LAST user message clearly and concisely,
-            following the defined persona.
+            (Jawablah respon terakhir dari User di atas dengan singkat dan jelas sesuai persona yang ditentukan)
         `;
 
-         // CALL GEMINI
+        // CALL GEMINI
         const ai = new GoogleGenAI({ apiKey: API_KEY });
 
         const response = await ai.models.generateContent({

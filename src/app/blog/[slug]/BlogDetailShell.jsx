@@ -214,16 +214,16 @@ export default function BlogDetail({ post, children }) {
                                     </span>
                                 ))}
                             </div>
-                            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
+                            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-300">
                                 {post.title}
                             </h1>
 
                             <div className={`flex items-center gap-6 text-sm font-mono border-l-2 pl-4 ${isDark ? 'border-white/10 text-gray-400' : 'border-black/10 text-gray-500'}`}>
-                                <div className="flex items-center gap-2">
+                                <div className="flex gap-2">
                                     <User className="w-4 h-4" />
                                     <span>{post.author || "Radya"}</span>
                                 </div>
-                                <div className="flex items-center gap-2">
+                                <div className="flex gap-2">
                                     <Calendar className="w-4 h-4" />
                                     <span>
                                         {post.createdAt
@@ -231,7 +231,7 @@ export default function BlogDetail({ post, children }) {
                                             : "Draft"}
                                     </span>
                                 </div>
-                                <div className="flex items-center gap-2">
+                                <div className="flex gap-2">
                                     <Clock className="w-4 h-4" />
                                     <span>{Math.ceil((post.content?.replace(/<[^>]*>?/gm, '').split(/\s+/).length || 0) / 170)} min read</span>
                                 </div>

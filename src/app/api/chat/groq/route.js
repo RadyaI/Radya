@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import Groq from "groq-sdk";
 import { PERSONAS } from "@/components/tools/AiChat/persona"; 
 
-const API_KEY = process.env.NEXT_PUBLIC_GROQ_API_KEY;
+const API_KEY = process.env.GROQ_API_KEY;
 
 export async function POST(req) {
     if (!API_KEY) {

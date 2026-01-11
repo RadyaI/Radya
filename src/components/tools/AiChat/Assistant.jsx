@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { X, Send, Bot, Loader2, Sparkles, Zap } from "lucide-react";
+import { X, Send, Bot, Loader2, Sparkles, Zap, Cat, MessageCircleCode } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import './custom.css'
 
@@ -190,7 +190,7 @@ export default function Assistant() {
                         <div key={idx} className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                             {msg.role === 'model' && (
                                 <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${provider === 'gemini' ? 'bg-blue-500/20' : 'bg-orange-500/20'}`}>
-                                    {provider === 'gemini' ? <Bot className="w-4 h-4 text-blue-400" /> : <Zap className="w-4 h-4 text-orange-400" />}
+                                    {provider === 'gemini' ? <Bot className="w-4 h-4 text-blue-400" /> : <Cat className="w-4 h-4 text-orange-400" />}
                                 </div>
                             )}
 
@@ -256,7 +256,7 @@ export default function Assistant() {
                 `}
             >
                 {isOpen ? <X className="w-6 h-6 text-white" /> : (
-                    provider === 'gemini' ? <Bot className="w-7 h-7 text-blue-400" /> : <Zap className="w-7 h-7 text-orange-400" />
+                    provider === 'gemini' ? <Bot className="w-7 h-7 text-blue-400" /> : <MessageCircleCode className="w-7 h-7 text-orange-400" />
                 )}
             </button>
         </div>

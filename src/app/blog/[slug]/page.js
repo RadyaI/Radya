@@ -29,16 +29,13 @@ const getPost = cache(async (slug) => {
     content: data.content,
     tags: data.tags || [],
     type: data.type || 'article',
-
     createdAt: data.createdAt
       ? data.createdAt.seconds * 1000
       : null,
-
     updatedAt: data.updatedAt
       ? data.updatedAt.seconds * 1000
       : null,
   }
-
 })
 
 export async function generateStaticParams() {
@@ -64,10 +61,15 @@ export async function generateMetadata({ params }) {
   return {
     title: post.title,
     description: desc,
+    alternates: {
+      canonical: `https://radya.my.id/blog/${post.slug}`,
+    },
     openGraph: {
       title: post.title,
       description: desc,
       type: 'article',
+      url: `https://radya.my.id/blog/${post.slug}`,
+      publishedTime: post.createdAt ? new Date(post.createdAt).toISOString() : undefined,
     }
   }
 }
@@ -87,6 +89,9 @@ export default async function Page({ params }) {
             "@context": "https://schema.org",
             "@type": "BlogPosting",
             headline: post.title,
+            url: `https://radya.my.id/blog/${post.slug}`,
+            datePublished: post.createdAt ? new Date(post.createdAt).toISOString() : undefined,
+            dateModified: post.updatedAt ? new Date(post.updatedAt).toISOString() : undefined,
             author: {
               "@type": "Person",
               name: post.author || "Radya"

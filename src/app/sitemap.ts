@@ -31,9 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // BLOG
   const blogSlugs = [
-    'belajar-nextjs-sitemap',
-    'firestore-dan-seo',
-    'personal-web-architecture',
+    'kuliah-informatika-gimana',
   ]
 
   const toolsRoutes: MetadataRoute.Sitemap = tools.map(tool => ({

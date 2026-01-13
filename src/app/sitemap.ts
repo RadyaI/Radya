@@ -1,6 +1,4 @@
 import { MetadataRoute } from 'next'
-import { db } from '@/lib/firebase'
-import { collection, getDocs, Timestamp } from 'firebase/firestore'
 
 const baseUrl = 'https://radya.my.id'
 export const runtime = 'nodejs'
@@ -31,6 +29,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     'whoami',
   ]
 
+  // BLOG
+  const blogSlugs = [
+    'belajar-nextjs-sitemap',
+    'firestore-dan-seo',
+    'personal-web-architecture',
+  ]
+
   const toolsRoutes: MetadataRoute.Sitemap = tools.map(tool => ({
     url: `${baseUrl}/tools/${tool}`,
     lastModified: new Date('2024-01-01'),
@@ -38,24 +43,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  // BLOG DYNAMIC ROUTES
-  const snapshot = await getDocs(collection(db, 'blogs'))
 
-  const blogRoutes: MetadataRoute.Sitemap = snapshot.docs.map(doc => {
-    const data = doc.data()
+  const blogRoutes: MetadataRoute.Sitemap = blogSlugs.map(slug => ({
+    url: `${baseUrl}/blog/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  }))
 
-    const updatedAt =
-      data.updatedAt instanceof Timestamp
-        ? data.updatedAt.toDate()
-        : new Date()
 
-    return {
-      url: `${baseUrl}/blog/${data.slug}`,
-      lastModified: updatedAt,
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    }
-  })
 
   return [
     ...staticRoutes,

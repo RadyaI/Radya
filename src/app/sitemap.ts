@@ -3,6 +3,8 @@ import { db } from '@/lib/firebase'
 import { collection, getDocs, Timestamp } from 'firebase/firestore'
 
 const baseUrl = 'https://radya.my.id'
+export const runtime = 'nodejs'
+export const revalidate = 86400
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 

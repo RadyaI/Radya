@@ -11,14 +11,14 @@ export default function Home() {
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                     </span>
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Online & Ready</span>
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Online</span>
                 </div>
             </div>
 
             <div className="mb-8 relative z-10">
                 
                 <p className="text-blue-400 font-mono text-sm mb-2 animate__animated animate__fadeInLeft">
-                    &lt;Hello_World /&gt; I am
+                    &lt;😼 /&gt; I am
                 </p>
 
                 <h1 className="text-6xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter mb-4 animate__animated animate__fadeInUp animate__delay-1s mix-blend-overlay opacity-90">

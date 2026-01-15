@@ -1,5 +1,5 @@
 import foto from "@/assets/foto2.jpg";
-import { Code2, GraduationCap, Heart, User } from "lucide-react";
+import { Code2, GraduationCap, Heart, Cat, Car } from "lucide-react";
 import 'animate.css';
 import Image from "next/image";
 
@@ -22,7 +22,7 @@ export default function About() {
 
     const techStack = [
         "JavaScript", "TypeScript", "React",
-        "Next.js", "Firebase", "Supabase", "Node.js", "SQL",
+        "Next.js", "Firebase", "Supabase", "SQL",
         "NoSQL", "Python"
     ];
 
@@ -109,8 +109,8 @@ export default function About() {
 
                         <div className="flex items-center gap-2 p-3 bg-white/5 rounded-lg border border-white/5 mt-4">
                             <Heart className="w-4 h-4 text-pink-500" />
-                            <span className="text-xs">
-                                Hobbies: Watching movies & unwinding offline.
+                            <span className="text-xs flex gap-1">
+                                Hobbies: Cats <Cat className="w-4 h-4"></Cat> & <a className="border-b border-dashed border-[grey] flex gap-1" target="blank_" href="https://www.google.com/search?q=bmw&oq=bmw&gs_lcrp=EgZjaHJvbWUqBwgAEAAYjwIyBwgAEAAYjwIyFQgBEC4YQxjHARixAxjRAxiABBiKBTIMCAIQIxgnGIAEGIoFMhEIAxBFGDsYQxixAxiABBiKBTIMCAQQIxgnGIAEGIoFMgYIBRBFGDwyBggGEEUYPDIGCAcQRRg80gEIMTcyOWowajmoAgawAgHxBVX2q0w5-D_w&sourceid=chrome&ie=UTF-8">BMW <Car className="w-4 h-4"></Car></a>.
                             </span>
                         </div>
                     </div>

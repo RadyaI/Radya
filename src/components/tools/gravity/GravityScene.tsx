@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
-import { GRAVITY_ICONS, PHYSICS_CONFIG } from '@/utils/gravity/gravity-data';
+import { GRAVITY_ICONS, PHYSICS_CONFIG } from '@/lib/gravity/gravity-data';
 import { RefreshCcw, Move, MousePointer2 } from 'lucide-react';
 
 export default function GravityScene() {

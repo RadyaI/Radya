@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Trash2, Maximize2 } from "lucide-react";
-import { SignatureData } from "@/utils/signpdf/pdfUtils";
+import { SignatureData } from "@/lib/signpdf/pdfUtils";
 
 interface Props {
   data: SignatureData;

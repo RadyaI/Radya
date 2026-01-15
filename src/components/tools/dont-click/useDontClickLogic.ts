@@ -5,7 +5,7 @@ import {
   getChaosLevel,
   getRandomMessage,
   MAX_CLICKS_BEFORE_CRASH,
-} from "@/utils/dont-click/dontClickUtils";
+} from "@/lib/dont-click/dontClickUtils";
 
 export function useDontClickLogic() {
   const [clickCount, setClickCount] = useState(0);

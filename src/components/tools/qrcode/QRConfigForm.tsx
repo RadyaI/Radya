@@ -34,7 +34,7 @@ export default function QRConfigForm({ data, style, onDataChange, onStyleChange 
           <button
             key={tab.id}
             onClick={() => handleTypeChange(tab.id)}
-            className={`flex flex-col items-center justify-center p-3 rounded-lg text-xs font-medium transition-all ${
+            className={`cursor-pointer flex flex-col items-center justify-center p-3 rounded-lg text-xs font-medium transition-all ${
               data.type === tab.id
                 ? 'bg-white dark:bg-neutral-700 text-blue-600 dark:text-blue-400 shadow-sm'
                 : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-200/50 dark:hover:bg-neutral-700/50'

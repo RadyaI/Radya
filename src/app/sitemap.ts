@@ -27,6 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     'signpdf',
     'speedtyper',
     'whoami',
+    'qrcode',
   ]
 
   // BLOG

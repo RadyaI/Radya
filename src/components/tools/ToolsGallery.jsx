@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import { ShieldCheck, Binary, Keyboard, ArrowUpRight, Palette, ScanLine, Zap, Gauge, Pen, LucideKanbanSquareDashed, File, Signature, AlertTriangle, Rocket, Search } from "lucide-react"; // Tambah 'Search' di sini
+import { ShieldCheck, Binary, Keyboard, ArrowUpRight, Palette, ScanLine, Zap, Gauge, Pen, LucideKanbanSquareDashed, File, Signature, AlertTriangle, Rocket, Search, QrCode } from "lucide-react"; // Tambah 'Search' di sini
 import Cursor from "../cursor";
 import Link from "next/link";
 
@@ -10,16 +10,16 @@ export default function ToolsGallery() {
     const [searchQuery, setSearchQuery] = useState(""); 
 
     const tools = [
-        // {
-        //     id: 1,
-        //     title: "Password Manager",
-        //     desc: "Client-side encrypted vault. Simpan password dengan aman.",
-        //     link: "/tools/password",
-        //     icon: ShieldCheck,
-        //     color: "from-blue-500 to-cyan-500",
-        //     rotate: "hover:-rotate-2",
-        //     delay: "animate-delay-100"
-        // },
+        {
+            id: 1,
+            title: "QR Code Generator",
+            desc: "QR Code Generator gratis untuk link, teks, email, phone dan wifi.",
+            link: "/tools/qrcode",
+            icon: QrCode,
+            color: "from-red-500 to-white-500",
+            rotate: "hover:-rotate-2",
+            delay: "animate-delay-100"
+        },
         {
             id: 2,
             title: "SignPDF",

@@ -1,26 +1,25 @@
 "use client"
 
-import { useState } from "react"; // Tambah ini buat state search
+import { useState } from "react";
 import { ShieldCheck, Binary, Keyboard, ArrowUpRight, Palette, ScanLine, Zap, Gauge, Pen, LucideKanbanSquareDashed, File, Signature, AlertTriangle, Rocket, Search } from "lucide-react"; // Tambah 'Search' di sini
 import Cursor from "../cursor";
 import Link from "next/link";
 
 export default function ToolsGallery() {
 
-    const [searchQuery, setSearchQuery] = useState(""); // State buat nyimpen text search
+    const [searchQuery, setSearchQuery] = useState(""); 
 
-    // ID sudah dirapikan urut 1-10
     const tools = [
-        {
-            id: 1,
-            title: "Password Manager",
-            desc: "Client-side encrypted vault. Simpan password dengan aman.",
-            link: "/tools/password",
-            icon: ShieldCheck,
-            color: "from-blue-500 to-cyan-500",
-            rotate: "hover:-rotate-2",
-            delay: "animate-delay-100"
-        },
+        // {
+        //     id: 1,
+        //     title: "Password Manager",
+        //     desc: "Client-side encrypted vault. Simpan password dengan aman.",
+        //     link: "/tools/password",
+        //     icon: ShieldCheck,
+        //     color: "from-blue-500 to-cyan-500",
+        //     rotate: "hover:-rotate-2",
+        //     delay: "animate-delay-100"
+        // },
         {
             id: 2,
             title: "SignPDF",
@@ -113,7 +112,6 @@ export default function ToolsGallery() {
         }
     ];
 
-    // Logic filtering tools berdasarkan Title atau Desc
     const filteredTools = tools.filter((tool) =>
         tool.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         tool.desc.toLowerCase().includes(searchQuery.toLowerCase())
@@ -139,7 +137,6 @@ export default function ToolsGallery() {
                             <br className="hidden md:block" /> Dibuat untuk mempermudah hidup (semoga).
                         </p>
 
-                        {/* --- SEARCH BAR SECTION --- */}
                         <div className="relative max-w-md mx-auto group">
                             <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
                             <div className="relative flex items-center bg-[#111] border border-[#222] rounded-2xl px-4 py-3 shadow-2xl focus-within:border-gray-500 focus-within:ring-1 focus-within:ring-gray-500 transition-all duration-300">
@@ -153,13 +150,11 @@ export default function ToolsGallery() {
                                 />
                             </div>
                         </div>
-                        {/* --- END SEARCH BAR --- */}
 
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-                        {/* Render Filtered Tools */}
                         {filteredTools.length > 0 ? (
                             filteredTools.map((item) => (
                                 <Link
@@ -200,7 +195,6 @@ export default function ToolsGallery() {
                                 </Link>
                             ))
                         ) : (
-                            // Tampilan kalau search tidak ditemukan
                             <div className="col-span-full py-20 text-center animate__animated animate__fadeIn">
                                 <div className="inline-block p-6 rounded-full bg-[#111] border border-[#222] mb-4">
                                     <Search className="w-8 h-8 text-gray-600" />
@@ -210,7 +204,6 @@ export default function ToolsGallery() {
                             </div>
                         )}
 
-                        {/* Kotak Coming Soon (Hanya muncul kalau tidak sedang search/search kosong, biar rapi) */}
                         {searchQuery === "" && (
                             <div className="group relative h-[300px] w-full flex items-center justify-center border border-dashed border-[#333] rounded-3xl p-8 hover:bg-[#111] transition cursor-default opacity-50 hover:opacity-100">
                                 <div className="text-center">

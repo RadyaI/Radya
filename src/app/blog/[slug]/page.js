@@ -55,7 +55,7 @@ export async function generateMetadata({ params }) {
   }
 
   const desc = post.content
-    ?.replace(/<[^>]+>/g, '')
+    ?.replace(/[#*`_~\[\]]/g, '')
     .slice(0, 160)
 
   return {
@@ -101,7 +101,7 @@ export default async function Page({ params }) {
       />
 
       <BlogDetailShell post={post}>
-        <BlogArticleHTML html={post.content} />
+        <BlogArticleHTML content={post.content} />
       </BlogDetailShell>
     </>
   )

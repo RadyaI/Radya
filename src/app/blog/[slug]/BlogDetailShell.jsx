@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { deleteDoc, doc } from "firebase/firestore";
 import { auth, db } from "../../../lib/firebase";
-import { ArrowLeft, Calendar, User, Moon, Sun, Edit, Trash2, Share2, Loader2, Hash, Clock } from "lucide-react";
+import { ArrowLeft, Calendar, User, Moon, Sun, Edit, Trash2, Share2, Hash, Clock } from "lucide-react";
 import { format } from "date-fns";
 import toast, { Toaster } from 'react-hot-toast';
 import Swal from 'sweetalert2';
@@ -21,40 +21,45 @@ export default function BlogDetail({ post, children }) {
     const contentRef = useRef(null);
 
     useEffect(() => {
-        auth.onAuthStateChanged((user) => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
             if (user?.email === "radyaiftikhar@gmail.com") setIsAdmin(true);
         });
+        return () => unsubscribe();
     }, []);
 
     useEffect(() => {
-        if (post?.content && contentRef.current) {
-            const codeBlocks = contentRef.current.querySelectorAll('pre code');
+        const timer = setTimeout(() => {
+            if (contentRef.current) {
+                const codeBlocks = contentRef.current.querySelectorAll('pre code');
 
-            codeBlocks.forEach((block) => {
-                hljs.highlightElement(block);
+                codeBlocks.forEach((block) => {
+                    hljs.highlightElement(block);
 
-                const pre = block.parentElement;
-                if (pre.querySelector('.copy-btn')) return;
+                    const pre = block.parentElement;
+                    if (pre.querySelector('.copy-btn')) return;
 
-                const button = document.createElement('button');
-                button.className = 'copy-btn absolute top-3 right-3 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 backdrop-blur-md border border-white/10';
-                button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
+                    const button = document.createElement('button');
+                    button.className = 'copy-btn absolute top-3 right-3 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 backdrop-blur-md border border-white/10';
+                    button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
 
-                button.addEventListener('click', async () => {
-                    const code = block.innerText;
-                    await navigator.clipboard.writeText(code);
-                    toast.success("Code copied! 📋", { style: { background: '#333', color: '#fff' } });
+                    button.addEventListener('click', async () => {
+                        const code = block.innerText;
+                        await navigator.clipboard.writeText(code);
+                        toast.success("Code copied! 📋", { style: { background: '#333', color: '#fff' } });
 
-                    button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
-                    setTimeout(() => {
-                        button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
-                    }, 2000);
+                        button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
+                        setTimeout(() => {
+                            button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
+                        }, 2000);
+                    });
+
+                    pre.classList.add('group', 'relative');
+                    pre.appendChild(button);
                 });
+            }
+        }, 100);
 
-                pre.classList.add('group', 'relative');
-                pre.appendChild(button);
-            });
-        }
+        return () => clearTimeout(timer);
     }, [post?.content]);
 
     const handleScroll = () => {
@@ -106,15 +111,16 @@ export default function BlogDetail({ post, children }) {
                 .custom-scroll::-webkit-scrollbar-thumb { background: ${isDark ? '#333' : '#ccc'}; border-radius: 10px; }
                 .custom-scroll::-webkit-scrollbar-thumb:hover { background: ${isDark ? '#555' : '#999'}; }
 
-                .article-content h1 { font-size: 2.25rem; font-weight: 800; margin-top: 2rem; margin-bottom: 1rem; line-height: 1.2; letter-spacing: -0.02em; }
-                .article-content h2 { font-size: 1.75rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; letter-spacing: -0.01em; color: ${isDark ? '#fff' : '#111'}; }
-                .article-content h3 { font-size: 1.5rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+                /* STYLE MARKDOWN */
+                .article-content h1 { font-size: 2.25rem; font-weight: 800; margin-top: 2rem; margin-bottom: 1rem; line-height: 1.2; letter-spacing: -0.02em; color: ${isDark ? '#fff' : '#111'}; }
+                .article-content h2 { font-size: 1.75rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; letter-spacing: -0.01em; color: ${isDark ? '#e5e7eb' : '#1f2937'}; border-bottom: 1px solid ${isDark ? '#333' : '#e5e7eb'}; padding-bottom: 0.5rem; }
+                .article-content h3 { font-size: 1.5rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; color: ${isDark ? '#d1d5db' : '#374151'}; }
                 .article-content p { margin-bottom: 1.5rem; line-height: 1.8; font-size: 1.1rem; opacity: 0.9; }
                 .article-content strong { font-weight: 700; color: ${isDark ? '#fff' : '#000'}; }
                 .article-content em { font-style: italic; opacity: 0.8; }
                 .article-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.5rem; }
                 .article-content ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1.5rem; }
-                .article-content blockquote { border-left: 4px solid #3b82f6; padding-left: 1.5rem; font-style: italic; background: ${isDark ? '#1a1a1a' : '#f3f4f6'}; padding: 1rem; border-radius: 0 8px 8px 0; margin-bottom: 1.5rem; }
+                .article-content blockquote { border-left: 4px solid #3b82f6; padding-left: 1.5rem; font-style: italic; background: ${isDark ? '#1a1a1a' : '#f3f4f6'}; padding: 1rem; border-radius: 0 8px 8px 0; margin-bottom: 1.5rem; color: ${isDark ? '#9ca3af' : '#4b5563'}; }
                 
                 .article-content pre { 
                     background: #1e1e1e !important; 
@@ -137,12 +143,18 @@ export default function BlogDetail({ post, children }) {
                     color: ${isDark ? '#e2e8f0' : '#0f172a'};
                     padding: 0.2rem 0.4rem;
                     border-radius: 4px;
+                    font-weight: 600;
                 }
 
                 .copy-btn { cursor: pointer; }
                 .article-content img { border-radius: 12px; width: 100%; border: 1px solid ${isDark ? '#333' : '#ddd'}; margin: 1rem 0; }
                 .article-content a { color: #3b82f6; text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.2s; }
                 .article-content a:hover { border-bottom-color: #3b82f6; }
+                
+                /* Table Style */
+                .article-content table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+                .article-content th, .article-content td { border: 1px solid ${isDark ? '#333' : '#ddd'}; padding: 0.75rem; text-align: left; }
+                .article-content th { background: ${isDark ? '#1a1a1a' : '#f3f4f6'}; font-weight: 700; }
             `}</style>
 
             <div className="w-full h-1 bg-transparent fixed top-0 left-0 z-[60]">
@@ -233,7 +245,7 @@ export default function BlogDetail({ post, children }) {
                                 </div>
                                 <div className="flex gap-2">
                                     <Clock className="w-4 h-4" />
-                                    <span>{Math.ceil((post.content?.replace(/<[^>]*>?/gm, '').split(/\s+/).length || 0) / 170)} min read</span>
+                                    <span>{Math.ceil((post.content?.length || 0) / 1000)} min read</span>
                                 </div>
                             </div>
                         </div>
@@ -295,7 +307,7 @@ export default function BlogDetail({ post, children }) {
                                         <Hash className="w-3 h-3" /> Words
                                     </span>
                                     <span className="font-mono font-bold">
-                                        {post.content?.replace(/<[^>]*>?/gm, '').split(/\s+/).length || 0}
+                                        {post.content?.split(/\s+/).length || 0}
                                     </span>
                                 </div>
 
@@ -304,16 +316,7 @@ export default function BlogDetail({ post, children }) {
                                         <span className="text-[10px]">Az</span> Chars
                                     </span>
                                     <span className="font-mono font-bold">
-                                        {post.content?.replace(/<[^>]*>?/gm, '').length || 0}
-                                    </span>
-                                </div>
-
-                                <div className="flex justify-between items-center text-sm">
-                                    <span className="opacity-60 flex items-center gap-2">
-                                        <Clock className="w-3 h-3" /> Read Time
-                                    </span>
-                                    <span className="font-mono font-bold text-green-500">
-                                        {Math.ceil((post.content?.replace(/<[^>]*>?/gm, '').split(/\s+/).length || 0) / 170)} min
+                                        {post.content?.length || 0}
                                     </span>
                                 </div>
 

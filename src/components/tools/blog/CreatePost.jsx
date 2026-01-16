@@ -10,7 +10,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 export default function CreatePost() {
     const [title, setTitle] = useState("");
-    const [content, setContent] = useState("**Hello World!**");
+    const [content, setContent] = useState("# Hello World!");
     const [tags, setTags] = useState("");
     const [loading, setLoading] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
@@ -57,7 +57,7 @@ export default function CreatePost() {
             const dataPayload = {
                 title,
                 slug,
-                content, // Isinya sekarang Markdown string
+                content,
                 tags: tags.split(',').map(t => t.trim()).filter(t => t),
                 author: "Radya",
                 updatedAt: serverTimestamp()
@@ -126,13 +126,15 @@ export default function CreatePost() {
                         </div>
                     </div>
 
-                    <div className="space-y-2" data-color-mode="dark"> {/* Attribute ini PENTING buat Dark Mode */}
+                    <div className="space-y-2" data-color-mode="dark">
                         <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-1">Content (Markdown)</label>
                         <MDEditor
                             value={content}
                             onChange={setContent}
                             height={500}
                             preview="live"
+                            hideToolbar={true}
+                            visibleDragbar={false} 
                             className="rounded-xl border border-white/10 overflow-hidden shadow-inner !bg-[#111]"
                         />
                     </div>

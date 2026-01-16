@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { BookOpen, Calendar, Clock, ArrowUpRight, Hash, Feather, Loader2 } from "lucide-react";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "@/utils/firebase";
 import { useRouter } from "next/navigation";
 import 'animate.css';
 import { format } from "date-fns";

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Cookies from "js-cookie";
-import { auth, db } from "../../lib/firebase";
+import { auth, db } from "../../utils/firebase";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { addDoc, collection, onSnapshot, orderBy, query, Timestamp, deleteDoc, doc } from "firebase/firestore";
 import { Send, Trash2, LogIn, MessageSquare, User, Loader2 } from "lucide-react";

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 import { PERSONAS } from "@/components/tools/AiChat/persona";
-import { aiRateLimit } from "@/lib/ai-ratelimit";
+import { aiRateLimit } from "@/utils/ai-ratelimit";
 
 const API_KEY = process.env.GEMINI_API_KEY;
 

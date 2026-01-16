@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import Groq from "groq-sdk";
 import { PERSONAS } from "@/components/tools/AiChat/persona";
-import { aiRateLimit } from "@/lib/ai-ratelimit";
+import { aiRateLimit } from "@/utils/ai-ratelimit";
 
 const API_KEY = process.env.GROQ_API_KEY;
 

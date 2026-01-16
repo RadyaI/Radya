@@ -1,8 +1,8 @@
 'use client';
 
 import { QRCodeSVG } from 'qrcode.react';
-import { QRData, QRStyle } from '@/lib/qrcode/types';
-import { generateQRValue, downloadQRCode } from '@/lib/qrcode/utils';
+import { QRData, QRStyle } from '@/utils/qrcode/types';
+import { generateQRValue, downloadQRCode } from '@/utils/qrcode/utils';
 import { Download, Share2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 

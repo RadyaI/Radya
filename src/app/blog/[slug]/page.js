@@ -1,6 +1,6 @@
 import { cache } from 'react'
 import { notFound } from 'next/navigation'
-import { db } from '@/lib/firebase'
+import { db } from '@/utils/firebase'
 import { collection, query, where, getDocs } from 'firebase/firestore'
 import BlogDetailShell from './BlogDetailShell'
 import BlogArticleHTML from './BlogArticleHTML'

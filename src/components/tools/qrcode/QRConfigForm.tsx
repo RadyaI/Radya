@@ -1,6 +1,6 @@
 'use client';
 
-import { QRData, QRStyle, QRType } from '@/lib/qrcode/types';
+import { QRData, QRStyle, QRType } from '@/utils/qrcode/types';
 import { motion } from 'framer-motion';
 import { Link, Type, Mail, Phone, Wifi } from 'lucide-react';
 

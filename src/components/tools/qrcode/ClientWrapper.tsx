@@ -5,7 +5,7 @@ import { ThemeProvider } from 'next-themes';
 import QRConfigForm from './QRConfigForm';
 import QRPreviewCard from './QRPreviewCard';
 import ThemeToggle from './ThemeToggle';
-import { QRData, QRStyle } from '@/lib/qrcode/types';
+import { QRData, QRStyle } from '@/utils/qrcode/types';
 
 export default function ClientWrapper() {
   const [qrData, setQrData] = useState<QRData>({

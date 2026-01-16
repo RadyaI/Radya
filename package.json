@@ -12,6 +12,7 @@
     "@uiw/react-md-editor": "^4.0.11",
     "@upstash/ratelimit": "^2.0.7",
     "@upstash/redis": "^1.36.1",
+    "@vercel/analytics": "^1.6.1",
     "animate.css": "^4.1.1",
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",

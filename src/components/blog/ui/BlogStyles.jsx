@@ -45,7 +45,7 @@ export default function BlogStyles({ isDark }) {
             }
             .copy-btn { cursor: pointer; }
             .article-content img { border-radius: 12px; width: 100%; border: 1px solid ${isDark ? '#333' : '#ddd'}; margin: 1rem 0; }
-            .article-content a { color: #3b82f6; text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.2s; }
+            .article-content a { cursor: pointer; color: #3b82f6; text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.2s; }
             .article-content a:hover { border-bottom-color: #3b82f6; }
             .article-content table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
             .article-content th, .article-content td { border: 1px solid ${isDark ? '#333' : '#ddd'}; padding: 0.75rem; text-align: left; }

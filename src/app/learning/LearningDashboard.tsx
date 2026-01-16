@@ -54,24 +54,28 @@ export default function LearningDashboard() {
 
   if (!user) {
     return (
-      <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-4">
-        <div className="w-20 h-20 bg-blue-500/10 rounded-3xl flex items-center justify-center mb-6 border border-blue-500/20">
-          <Terminal className="w-10 h-10 text-blue-500" />
+      <>
+        <BackgroundEffects />
+        <CursorFollower />
+        <div className="pb-10 min-h-screen flex flex-col items-center justify-center text-center px-4">
+          <div className="w-20 h-20 bg-blue-500/20 rounded-3xl flex items-center justify-center mb-6 border border-blue-500/20">
+            <Terminal className="w-10 h-10 text-blue-300" />
+          </div>
+          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+            Track Your <span className="text-blue-500">Growth</span>
+          </h1>
+          <p className="text-zinc-400 max-w-md mb-8 text-lg">
+            Personalized learning management system to organize your studies, track progress, and achieve your goals.
+          </p>
+          <button
+            onClick={login}
+            className="cursor-pointer group flex items-center gap-3 bg-white text-black px-8 py-3 rounded-full font-semibold hover:bg-zinc-200 transition-all hover:scale-105 active:scale-95"
+          >
+            <LogIn className="w-5 h-5" />
+            Continue with Google
+          </button>
         </div>
-        <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">
-          Track Your <span className="text-blue-500">Growth</span>
-        </h1>
-        <p className="text-zinc-400 max-w-md mb-8 text-lg">
-          Personalized learning management system to organize your studies, track progress, and achieve your goals.
-        </p>
-        <button
-          onClick={login}
-          className="group flex items-center gap-3 bg-white text-black px-8 py-3 rounded-full font-semibold hover:bg-zinc-200 transition-all hover:scale-105 active:scale-95"
-        >
-          <LogIn className="w-5 h-5" />
-          Continue with Google
-        </button>
-      </div>
+      </>
     )
   }
 

@@ -1,15 +1,25 @@
 "use client"
 
 import { useState } from "react";
-import { ShieldCheck, Binary, Keyboard, ArrowUpRight, Palette, ScanLine, Zap, Gauge, Pen, LucideKanbanSquareDashed, File, Signature, AlertTriangle, Rocket, Search, QrCode } from "lucide-react"; // Tambah 'Search' di sini
+import { Book, Binary, Keyboard, ArrowUpRight, Palette, ScanLine, Zap, Gauge, Pen, LucideKanbanSquareDashed, File, Signature, AlertTriangle, Rocket, Search, QrCode } from "lucide-react"; // Tambah 'Search' di sini
 import Cursor from "../cursor";
 import Link from "next/link";
 
 export default function ToolsGallery() {
 
-    const [searchQuery, setSearchQuery] = useState(""); 
+    const [searchQuery, setSearchQuery] = useState("");
 
     const tools = [
+        {
+            id: 0,
+            title: "My Learning Path",
+            desc: "Sistem rencana belajar, menentukan target, dan mencatat progress.",
+            link: "/learning",
+            icon: Book,
+            color: "from-blue-500 to-green-500",
+            rotate: "hover:-rotate-2",
+            delay: "animate-delay-100"
+        },
         {
             id: 1,
             title: "QR Code Generator",

@@ -16,11 +16,20 @@ export default function Project() {
             tag: ["React", "Firebase", "Tailwind"],
         },
         {
+            title: "My Learning Plan",
+            desc: "Personalized learning management system to organize your studies, track progress, and achieve your goals.",
+            tech: "Nextjs",
+            color: "#00f310",
+            live_link: "/learning",
+            repo_link: "https://github.com/RadyaI/Radya/tree/master/src/app/learning",
+            tag: ["Nextjs", "Firebase", "Tailwind", "Learning"],
+        },
+        {
             no: 2,
             title: "whoschat",
             desc: "An anonymous chatroom you can create, share, and delete anytime.",
             tech: "Nextjs",
-            color: "#0070F3",
+            color: "#f3007a",
             live_link: "https://whoschat.vercel.app/",
             repo_link: "https://github.com/RadyaI/whoschat",
             tag: ["Nextjs", "Firebase", "anonim-chat"],
@@ -40,7 +49,7 @@ export default function Project() {
             title: "Speed Typer",
             desc: "Finger speed test. Stop-on-error mode & dynamic word bank (ID/EN).",
             tech: "Nextjs",
-            color: "#0070F3",
+            color: "#a0991e",
             live_link: "/tools/speedtyper",
             repo_link: "-",
             tag: ["Typing Test", "Word per Minute", "Nextjs"]
@@ -109,7 +118,7 @@ export default function Project() {
 
     return (
         <div className="h-full relative overflow-hidden">
-            
+
             <style>{`
                 .scroll-container {
                     overflow-y: auto;
@@ -125,7 +134,7 @@ export default function Project() {
 
             <div className="scroll-container">
                 <div className="px-2 md:px-4 pb-10 font-sans text-gray-300">
-                    
+
                     <div className="mb-8 animate__animated animate__fadeInDown">
                         <div className="relative z-10 flex justify-end items-center gap-3">
                             <span className="text-purple-400 font-mono text-sm">// 04</span>
@@ -135,12 +144,12 @@ export default function Project() {
 
                     <div className="grid grid-cols-1 gap-6">
                         {projectData.map((item, idx) => (
-                            <div 
+                            <div
                                 key={idx}
                                 className="group relative bg-[#111] border border-white/5 rounded-2xl p-6 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl animate__animated animate__fadeInUp"
                                 style={{ animationDelay: `${idx * 100}ms` }}
                             >
-                                <div 
+                                <div
                                     className="absolute left-0 top-6 bottom-6 w-1 rounded-r-full shadow-[0_0_10px_currentColor] opacity-60 group-hover:opacity-100 transition duration-500"
                                     style={{ backgroundColor: item.color, color: item.color }}
                                 ></div>
@@ -150,9 +159,9 @@ export default function Project() {
                                         {item.title}
                                     </h3>
                                     <div className="p-2 rounded-lg bg-white/5 border border-white/5 text-gray-400">
-                                        {item.tech.includes('React') || item.tech.includes('Next') ? <Box className="w-4 h-4"/> : 
-                                         item.tech.includes('Typescript') || item.tech.includes('Javascript') ? <Code2 className="w-4 h-4"/> : 
-                                         <Layers className="w-4 h-4"/>}
+                                        {item.tech.includes('React') || item.tech.includes('Next') ? <Box className="w-4 h-4" /> :
+                                            item.tech.includes('Typescript') || item.tech.includes('Javascript') ? <Code2 className="w-4 h-4" /> :
+                                                <Layers className="w-4 h-4" />}
                                     </div>
                                 </div>
 
@@ -170,9 +179,9 @@ export default function Project() {
 
                                 <div className="flex gap-3 pl-4 pt-4 border-t border-white/5">
                                     {item.repo_link !== "-" && (
-                                        <a 
-                                            href={item.repo_link} 
-                                            target="_blank" 
+                                        <a
+                                            href={item.repo_link}
+                                            target="_blank"
                                             rel="noopener noreferrer"
                                             className="flex items-center gap-2 px-4 py-2 text-xs font-bold bg-[#1a1a1a] hover:bg-[#222] border border-white/10 rounded-lg text-gray-300 hover:text-white transition"
                                         >
@@ -182,9 +191,9 @@ export default function Project() {
                                     )}
 
                                     {item.live_link !== "-" && (
-                                        <a 
-                                            href={item.live_link} 
-                                            target="_blank" 
+                                        <a
+                                            href={item.live_link}
+                                            target="_blank"
                                             rel="noopener noreferrer"
                                             className="flex items-center gap-2 px-4 py-2 text-xs font-bold bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/20 text-blue-400 hover:text-blue-300 rounded-lg transition"
                                         >

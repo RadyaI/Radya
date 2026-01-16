@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Toaster } from 'react-hot-toast';
 import 'animate.css';
 
-import { useAdmin, useScrollProgress, useSyntaxHighlighting, useDeleteArticle } from "@/lib/blog/hooks";
+import { useAdmin, useScrollProgress, useSyntaxHighlighting, useDeleteArticle } from "@/hooks/useBlog";
 import BlogStyles from "@/components/blog/ui/BlogStyles";
 import LeftSidebar from "@/components/blog/ui/LeftSidebar";
 import RightSidebar from "@/components/blog/ui/RightSidebar";
@@ -17,7 +17,7 @@ export default function BlogDetail({ post, children }) {
     const contentRef = useRef(null);
     const [isDark, setIsDark] = useState(true);
 
-    const isAdmin = useAdmin();
+    const {isAdmin, isLoading} = useAdmin();
     const { progress, handleScroll } = useScrollProgress(contentRef);
     const handleDelete = useDeleteArticle(isDark, router);
     
@@ -40,7 +40,8 @@ export default function BlogDetail({ post, children }) {
                 <LeftSidebar 
                     isDark={isDark} 
                     setIsDark={setIsDark} 
-                    isAdmin={isAdmin} 
+                    isAdmin={isAdmin}
+                    isLoading={isLoading} 
                     router={router} 
                     post={post} 
                     onDelete={handleDelete} 

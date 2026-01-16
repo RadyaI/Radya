@@ -1,7 +1,7 @@
 import { ArrowLeft, Moon, Sun, Edit, Trash2, Share2 } from "lucide-react";
 import toast from 'react-hot-toast';
 
-export default function LeftSidebar({ isDark, setIsDark, isAdmin, router, post, onDelete }) {
+export default function LeftSidebar({ isDark, setIsDark, isAdmin, isLoading, router, post, onDelete }) {
     return (
         <div className={`hidden lg:flex w-24 xl:w-64 flex-col justify-between p-6 border-r ${isDark ? 'border-white/5 bg-[#050505]/80' : 'border-black/5 bg-white/80'} backdrop-blur-sm z-40`}>
             <div className="space-y-6">

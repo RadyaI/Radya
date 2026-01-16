@@ -1,7 +1,7 @@
 "use client";
 
 import { Toaster } from "react-hot-toast";
-import { useWritePost } from "@/lib/blog/hooks";
+import { useWritePost } from "@/hooks/useBlog";
 import WriteHeader from "./WriteHeader";
 import WriteForm from "./WriteForm";
 

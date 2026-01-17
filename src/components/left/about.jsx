@@ -3,6 +3,8 @@ import { Code2, GraduationCap, Heart, Cat, Car } from "lucide-react";
 import 'animate.css';
 import Image from "next/image";
 
+const linkCat = "https://www.google.com/search?sca_esv=3752bc17590d0ff6&sxsrf=ANbL-n7AxoCLJwQnlcdo9ofc53hBy4vnRQ:1768665117614&udm=2&fbs=ADc_l-ZfIPzv45NHkpmEx1uvAy1Y0jSl1hx3Xkmo2lpunDqItvmOdSOit7muIXZsXvpLBdHparcpJwBJPZvwUJitlUSAbiBz4yxtwJoaKDXX2EwzhCrqLz9MmXxhasEAw1gLUfB7AOeO_QAzl7XjjVYp04Y0XMMHPxLtQL079J3Z9MGKcPR9IIpxWL021vypQVdohqtsDokBRDRROkXq3Rum2GUHsPh31w&q=cat&sa=X&ved=2ahUKEwiJoL-A95KSAxXp1TgGHacvAjUQtKgLegQIKRAB&biw=1280&bih=598&dpr=1.5&aic=0"
+
 export default function About() {
 
     const education = [
@@ -76,7 +78,7 @@ export default function About() {
                                     src={foto}
                                     alt="Radya"
                                     fill
-                                    sizes="(max-width: 768px) 100vw, 33vw" 
+                                    sizes="(max-width: 768px) 100vw, 33vw"
                                     className="object-cover rounded-full grayscale group-hover:grayscale-0 transition duration-500"
                                 />
                             </div>
@@ -110,12 +112,12 @@ export default function About() {
                         <div className="flex items-center gap-2 p-3 bg-white/5 rounded-lg border border-white/5 mt-4">
                             <Heart className="w-4 h-4 text-pink-500" />
                             <span className="text-xs flex gap-1">
-                                Hobbies: Cats <Cat className="w-4 h-4"></Cat> & <a className="border-b border-dashed border-[grey] flex gap-1" target="blank_" href="https://www.google.com/search?q=bmw&oq=bmw&gs_lcrp=EgZjaHJvbWUqBwgAEAAYjwIyBwgAEAAYjwIyFQgBEC4YQxjHARixAxjRAxiABBiKBTIMCAIQIxgnGIAEGIoFMhEIAxBFGDsYQxixAxiABBiKBTIMCAQQIxgnGIAEGIoFMgYIBRBFGDwyBggGEEUYPDIGCAcQRRg80gEIMTcyOWowajmoAgawAgHxBVX2q0w5-D_w&sourceid=chrome&ie=UTF-8">BMW <Car className="w-4 h-4"></Car></a>.
+                                Hobbies: <a target="_blank" href={linkCat} className="flex gap-1 border-[gray] border-b border-dashed">Cats <Cat className="w-4 h-4"></Cat></a> & <a className="border-b border-dashed border-[grey] flex gap-1" target="blank_" href="https://www.google.com/search?q=bmw&oq=bmw&gs_lcrp=EgZjaHJvbWUqBwgAEAAYjwIyBwgAEAAYjwIyFQgBEC4YQxjHARixAxjRAxiABBiKBTIMCAIQIxgnGIAEGIoFMhEIAxBFGDsYQxixAxiABBiKBTIMCAQQIxgnGIAEGIoFMgYIBRBFGDwyBggGEEUYPDIGCAcQRRg80gEIMTcyOWowajmoAgawAgHxBVX2q0w5-D_w&sourceid=chrome&ie=UTF-8">BMW <Car className="w-4 h-4"></Car></a>.
                             </span>
                         </div>
                     </div>
 
-                    <div className="mb-10 animate__animated animate__fadeInUp animate__delay-2s">
+                    <div className="mb-10 animate__animated animate__fadeInUp animate__delay-2s"> 
                         <div className="flex items-center gap-2 mb-4 text-gray-500 text-xs font-bold uppercase tracking-widest">
                             <Code2 className="w-4 h-4" /> Tech
                         </div>

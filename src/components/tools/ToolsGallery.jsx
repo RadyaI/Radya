@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import { Book, Binary, Keyboard, ArrowUpRight, Palette, ScanLine, Zap, Gauge, Pen, LucideKanbanSquareDashed, File, Signature, AlertTriangle, Rocket, Search, QrCode } from "lucide-react"; // Tambah 'Search' di sini
+import { Book, Binary, Keyboard, ArrowUpRight, Palette, ScanLine, Zap, Gauge, Pen, LucideKanbanSquareDashed, File, Signature, AlertTriangle, Rocket, Search, QrCode, LucideMapPlus } from "lucide-react"; // Tambah 'Search' di sini
 import Cursor from "../cursor";
 import Link from "next/link";
 
@@ -17,6 +17,16 @@ export default function ToolsGallery() {
             link: "/learning",
             icon: Book,
             color: "from-blue-500 to-green-500",
+            rotate: "hover:-rotate-2",
+            delay: "animate-delay-100"
+        },
+        {
+            id: 11,
+            title: "Is This Map?",
+            desc: "Experimen menggunakan library leaflet, melihat seberapa jauh kamu dari lokasi tertentu dan random lokasi.",
+            link: "/isthismap",
+            icon: LucideMapPlus,
+            color: "from-blue-600 to-orange-400",
             rotate: "hover:-rotate-2",
             delay: "animate-delay-100"
         },

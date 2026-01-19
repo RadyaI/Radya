@@ -54,12 +54,12 @@ export default function WriteForm({
             <button
                 onClick={handleSave}
                 disabled={loading}
-                className="w-full py-4 mt-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg shadow-blue-900/20 flex items-center justify-center gap-3 transition-all transform hover:scale-[1.01]"
+                className="cursor-pointer w-full py-4 mt-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg shadow-blue-900/20 flex items-center justify-center gap-3 transition-all transform hover:scale-[1.01]"
             >
                 {loading ? (
                     <><Loader2 className="w-5 h-5 animate-spin" /> Processing...</>
                 ) : (
-                    isEditMode ? <><PenTool className="w-5 h-5" /> UPDATE SYSTEM</> : <><Save className="w-5 h-5" /> PUBLISH TO NET</>
+                    isEditMode ? <><PenTool className="w-5 h-5" /> UPDATE SYSTEM</> : <><Save className="w-5 h-5" /> PUBLISH</>
                 )}
             </button>
         </div>

@@ -1,8 +1,8 @@
 'use client'
 
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useEffect } from 'react';
 import L from 'leaflet';
 
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -35,11 +35,26 @@ interface MapRouteViewProps {
   userPos: { lat: number; lng: number } | undefined;
   onUserDragEnd: (pos: { lat: number, lng: number }) => void;
   targets: LocationTarget[];
+  focusedTarget: { lat: number; lng: number } | null;
+}
+
+function CameraController({ target }: { target: { lat: number; lng: number } | null }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (target) {
+      map.flyTo([target.lat, target.lng], 6, {
+        animate: true,
+        duration: 2 
+      });
+    }
+  }, [target, map]);
+
+  return null;
 }
 
 function DraggableMarker({ pos, onDragEnd }: { pos: { lat: number, lng: number }, onDragEnd: (pos: { lat: number, lng: number }) => void }) {
     const markerRef = useRef<L.Marker>(null);
-
     const eventHandlers = useMemo(
         () => ({
             dragend() {
@@ -60,15 +75,15 @@ function DraggableMarker({ pos, onDragEnd }: { pos: { lat: number, lng: number }
             position={pos}
             ref={markerRef}
             icon={userIcon}
-            zIndexOffset={1000}
+            zIndexOffset={1000} 
         >
             <Popup>Geser aku sesuka hatimu! 📍</Popup>
         </Marker>
     )
 }
 
-export default function MapRouteView({ userPos, onUserDragEnd, targets }: MapRouteViewProps) {
-  const defaultCenter: [number, number] = [-2.5489, 118.0149]; // Center Indonesia
+export default function MapRouteView({ userPos, onUserDragEnd, targets, focusedTarget }: MapRouteViewProps) {
+  const defaultCenter: [number, number] = [-2.5489, 118.0149]; 
 
   return (
     <MapContainer 
@@ -81,6 +96,9 @@ export default function MapRouteView({ userPos, onUserDragEnd, targets }: MapRou
         url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
       />
       
+      {/* Pasang Controller Kamera di sini */}
+      <CameraController target={focusedTarget} />
+
       {userPos && (
         <DraggableMarker pos={userPos} onDragEnd={onUserDragEnd} />
       )}

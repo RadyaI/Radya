@@ -3,9 +3,11 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useGeolocation } from '@/hooks/useGeolocation';
-import { HARDCODED_LOCATIONS, calculateDistance } from '@/utils/isthismap/geoLogic';
+import { calculateDistance } from '@/utils/isthismap/geoLogic';
+import { HARDCODED_LOCATIONS } from '@/utils/isthismap/location';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Ruler, MapPin, Loader2, GripHorizontal } from 'lucide-react';
+import { Ruler, MapPin, Loader2, GripHorizontal, MousePointerClick } from 'lucide-react';
+
 
 const MapRouteView = dynamic(
     () => import('@/components/tools/isthismap/how-far/MapRouteView'),
@@ -15,9 +17,10 @@ const MapRouteView = dynamic(
 export default function HowFarPage() {
     const locationState = useGeolocation();
     const [currentPos, setCurrentPos] = useState<{ lat: number, lng: number } | undefined>(undefined);
-
     const [isCalculating, setIsCalculating] = useState(false);
     const [loadingText, setLoadingText] = useState("Initializing...");
+
+    const [focusedTarget, setFocusedTarget] = useState<{ lat: number, lng: number } | null>(null);
 
     useEffect(() => {
         if (locationState.coordinates && !currentPos) {
@@ -28,6 +31,7 @@ export default function HowFarPage() {
     const startCalculation = (pos: { lat: number, lng: number }) => {
         setCurrentPos(pos);
         setIsCalculating(true);
+        setFocusedTarget(null);
 
         const texts = [
             "Tracking your coordinates...",
@@ -38,6 +42,7 @@ export default function HowFarPage() {
             "1+1=2...",
             "Yep, location found!"
         ];
+
 
         let i = 0;
         setLoadingText(texts[0]);
@@ -55,6 +60,10 @@ export default function HowFarPage() {
 
     const handleDragEnd = (newPos: { lat: number, lng: number }) => {
         startCalculation(newPos);
+    };
+
+    const handleItemClick = (lat: number, lng: number) => {
+        setFocusedTarget({ lat, lng });
     };
 
     const calculatedDistances = currentPos ? HARDCODED_LOCATIONS.map(loc => {
@@ -95,7 +104,7 @@ export default function HowFarPage() {
                         <div className="bg-yellow-500 p-2 rounded-lg text-black">
                             <Ruler size={20} />
                         </div>
-                        <h1 className="text-xl font-black text-white uppercase italic">How far are you?</h1>
+                        <h1 className="text-xl font-black text-white uppercase italic">Distance Report</h1>
                     </div>
                     <p className="text-xs text-zinc-400 flex items-center gap-1">
                         <GripHorizontal size={14} /> Drag the blue pin on the map to change your location.
@@ -105,17 +114,18 @@ export default function HowFarPage() {
                 <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-3">
                     {currentPos ? (
                         calculatedDistances.map((item, idx) => (
-                            <motion.div
+                            <motion.button
                                 key={item.name}
+                                onClick={() => handleItemClick(item.lat, item.lng)}
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: idx * 0.05 + 0.5 }}
-                                className="bg-zinc-800/50 border border-zinc-700 p-4 rounded-xl flex items-center justify-between hover:bg-zinc-800 transition-colors group"
+                                className="w-full bg-zinc-800/50 border border-zinc-700 p-4 rounded-xl flex items-center justify-between hover:bg-zinc-800 hover:border-yellow-500/50 transition-all group text-left focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
                             >
                                 <div className="flex items-center gap-3">
                                     <span className="text-2xl group-hover:scale-125 transition-transform">{item.icon}</span>
                                     <div>
-                                        <h3 className="font-bold text-zinc-200 text-sm">{item.name}</h3>
+                                        <h3 className="font-bold text-zinc-200 text-sm group-hover:text-yellow-400 transition-colors">{item.name}</h3>
                                         <p className="text-[10px] text-zinc-500">{item.desc}</p>
                                     </div>
                                 </div>
@@ -123,9 +133,12 @@ export default function HowFarPage() {
                                     <span className="block font-mono font-bold text-yellow-500 text-lg">
                                         {(item.meters / 1000).toLocaleString('id-ID', { maximumFractionDigits: 0 })}
                                     </span>
-                                    <span className="text-[10px] text-zinc-500 uppercase tracking-wide">KM</span>
+                                    <div className="flex items-center justify-end gap-1 text-[10px] text-zinc-500 uppercase tracking-wide">
+                                        <span>KM</span>
+                                        <MousePointerClick size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    </div>
                                 </div>
-                            </motion.div>
+                            </motion.button>
                         ))
                     ) : (
                         <div className="text-center py-10 text-zinc-600">
@@ -141,11 +154,14 @@ export default function HowFarPage() {
                     userPos={currentPos}
                     onUserDragEnd={handleDragEnd}
                     targets={HARDCODED_LOCATIONS}
+                    focusedTarget={focusedTarget}
                 />
 
-                <div className="absolute top-4 right-4 z-[400] bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 text-xs text-white pointer-events-none">
-                    📍 Lat: {currentPos?.lat.toFixed(4)} | Lng: {currentPos?.lng.toFixed(4)}
-                </div>
+                {!isCalculating && currentPos && !focusedTarget && (
+                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[400] bg-black/50 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-xs text-white pointer-events-none">
+                        Click the list in the sidebar to zoom in on the location 👇
+                    </div>
+                )}
             </div>
 
         </main>

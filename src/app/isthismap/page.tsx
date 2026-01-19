@@ -3,7 +3,7 @@ import MenuCard from '@/components/tools/isthismap/MenuCard';
 import { LocateFixed, Shuffle, Skull } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'IsthisMap? - Peta Absurd untuk Gabut Maksimal | Radya.my.id',
+    title: 'IsthisMap? - radya.my.id',
     description: 'Tools peta interaktif untuk menghitung jarak ke Point Nemo, teleportasi random, dan simulasi zombie.',
 };
 
@@ -43,7 +43,7 @@ export default function IsthisMapPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <MenuCard
-                        title="How Far Bro?"
+                        title="How Far?"
                         description="Measuring the distance from where you're sitting right now to the edge of the world. Point Nemo? Everest? Let's go."
                         href="/isthismap/how-far"
                         icon={<LocateFixed className="h-8 w-8" />}

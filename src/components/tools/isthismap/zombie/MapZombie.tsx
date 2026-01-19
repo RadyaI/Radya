@@ -54,17 +54,21 @@ function MapEvents({ onMapClick }: { onMapClick: (lat: number, lng: number) => v
 
 export default function MapZombie({ playerPos, zombies, onMapClick, energy }: MapZombieProps) {
     return (
-        <MapContainer 
-            center={playerPos ? [playerPos.lat, playerPos.lng] : [0,0]} 
-            zoom={17} 
+        <MapContainer
+            center={playerPos ? [playerPos.lat, playerPos.lng] : [0, 0]}
+            zoom={17}
             className="h-full w-full bg-[#1a0505] z-0"
             zoomControl={false}
-            scrollWheelZoom={false} 
+            scrollWheelZoom={false}
             dragging={false}
         >
             <TileLayer
-                attribution='&copy; CARTO'
-                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+            />
+
+            <TileLayer
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
             />
             
             <MapEvents onMapClick={onMapClick} />
@@ -73,23 +77,23 @@ export default function MapZombie({ playerPos, zombies, onMapClick, energy }: Ma
             {playerPos && (
                 <>
                     <Marker position={[playerPos.lat, playerPos.lng]} icon={userIcon} />
-                    
-                    <Circle 
-                        center={[playerPos.lat, playerPos.lng]} 
+
+                    <Circle
+                        center={[playerPos.lat, playerPos.lng]}
                         radius={300}
-                        pathOptions={{ 
-                            color: energy >= 30 ? 'emerald' : 'gray', 
-                            fillColor: 'transparent', 
-                            weight: 1, 
+                        pathOptions={{
+                            color: energy >= 30 ? 'emerald' : 'gray',
+                            fillColor: 'transparent',
+                            weight: 1,
                             dashArray: '5, 5',
                             opacity: 0.3
-                        }} 
+                        }}
                     />
 
-                    <Circle 
-                        center={[playerPos.lat, playerPos.lng]} 
-                        radius={30} 
-                        pathOptions={{ color: 'transparent', fillColor: 'red', fillOpacity: 0.1 }} 
+                    <Circle
+                        center={[playerPos.lat, playerPos.lng]}
+                        radius={30}
+                        pathOptions={{ color: 'transparent', fillColor: 'red', fillOpacity: 0.1 }}
                     />
                 </>
             )}

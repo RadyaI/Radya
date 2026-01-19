@@ -19,7 +19,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date('2026-01-17'),
       changeFrequency: 'daily',
       priority: 0.6,
-    }
+    },
+    {
+      url: `${baseUrl}/isthismap`,
+      lastModified: new Date('2026-01-17'),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/isthismap/zombie`,
+      lastModified: new Date('2026-01-17'),
+      changeFrequency: 'monthly',
+      priority: 0.1,
+    },
+    {
+      url: `${baseUrl}/isthismap/random-place`,
+      lastModified: new Date('2026-01-17'),
+      changeFrequency: 'monthly',
+      priority: 0.1,
+    },
+    {
+      url: `${baseUrl}/isthismap/how-far`,
+      lastModified: new Date('2026-01-17'),
+      changeFrequency: 'monthly',
+      priority: 0.1,
+    },
   ]
 
   // TOOLS ROUTES

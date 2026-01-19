@@ -174,6 +174,14 @@ export const HARDCODED_LOCATIONS = [
   { name: "Dead Sea", lat: 31.5590, lng: 35.4732, icon: "🧂", desc: "The lowest land point on Earth." },
   { name: "Great Pacific Garbage Patch", lat: 33.0, lng: -140.0, icon: "🗑️", desc: "The largest accumulation of ocean plastic." },
   { name: "Vatican City", lat: 41.9029, lng: 12.4534, icon: "⛪", desc: "The smallest country in the world." },
+  { name: "Great Wall of China", lat: 40.4319, lng: 116.5704, icon: "🧱", desc: "A massive ancient wall built to protect China from invasions." },
+  { name: "Petra", lat: 30.3285, lng: 35.4444, icon: "🏜️", desc: "An ancient city carved into rose-colored rock cliffs in Jordan." },
+  { name: "Christ the Redeemer", lat: -22.9519, lng: -43.2105, icon: "✝️", desc: "A giant statue of Jesus Christ overlooking Rio de Janeiro." },
+  { name: "Machu Picchu", lat: -13.1631, lng: -72.5450, icon: "⛰️", desc: "A mysterious Incan city located high in the Andes Mountains." },
+  { name: "Chichén Itzá", lat: 20.6843, lng: -88.5678, icon: "🛕", desc: "A famous Mayan archaeological site known for its pyramid temple." },
+  { name: "Colosseum", lat: 41.8902, lng: 12.4922, icon: "🏛️", desc: "A large ancient amphitheater used for gladiator battles in Rome." },
+  { name: "Taj Mahal", lat: 27.1751, lng: 78.0421, icon: "🕌", desc: "A stunning white marble mausoleum built as a symbol of love." }
+
 ];
 
 export const OCEAN_QUOTES = [

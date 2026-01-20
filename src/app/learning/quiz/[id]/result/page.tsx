@@ -28,7 +28,7 @@ export default function QuizResultPage() {
       const attData = await getAttemptDetail(attemptId)
       if (attData) {
         setAttempt(attData)
-        const quizData = await getQuizDetail(attData.quizId)
+        const quizData = await getQuizDetail((attData as any).quizId)
         if (quizData) setQuiz(quizData)
       }
       setLoading(false)

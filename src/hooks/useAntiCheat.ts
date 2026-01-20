@@ -16,7 +16,7 @@ export const useAntiCheat = (isActive: boolean) => {
     }
 
     const handleBlur = () => {
-      toast('FOKUS WOI! JANGAN NYONTEK! ', {
+      toast('Hayoo fokus fokus...! ', {
         icon: '🚫',
         style: { background: '#ef4444', color: '#fff', fontWeight: 'bold' },
         duration: 4000

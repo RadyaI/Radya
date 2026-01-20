@@ -8,7 +8,7 @@ import { useAntiCheat } from '@/hooks/useAntiCheat'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Clock, CheckCircle, ChevronRight, Code, Loader2 } from 'lucide-react'
 import BackgroundEffects from '@/components/learning/UI/BackgroundEffects'
-import { Toaster } from 'react-hot-toast'
+import toast, { Toaster } from 'react-hot-toast'
 
 export default function PlayQuizPage() {
   const { id } = useParams()
@@ -91,6 +91,20 @@ export default function PlayQuizPage() {
 
   const currentQ = quiz.questions[currentIndex]
 
+  const getDirectImageUrl = (url: string) => {
+    if (!url) return ''
+
+    const idRegex = /\/d\/(.*?)(?:\/|$)|id=(.*?)(?:&|$)/;
+    const match = url.match(idRegex);
+    const id = match ? (match[1] || match[2]) : null;
+
+    if (id) {
+      return `https://lh3.googleusercontent.com/d/${id}`
+    }
+
+    return url
+  }
+
   return (
     <>
       <div className="min-h-screen bg-black relative flex flex-col select-none">
@@ -131,7 +145,19 @@ export default function PlayQuizPage() {
 
               {currentQ.imageUrl && (
                 <div className="mb-6 rounded-2xl overflow-hidden border border-white/10 max-h-[300px] w-fit mx-auto bg-black/50">
-                  <img src={currentQ.imageUrl} alt="Question Reference" className="object-contain h-full max-h-[300px]" />
+                  <img
+                    src={getDirectImageUrl(currentQ.imageUrl)}
+                    alt="Question Reference"
+
+                    referrerPolicy="no-referrer"
+
+                    className="object-contain h-full max-h-[300px]"
+                    onError={(e) => {
+                      console.error("Gagal load gambar:", e.currentTarget.src)
+                      e.currentTarget.style.display = 'none'
+                      toast.error('Gambar rusak/tidak public')
+                    }}
+                  />
                 </div>
               )}
 

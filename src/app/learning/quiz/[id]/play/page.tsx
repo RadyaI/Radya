@@ -30,7 +30,7 @@ export default function PlayQuizPage() {
     getQuizDetail().then(data => {
       if (data) {
         setQuiz(data)
-        if (data.timeLimit > 0) setTimeLeft(data.timeLimit)
+        if ((data as any).timeLimit > 0) setTimeLeft((data as any).timeLimit)
       } else {
         router.push('/learning/quiz')
       }

@@ -14,7 +14,8 @@ import {
   orderBy, 
   onSnapshot, 
   addDoc, 
-  serverTimestamp 
+  serverTimestamp, 
+  Query
 } from 'firebase/firestore'
 import toast from 'react-hot-toast'
 
@@ -48,11 +49,20 @@ export const useLearning = () => {
       return
     }
 
-    const q = query(
-      collection(db, 'learning_plans'),
-      where('userId', '==', user.uid),
-      orderBy('createdAt', 'desc')
-    )
+    let q: Query;
+
+    if (user.email === 'radyaiftikhar@gmail.com') {
+      q = query(
+        collection(db, 'learning_plans'),
+        orderBy('createdAt', 'desc')
+      )
+    } else {
+      q = query(
+        collection(db, 'learning_plans'),
+        where('userId', '==', user.uid),
+        orderBy('createdAt', 'desc')
+      )
+    }
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((doc) => ({

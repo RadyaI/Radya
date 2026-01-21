@@ -9,7 +9,7 @@ export default function QuizReviewModule({ questions, userAnswers }: Props) {
   return (
     <div className="w-full mt-8 space-y-6 text-left pb-10">
       <h3 className="text-xl font-bold text-white mb-4 border-b border-white/10 pb-4">
-        Detailed Review
+        Detailed Review <br /> <span className='text-[12px] font-light text-green-500'>Explanation by Groq AI</span>
       </h3>
       
       {questions.map((q, idx) => {

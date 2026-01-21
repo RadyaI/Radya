@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Clock, Trophy, ArrowRight, Edit2 } from 'lucide-react'
+import { Eye, Clock, Trophy, ArrowRight, Edit2, FileText, ListChecks } from 'lucide-react'
 import Link from 'next/link'
 import { useLearning } from '@/hooks/useLearning'
 import { isAdmin } from '@/utils/admins'
@@ -14,6 +14,7 @@ interface QuizProps {
   difficulty: string
   timeLimit: number
   questionCount: number
+  type?: string
 }
 
 export default function QuizCard({ data, index }: { data: QuizProps, index: number }) {
@@ -25,6 +26,8 @@ export default function QuizCard({ data, index }: { data: QuizProps, index: numb
     Hard: 'text-red-400 bg-red-400/10 border-red-400/20',
     Expert: 'text-purple-400 bg-purple-400/10 border-purple-400/20'
   }[data.difficulty] || 'text-zinc-400 bg-zinc-400/10'
+
+  const isEssay = data.type === 'essay'
 
   return (
     <motion.div
@@ -40,9 +43,14 @@ export default function QuizCard({ data, index }: { data: QuizProps, index: numb
           <span className="text-xs font-bold tracking-wider text-blue-500 uppercase bg-blue-500/10 px-2 py-1 rounded-lg border border-blue-500/20">
             {data.category}
           </span>
-          <span className={`text-xs font-medium px-2 py-1 rounded-lg border ${difficultyColor}`}>
-            {data.difficulty}
-          </span>
+          <div className="flex gap-2">
+            <span className={`text-xs font-medium px-2 py-1 rounded-lg border flex items-center gap-1 ${isEssay ? 'text-blue-300 bg-blue-500/10 border-blue-500/20' : 'text-zinc-400 bg-zinc-500/10 border-zinc-500/20'}`}>
+              {isEssay ? <FileText className="w-3 h-3" /> : <ListChecks className="w-3 h-3" />}
+            </span>
+            <span className={`text-xs font-medium px-2 py-1 rounded-lg border ${difficultyColor}`}>
+              {data.difficulty}
+            </span>
+          </div>
         </div>
 
         <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors line-clamp-1">
@@ -64,7 +72,7 @@ export default function QuizCard({ data, index }: { data: QuizProps, index: numb
         </div>
 
         <div className="flex gap-3 mt-auto">
-          <Link 
+          <Link
             href={`/learning/quiz/${data.id}`}
             className="flex-1 py-3 bg-white text-black rounded-xl font-bold flex items-center justify-center gap-2 group-hover:scale-[1.02] active:scale-95 transition-all shadow-lg hover:shadow-white/20"
           >
@@ -73,13 +81,22 @@ export default function QuizCard({ data, index }: { data: QuizProps, index: numb
           </Link>
 
           {user && isAdmin(user.email) && (
-            <Link
-              href={`/learning/quiz/manage/${data.id}`}
-              className="px-4 py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white rounded-xl border border-zinc-700 transition-all flex items-center justify-center"
-              title="Edit Quiz"
-            >
-              <Edit2 className="w-5 h-5" />
-            </Link>
+            <div className="flex gap-2">
+              <Link
+                href={`/learning/quiz/manage/${data.id}/results`}
+                className="px-4 py-3 bg-blue-900/30 hover:bg-blue-900/50 text-blue-400 border border-blue-500/30 rounded-xl transition-all flex items-center justify-center"
+                title="Monitor Results"
+              >
+                <Eye className="w-5 h-5" />
+              </Link>
+              <Link
+                href={`/learning/quiz/manage/${data.id}`}
+                className="px-4 py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white rounded-xl border border-zinc-700 transition-all flex items-center justify-center"
+                title="Edit Quiz"
+              >
+                <Edit2 className="w-5 h-5" />
+              </Link>
+            </div>
           )}
         </div>
       </div>

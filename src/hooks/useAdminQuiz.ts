@@ -30,7 +30,6 @@ export const useAdminQuiz = () => {
     setSaving(true)
     try {
       const cleanData = JSON.parse(JSON.stringify(data))
-      
       await updateDoc(doc(db, 'quizzes', id), {
         ...cleanData,
         updatedAt: serverTimestamp()
@@ -38,7 +37,6 @@ export const useAdminQuiz = () => {
       toast.success('Quiz Updated! 📝')
       router.push('/learning/quiz')
     } catch (error) {
-      console.error(error)
       toast.error('Error updating quiz')
     } finally {
       setSaving(false)
@@ -50,12 +48,32 @@ export const useAdminQuiz = () => {
     try {
       await deleteDoc(doc(db, 'quizzes', id))
       toast.success('Quiz Deleted 🗑️')
-      router.push('/learning/quiz')
-      router.refresh()
+      router.push("/learning/quiz")
     } catch (error) {
       toast.error('Error deleting quiz')
     }
   }
 
-  return { saving, createQuiz, updateQuiz, deleteQuiz }
+  const gradeAttempt = async (attemptId: string, finalScore: number, feedback: string) => {
+    if (!attemptId) return toast.error('Error: ID Missing')
+    
+    setSaving(true)
+    try {
+        await updateDoc(doc(db, 'quiz_attempts', attemptId), {
+            score: finalScore,
+            status: 'graded',
+            adminFeedback: feedback,
+            gradedAt: serverTimestamp()
+        })
+        toast.success('Score updated successfully!')
+        router.back()
+    } catch (error) {
+        console.error(error)
+        toast.error('Failed to update score')
+    } finally {
+        setSaving(false)
+    }
+  }
+
+  return { saving, createQuiz, updateQuiz, deleteQuiz, gradeAttempt }
 }

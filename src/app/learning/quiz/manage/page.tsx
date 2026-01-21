@@ -6,6 +6,7 @@ import AdminQuizForm from '@/components/quiz/AdminQuizForm'
 import { ShieldAlert, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import BackgroundEffects from '@/components/learning/UI/BackgroundEffects'
+import { Toaster } from 'react-hot-toast'
 
 export default function ManageQuizPage() {
   const { user, loading } = useLearning()
@@ -35,17 +36,20 @@ export default function ManageQuizPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black relative">
-      <BackgroundEffects />
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 relative z-10">
-        <div className="mb-10">
-           <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500 mb-2">
-            Quiz Command Center
-          </h1>
-          <p className="text-zinc-400">Create rigorous assessments to test their limits.</p>
+    <>
+    <Toaster position='top-right' />
+      <div className="min-h-screen bg-black relative">
+        <BackgroundEffects />
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 relative z-10">
+          <div className="mb-10">
+            <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500 mb-2">
+              Quiz Command Center
+            </h1>
+            <p className="text-zinc-400">Create rigorous assessments to test their limits.</p>
+          </div>
+          <AdminQuizForm userEmail={user.email!} />
         </div>
-        <AdminQuizForm userEmail={user.email!} />
       </div>
-    </div>
+    </>
   )
 }

@@ -12,6 +12,7 @@ import ActivityStats from '@/components/learning/dashboard/ActivityStats'
 
 import BackgroundEffects from '@/components/learning/UI/BackgroundEffects'
 import CursorFollower from '@/components/learning/UI/CursorFollower'
+import { Toaster } from 'react-hot-toast'
 
 const CATEGORIES = [
   "All Categories",
@@ -80,99 +81,103 @@ export default function LearningDashboard() {
   }
 
   return (
-    <div className="relative min-h-screen">
+    <>
+      <div className="relative min-h-screen">
 
-      <BackgroundEffects />
-      <CursorFollower />
+        <BackgroundEffects />
+        <CursorFollower />
 
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 py-10">
+        <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 py-10">
 
-        <HeaderDashboard
-          user={user}
-          onOpenModal={() => setIsModalOpen(true)}
-          onLogout={logout}
-        />
+          <HeaderDashboard
+            user={user}
+            onOpenModal={() => setIsModalOpen(true)}
+            onLogout={logout}
+          />
 
-        <ActivityStats plans={plans} />
+          <ActivityStats plans={plans} />
 
-        <div className="bg-zinc-900/30 border border-white/5 p-4 rounded-2xl mb-8 flex flex-col md:flex-row gap-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-            <input
-              type="text"
-              placeholder="Search plans..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500/50 transition-colors"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
+          <div className="bg-zinc-900/30 border border-white/5 p-4 rounded-2xl mb-8 flex flex-col md:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <input
+                type="text"
+                placeholder="Search plans..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500/50 transition-colors"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            <div className="relative min-w-[200px]">
+              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-10 pr-8 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500/50 appearance-none cursor-pointer"
               >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
+                {CATEGORIES.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          <div className="relative min-w-[200px]">
-            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-10 pr-8 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500/50 appearance-none cursor-pointer"
+          {filteredPlans.length === 0 ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-20 border border-dashed border-zinc-800 rounded-3xl bg-zinc-900/20"
             >
-              {CATEGORIES.map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
-          </div>
+              {plans.length === 0 ? (
+                <>
+                  <p className="text-zinc-500 mb-4">No learning plans yet. Start your journey!</p>
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="cursor-pointer text-blue-500 hover:text-blue-400 text-sm font-medium"
+                  >
+                    Create your first plan &rarr;
+                  </button>
+                </>
+              ) : (
+                <div className="space-y-2">
+                  <p className="text-zinc-400">No plans match your search.</p>
+                  <button
+                    onClick={() => { setSearchQuery(''); setSelectedCategory('All Categories') }}
+                    className="text-blue-500 hover:text-blue-400 text-sm"
+                  >
+                    Clear filters
+                  </button>
+                </div>
+              )}
+            </motion.div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <AnimatePresence mode='popLayout'>
+                {filteredPlans.map((plan, idx) => (
+                  <PlanCard key={plan.id} data={plan} index={idx} />
+                ))}
+              </AnimatePresence>
+            </div>
+          )}
+
+          <CreateModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onSubmit={createPlan}
+          />
         </div>
-
-        {filteredPlans.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-20 border border-dashed border-zinc-800 rounded-3xl bg-zinc-900/20"
-          >
-            {plans.length === 0 ? (
-              <>
-                <p className="text-zinc-500 mb-4">No learning plans yet. Start your journey!</p>
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="cursor-pointer text-blue-500 hover:text-blue-400 text-sm font-medium"
-                >
-                  Create your first plan &rarr;
-                </button>
-              </>
-            ) : (
-              <div className="space-y-2">
-                <p className="text-zinc-400">No plans match your search.</p>
-                <button
-                  onClick={() => { setSearchQuery(''); setSelectedCategory('All Categories') }}
-                  className="text-blue-500 hover:text-blue-400 text-sm"
-                >
-                  Clear filters
-                </button>
-              </div>
-            )}
-          </motion.div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <AnimatePresence mode='popLayout'>
-              {filteredPlans.map((plan, idx) => (
-                <PlanCard key={plan.id} data={plan} index={idx} />
-              ))}
-            </AnimatePresence>
-          </div>
-        )}
-
-        <CreateModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onSubmit={createPlan}
-        />
       </div>
-    </div>
+      <Toaster position='top-right'  />
+    </>
   )
+
 }

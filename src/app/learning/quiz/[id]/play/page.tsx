@@ -6,9 +6,20 @@ import { useLearning } from '@/hooks/useLearning'
 import { useQuiz } from '@/hooks/useQuiz'
 import { useAntiCheat } from '@/hooks/useAntiCheat'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Clock, CheckCircle, ChevronRight, Code, Loader2 } from 'lucide-react'
+import { Clock, CheckCircle, ChevronRight, Code, Loader2, Edit3 } from 'lucide-react'
 import BackgroundEffects from '@/components/learning/UI/BackgroundEffects'
 import toast, { Toaster } from 'react-hot-toast'
+
+const getDirectImageUrl = (url: string) => {
+  if (!url) return ''
+  const idRegex = /\/d\/(.*?)(?:\/|$)|id=(.*?)(?:&|$)/;
+  const match = url.match(idRegex);
+  const id = match ? (match[1] || match[2]) : null;
+  if (id) {
+    return `https://lh3.googleusercontent.com/d/${id}`
+  }
+  return url
+}
 
 export default function PlayQuizPage() {
   const { id } = useParams()
@@ -18,7 +29,7 @@ export default function PlayQuizPage() {
 
   const [quiz, setQuiz] = useState<any>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [answers, setAnswers] = useState<Record<number, number>>({})
+  const [answers, setAnswers] = useState<Record<number, string | number>>({})
   const [timeLeft, setTimeLeft] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -26,7 +37,6 @@ export default function PlayQuizPage() {
 
   useEffect(() => {
     if (!id || !user) return
-
     getQuizDetail().then(data => {
       if (data) {
         setQuiz(data)
@@ -43,13 +53,16 @@ export default function PlayQuizPage() {
 
     let correctCount = 0
     quiz.questions.forEach((q: any, idx: number) => {
-      const selectedOptionIdx = answers[idx]
-      if (selectedOptionIdx !== undefined && q.options[selectedOptionIdx].isCorrect) {
-        correctCount++
+      const ans = answers[idx]
+      if (q.type !== 'essay' && typeof ans === 'number') {
+        if (q.options[ans].isCorrect) {
+          correctCount++
+        }
       }
     })
 
-    const finalScore = Math.round((correctCount / quiz.questions.length) * 100)
+    const pgQuestions = quiz.questions.filter((q: any) => q.type !== 'essay').length
+    const finalScore = pgQuestions > 0 ? Math.round((correctCount / pgQuestions) * 100) : 0
 
     try {
       const attemptId = await submitQuiz(
@@ -59,9 +72,7 @@ export default function PlayQuizPage() {
         correctCount,
         answers
       )
-
       router.replace(`/learning/quiz/${id}/result?attemptId=${attemptId}`)
-
     } catch (e) {
       setIsSubmitting(false)
     }
@@ -90,20 +101,7 @@ export default function PlayQuizPage() {
   )
 
   const currentQ = quiz.questions[currentIndex]
-
-  const getDirectImageUrl = (url: string) => {
-    if (!url) return ''
-
-    const idRegex = /\/d\/(.*?)(?:\/|$)|id=(.*?)(?:&|$)/;
-    const match = url.match(idRegex);
-    const id = match ? (match[1] || match[2]) : null;
-
-    if (id) {
-      return `https://lh3.googleusercontent.com/d/${id}`
-    }
-
-    return url
-  }
+  const currentType = currentQ.type || 'multiple-choice'
 
   return (
     <>
@@ -148,15 +146,9 @@ export default function PlayQuizPage() {
                   <img
                     src={getDirectImageUrl(currentQ.imageUrl)}
                     alt="Question Reference"
-
                     referrerPolicy="no-referrer"
-
                     className="object-contain h-full max-h-[300px]"
-                    onError={(e) => {
-                      console.error("Gagal load gambar:", e.currentTarget.src)
-                      e.currentTarget.style.display = 'none'
-                      toast.error('Gambar rusak/tidak public')
-                    }}
+                    onError={(e) => e.currentTarget.style.display = 'none'}
                   />
                 </div>
               )}
@@ -170,33 +162,48 @@ export default function PlayQuizPage() {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 gap-3 mb-10">
-                {currentQ.options.map((opt: any, idx: number) => (
-                  <button
-                    key={idx}
-                    onClick={() => setAnswers(prev => ({ ...prev, [currentIndex]: idx }))}
-                    className={`relative p-5 rounded-2xl text-left transition-all border group ${answers[currentIndex] === idx
-                      ? 'bg-blue-600 border-blue-500 shadow-[0_0_20px_rgba(37,99,235,0.3)]'
-                      : 'bg-zinc-900/40 border-white/10 hover:bg-zinc-800 hover:border-white/20'
-                      }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className={`w-8 h-8 rounded-full border flex items-center justify-center text-sm font-bold transition-colors ${answers[currentIndex] === idx ? 'bg-white text-blue-600 border-white' : 'border-zinc-600 text-zinc-500 group-hover:border-zinc-400 group-hover:text-zinc-300'
-                        }`}>
-                        {String.fromCharCode(65 + idx)}
+              {currentType === 'essay' ? (
+                <div className="relative">
+                  <textarea
+                    value={answers[currentIndex] as string || ''}
+                    onChange={(e) => setAnswers(prev => ({ ...prev, [currentIndex]: e.target.value }))}
+                    placeholder="Type your answer here..."
+                    className="w-full bg-zinc-900/50 border border-white/10 rounded-2xl p-6 text-lg text-white placeholder:text-zinc-600 focus:border-blue-500 outline-none transition-all resize-y min-h-[200px]"
+                    spellCheck={false}
+                  />
+                  <div className="absolute bottom-4 right-4 text-xs text-zinc-500 flex items-center gap-1">
+                    <Edit3 className="w-3 h-3" /> Essay Mode
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-3 mb-10">
+                  {currentQ.options.map((opt: any, idx: number) => (
+                    <button
+                      key={idx}
+                      onClick={() => setAnswers(prev => ({ ...prev, [currentIndex]: idx }))}
+                      className={`relative p-5 rounded-2xl text-left transition-all border group ${answers[currentIndex] === idx
+                          ? 'bg-blue-600 border-blue-500 shadow-[0_0_20px_rgba(37,99,235,0.3)]'
+                          : 'bg-zinc-900/40 border-white/10 hover:bg-zinc-800 hover:border-white/20'
+                        }`}
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className={`w-8 h-8 rounded-full border flex items-center justify-center text-sm font-bold transition-colors ${answers[currentIndex] === idx ? 'bg-white text-blue-600 border-white' : 'border-zinc-600 text-zinc-500 group-hover:border-zinc-400 group-hover:text-zinc-300'
+                          }`}>
+                          {String.fromCharCode(65 + idx)}
+                        </div>
+                        <span className={`text-lg ${answers[currentIndex] === idx ? 'text-white font-semibold' : 'text-zinc-300'}`}>
+                          {opt.text}
+                        </span>
                       </div>
-                      <span className={`text-lg ${answers[currentIndex] === idx ? 'text-white font-semibold' : 'text-zinc-300'}`}>
-                        {opt.text}
-                      </span>
-                    </div>
-                    {answers[currentIndex] === idx && (
-                      <motion.div layoutId="check" className="absolute right-5 top-1/2 -translate-y-1/2">
-                        <CheckCircle className="w-6 h-6 text-white" />
-                      </motion.div>
-                    )}
-                  </button>
-                ))}
-              </div>
+                      {answers[currentIndex] === idx && (
+                        <motion.div layoutId="check" className="absolute right-5 top-1/2 -translate-y-1/2">
+                          <CheckCircle className="w-6 h-6 text-white" />
+                        </motion.div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
             </motion.div>
           </AnimatePresence>
         </div>
@@ -232,7 +239,8 @@ export default function PlayQuizPage() {
           </div>
         </div>
       </div>
-      <Toaster position='top-right' />
+      <Toaster position='top-right'/>
     </>
   )
+
 }

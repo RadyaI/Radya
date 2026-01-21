@@ -6,6 +6,7 @@ import { useQuiz } from '@/hooks/useQuiz'
 import AdminQuizForm from '@/components/quiz/AdminQuizForm'
 import { Loader2 } from 'lucide-react'
 import BackgroundEffects from '@/components/learning/UI/BackgroundEffects'
+import { Toaster } from 'react-hot-toast'
 
 export default function EditQuizPage() {
   const { id } = useParams()
@@ -27,12 +28,15 @@ export default function EditQuizPage() {
   )
 
   return (
-    <div className="min-h-screen bg-black relative">
-      <BackgroundEffects />
-      <div className="max-w-5xl mx-auto px-4 py-12 relative z-10">
-        <h1 className="text-3xl text-white font-bold mb-8">Edit Quiz</h1>
-        <AdminQuizForm userEmail="admin" initialData={initialData} isEditMode={true} />
+    <>
+    <Toaster position='top-right' />
+      <div className="min-h-screen bg-black relative">
+        <BackgroundEffects />
+        <div className="max-w-5xl mx-auto px-4 py-12 relative z-10">
+          <h1 className="text-3xl text-white font-bold mb-8">Edit Quiz</h1>
+          <AdminQuizForm userEmail="admin" initialData={initialData} isEditMode={true} />
+        </div>
       </div>
-    </div>
+    </>
   )
 }

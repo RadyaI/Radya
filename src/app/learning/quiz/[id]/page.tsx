@@ -106,7 +106,7 @@ export default function QuizPreStartPage() {
           {!user ? (
              <div className="text-center">
                <p className="text-zinc-500 mb-2">Please login to start</p>
-               <button disabled className="w-full py-4 bg-zinc-800 rounded-xl text-zinc-500 font-bold cursor-not-allowed">
+               <button onClick={() => router.push("/learning")} className="w-full py-4 bg-zinc-800 rounded-xl text-zinc-500 font-bold cursor-not-allowed">
                  Login Required
                </button>
              </div>

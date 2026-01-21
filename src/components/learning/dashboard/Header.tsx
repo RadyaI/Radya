@@ -1,5 +1,6 @@
-import { LayoutGrid, Plus, LogOut } from 'lucide-react'
+import { LayoutGrid, Plus, LogOut, BookOpenCheck } from 'lucide-react'
 import { User } from 'firebase/auth'
+import { useRouter } from 'next/navigation'
 
 interface Props {
   user: User | null
@@ -8,6 +9,9 @@ interface Props {
 }
 
 export default function HeaderDashboard({ user, onOpenModal, onLogout }: Props) {
+
+  const router = useRouter()
+
   return (
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
       <div>
@@ -27,6 +31,14 @@ export default function HeaderDashboard({ user, onOpenModal, onLogout }: Props) 
         >
           <Plus className="w-5 h-5" />
           <span className="hidden sm:inline">New Plan</span>
+        </button>
+
+        <button
+          onClick={() => router.push("/learning/quiz")}
+          className="cursor-pointer flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2.5 rounded-xl font-medium transition-all shadow-lg shadow-blue-900/20 hover:shadow-blue-900/40"
+        >
+          <BookOpenCheck className="w-5 h-5" />
+          <span className="hidden sm:inline">Quiz</span>
         </button>
 
         <button

@@ -1,55 +1,56 @@
 "use client";
 
-import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Head from 'next/head';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- COMPONENT: HYPER SCRAMBLE TEXT ---
-// Efek teks ngacak dulu baru bener
-const HyperText = ({ text, className, delay = 0 }: { text: string, className?: string, delay?: number }) => {
-  const [display, setDisplay] = useState(text);
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
-  
-  useEffect(() => {
-    let iteration = 0;
-    let interval: NodeJS.Timeout;
+// --- COMPONENT: CHAOTIC TEXT (HURUF MENCAR) ---
+const ChaoticTitle = ({ text }: { text: string }) => {
+    return (
+        <div className="relative h-[20vh] md:h-[40vh] w-full pointer-events-none select-none">
+            {text.split("").map((char, i) => {
+                // Random position & rotation buat efek "Chaos"
+                const randomRot = Math.random() * 20 - 10; 
+                const randomY = Math.random() * 50; 
+                return (
+                    <span 
+                        key={i} 
+                        className="inline-block font-anton text-[15vw] leading-none absolute will-change-transform mix-blend-difference text-[#EAEAEA]"
+                        style={{ 
+                            left: `${i * 12}%`, 
+                            top: `${randomY}px`,
+                            transform: `rotate(${randomRot}deg)` 
+                        }}
+                    >
+                        {char}
+                    </span>
+                )
+            })}
+        </div>
+    )
+}
 
-    const startScramble = () => {
-      clearInterval(interval);
-      interval = setInterval(() => {
-        setDisplay(
-          text
-            .split("")
-            .map((letter, index) => {
-              if (index < iteration) return text[index];
-              return chars[Math.floor(Math.random() * chars.length)];
-            })
-            .join("")
-        );
-
-        if (iteration >= text.length) clearInterval(interval);
-        iteration += 1 / 3; // Kecepatan decoding
-      }, 30);
-    };
-
-    // Trigger saat component masuk viewport (pake Intersection Observer simpel)
-    // Atau pake timeout simple buat demo ini
-    const timer = setTimeout(startScramble, delay * 1000);
-    return () => {
-        clearInterval(interval);
-        clearTimeout(timer);
-    }
-  }, [text, delay]);
-
-  return <span className={className}>{display}</span>;
-};
+// --- COMPONENT: STICKY NOTE (Konteks Penjelas) ---
+const StickyNote = ({ title, text, rotation = "0deg" }: { title: string, text: string, rotation?: string }) => {
+    return (
+        <div 
+            className="bg-[#FFFFF0] text-black p-6 w-64 md:w-80 border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative z-20"
+            style={{ transform: `rotate(${rotation})` }}
+        >
+            <div className="w-3 h-3 rounded-full bg-red-500 mb-4 border border-black"></div>
+            <h4 className="font-anton text-2xl mb-2 uppercase">{title}</h4>
+            <p className="font-mono text-xs leading-relaxed opacity-80">{text}</p>
+        </div>
+    )
+}
 
 export default function TheOtherSide() {
   const mainRef = useRef<HTMLDivElement>(null);
-  const cursorRef = useRef<HTMLDivElement>(null);
+  
+  // Section Refs
+  const heroRef = useRef<HTMLDivElement>(null);
   const bmwRef = useRef<HTMLDivElement>(null);
   const manhwaRef = useRef<HTMLDivElement>(null);
   const catRef = useRef<HTMLDivElement>(null);
@@ -57,256 +58,235 @@ export default function TheOtherSide() {
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       
-      // --- 1. GLOBAL CURSOR FIX (No More Bugs) ---
-      // Listener dipasang global, state visualnya yang diubah per section
-      const xSet = gsap.quickSetter(cursorRef.current, "x", "px");
-      const ySet = gsap.quickSetter(cursorRef.current, "y", "px");
-
-      window.addEventListener("mousemove", (e) => {
-        xSet(e.clientX);
-        ySet(e.clientY);
+      // 1. HERO PARALLAX SCATTER
+      // Huruf-huruf di Hero gerak mencar pas di scroll
+      gsap.to(".hero-char", {
+          y: (i) => (i + 1) * -100, // Tiap huruf beda speed
+          x: (i) => (i % 2 === 0 ? -50 : 50), // Ganjil genap beda arah
+          rotation: (i) => i * 10,
+          opacity: 0,
+          scrollTrigger: { trigger: heroRef.current, scrub: 0.5 }
       });
 
-      // --- 2. BACKGROUND COLOR LOGIC ---
-      const sections = [bmwRef.current, manhwaRef.current, catRef.current];
-      const bgColors = ["#0F1014", "#E5E5E5", "#D7CCC8"];
-      const textColors = ["#F5F5F5", "#111111", "#3E2723"];
-
-      sections.forEach((section, i) => {
-        if (!section) return;
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top center",
-          end: "bottom center",
-          onEnter: () => gsap.to(mainRef.current, { backgroundColor: bgColors[i], color: textColors[i] }),
-          onEnterBack: () => gsap.to(mainRef.current, { backgroundColor: bgColors[i], color: textColors[i] }),
-          // Logic Cursor per Section
-          onUpdate: ({ isActive }) => {
-             if (i === 2 && isActive) { // Zona Kucing
-                gsap.to(cursorRef.current, { scale: 1, opacity: 1, duration: 0.3 });
-             } else if (i !== 2) {
-                gsap.to(cursorRef.current, { scale: 0, opacity: 0, duration: 0.3 });
-             }
-          }
-        });
+      // 2. BMW HORIZONTAL DRAG
+      // Teks background gerak horizontal kenceng
+      gsap.to(".bmw-bg-text", {
+          xPercent: -50,
+          scrollTrigger: { trigger: bmwRef.current, scrub: 1 }
+      });
+      // Gambar/Elemen miring ikut scroll
+      gsap.to(".bmw-element", {
+          yPercent: 30,
+          rotation: 5,
+          scrollTrigger: { trigger: bmwRef.current, scrub: 1 }
       });
 
-      // --- 3. VELOCITY SKEW (BMW) ---
-      let proxy = { skew: 0 };
-      let skewSetter = gsap.quickSetter(".bmw-text", "skewX", "deg");
-      let clamp = gsap.utils.clamp(-20, 20);
-
-      ScrollTrigger.create({
-        trigger: bmwRef.current,
-        onUpdate: (self) => {
-          let skew = clamp(self.getVelocity() / -50);
-          if (Math.abs(skew) > Math.abs(proxy.skew)) {
-            proxy.skew = skew;
-            gsap.to(proxy, { skew: 0, duration: 0.5, ease: "power3", overwrite: true, onUpdate: () => skewSetter(proxy.skew) });
-          }
-        }
+      // 3. MANHWA PANELS FLOATING
+      // Panel komik melayang floating
+      gsap.utils.toArray<HTMLElement>(".manhwa-float").forEach((el, i) => {
+          gsap.to(el, {
+              y: (i + 1) * -50,
+              rotation: (i % 2 === 0 ? -5 : 5),
+              scrollTrigger: { trigger: manhwaRef.current, scrub: 1 }
+          });
       });
 
-      // --- 4. PARALLAX TEXT (MANHWA) ---
-      gsap.to(".manhwa-text-move", {
-        xPercent: -20,
-        scrollTrigger: {
-            trigger: manhwaRef.current,
-            scrub: 1
-        }
-      })
+      // 4. CAT CHAOS
+      // Teks kucing "MEOW" ngikutin tapi delay (Magnetic)
+      const catText = document.querySelector(".cat-giant-text") as HTMLElement;
+      if (catText) {
+          window.addEventListener("mousemove", (e) => {
+              const x = (e.clientX / window.innerWidth - 0.5) * 50;
+              const y = (e.clientY / window.innerHeight - 0.5) * 50;
+              gsap.to(catText, { x: x, y: y, duration: 1, ease: "power2.out" });
+          });
+      }
 
     }, mainRef);
-
     return () => ctx.revert();
   }, []);
 
   return (
-    <main ref={mainRef} className="min-h-screen bg-[#0F1014] text-[#F5F5F5] transition-colors overflow-x-hidden selection:bg-red-500 selection:text-white relative">
+    <main ref={mainRef} className="min-h-screen bg-[#111] text-[#EAEAEA] font-sans overflow-x-hidden selection:bg-[#FF4D00] selection:text-white">
       
-      {/* FONTS & STYLES */}
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
         .font-anton { font-family: 'Anton', sans-serif; }
         .font-mono { font-family: 'Space Mono', monospace; }
-        .text-stroke-white { -webkit-text-stroke: 1px white; color: transparent; }
-        .text-stroke-black { -webkit-text-stroke: 1px black; color: transparent; }
+        .text-stroke { -webkit-text-stroke: 1px rgba(255,255,255,0.2); color: transparent; }
         
-        .bg-grid {
-            background-size: 50px 50px; /* Grid lebih rapat */
-            background-image: linear-gradient(to right, rgba(100, 100, 100, 0.05) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(100, 100, 100, 0.05) 1px, transparent 1px);
+        /* Noise Grain Texture */
+        .noise {
+             position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.05;
+             background: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
         }
       `}</style>
+      
+      <div className="noise"></div>
 
-      {/* FIXED ELEMENTS */}
-      <div className="fixed inset-0 bg-grid pointer-events-none z-0"></div>
-      <div ref={cursorRef} className="fixed top-0 left-0 w-24 h-24 bg-[#3E2723] rounded-full pointer-events-none z-50 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center text-[#E6DCCA] font-bold text-sm mix-blend-hard-light scale-0 opacity-0">
-          <span className="animate-spin">PET ME</span>
+      {/* NAV (MINIMALIST POJOK) */}
+      <nav className="fixed top-6 left-6 z-50 mix-blend-difference">
+          <span className="font-anton text-xl tracking-wide block">RADYA</span>
+          <span className="font-mono text-xs opacity-50 block">/ OTHERSIDE</span>
+      </nav>
+      <div className="fixed top-6 right-6 z-50 font-mono text-xs border border-white/20 px-3 py-1 rounded-full hidden md:block mix-blend-difference">
+          SCROLL TO DECONSTRUCT ↓
       </div>
 
-      <div className="fixed top-0 left-0 w-full p-6 flex justify-between items-start z-50 mix-blend-difference text-white">
-        <div>
-            <span className="font-anton tracking-wide text-2xl block">RADYA <span className="font-mono text-sm opacity-60">/ OTHERSIDE</span></span>
-            <div className="font-mono text-[10px] mt-2 max-w-[150px] leading-tight opacity-70">
-                <HyperText text="INITIATING PROTOCOL: PERSONAL_INTERESTS_V2.0" />
-            </div>
-        </div>
-        <div className="text-right hidden md:block">
-            <span className="font-mono text-xs block">[ SYSTEM STATUS: ONLINE ]</span>
-            <span className="font-mono text-xs block opacity-50">LAT: -7.250445 | LONG: 112.768845</span>
-        </div>
-      </div>
+      {/* --- SECTION 1: HERO (THE SCATTER) --- */}
+      <section ref={heroRef} className="min-h-screen relative flex items-center justify-center overflow-hidden">
+          {/* Background Chaos Text */}
+          <div className="absolute inset-0 flex flex-col justify-center items-center opacity-10 pointer-events-none select-none">
+             <div className="text-[20vw] font-anton leading-[0.8]">CHAOS</div>
+             <div className="text-[20vw] font-anton leading-[0.8] ml-20">MODE</div>
+          </div>
 
-      {/* --- ZONE 1: BMW (DENSE LAYOUT) --- */}
-      <section ref={bmwRef} className="relative min-h-screen flex items-center px-6 md:px-12 py-24 z-10 border-b border-white/10">
-        <div className="absolute top-0 right-10 h-full flex gap-4 opacity-30 mix-blend-overlay pointer-events-none">
-          <div className="w-1 h-full bg-[#5E87C8]"></div>
-          <div className="w-1 h-full bg-[#280562]"></div>
-          <div className="w-1 h-full bg-[#C91A25]"></div>
-        </div>
-
-        <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
-            {/* Kolom Kiri: Teks Kecil (Filler/Texture) */}
-            <div className="hidden md:col-span-2 md:flex flex-col justify-between h-[60vh] font-mono text-xs text-gray-500 border-r border-gray-800 pr-4">
-                <div>
-                    <p className="mb-4">PROJECT: GARAGE</p>
-                    <p className="opacity-50">Precision engineering meets raw performance. Defining the ultimate driving machine through code and chassis dynamics.</p>
-                </div>
-                <div className="space-y-2">
-                    <p>01. VANOS SYSTEM</p>
-                    <p>02. INDIVIDUAL THROTTLE BODIES</p>
-                    <p>03. 50:50 WEIGHT DIST.</p>
-                </div>
-            </div>
-
-            {/* Kolom Tengah: Judul Besar */}
-            <div className="col-span-12 md:col-span-8 relative">
-                <div className="bmw-text">
-                    <HyperText text="BAVARIAN" className="text-[12vw] leading-[0.8] font-anton block" delay={0.2} />
-                    <h1 className="text-[12vw] leading-[0.8] font-anton block text-stroke-white opacity-80">MOTOR</h1>
-                    <h1 className="text-[12vw] leading-[0.8] font-anton block text-[#C91A25]">WORKS</h1>
-                </div>
-                
-                {/* Specs Grid yang Rapat */}
-                <div className="grid grid-cols-3 md:grid-cols-3 gap-0 border-t border-b border-gray-700 mt-12">
-                    <div className="p-4 border-r border-gray-700 hover:bg-white/5 transition-colors group">
-                        <span className="font-mono text-[10px] text-gray-400 block mb-1">CHASSIS CODE</span>
-                        <HyperText text="E46 M3" className="font-anton text-2xl group-hover:text-[#5E87C8]" />
-                    </div>
-                    <div className="p-4 border-r border-gray-700 hover:bg-white/5 transition-colors group">
-                        <span className="font-mono text-[10px] text-gray-400 block mb-1">ENGINE</span>
-                        <HyperText text="S54B32" className="font-anton text-2xl group-hover:text-[#280562]" delay={0.5} />
-                    </div>
-                    <div className="p-4 hover:bg-white/5 transition-colors group">
-                        <span className="font-mono text-[10px] text-gray-400 block mb-1">OUTPUT</span>
-                        <HyperText text="343 HP" className="font-anton text-2xl group-hover:text-[#C91A25]" delay={0.8} />
-                    </div>
-                </div>
-            </div>
-
-            {/* Kolom Kanan: Vertikal Text */}
-            <div className="hidden md:col-span-2 md:flex flex-col justify-end items-end h-[50vh]">
-                 <span className="writing-vertical font-mono text-xs tracking-widest opacity-50 rotate-180">
-                    JOY IS BMW • FREUDE AM FAHREN
-                 </span>
-            </div>
-        </div>
+          <div className="relative z-10 text-center w-full max-w-5xl mx-auto mt-20 md:mt-0">
+               {/* Huruf Mencar-mencar */}
+               <div className="flex justify-center flex-wrap gap-x-2 md:gap-x-8 px-4">
+                   {/* Huruf Manual satu-satu biar bisa dianimasiin mencar */}
+                   {["U", "N", "F", "I", "L", "T", "E", "R", "E", "D"].map((char, i) => (
+                       <span key={i} className="hero-char font-anton text-[12vw] md:text-[8vw] inline-block hover:text-[#FF4D00] transition-colors duration-300 cursor-default">
+                           {char}
+                       </span>
+                   ))}
+               </div>
+               
+               {/* Context Note (Miring dikit) */}
+               <div className="mt-12 max-w-md mx-auto transform -rotate-2 bg-[#FF4D00] text-black p-4 inline-block shadow-[8px_8px_0px_0px_#fff]">
+                   <p className="font-mono text-xs md:text-sm font-bold">
+                       [ SYSTEM ALERT ] <br/>
+                       This is the deconstructed version of Radya. 
+                       No grid system found. Enter at your own risk.
+                   </p>
+               </div>
+          </div>
       </section>
 
-      {/* --- ZONE 2: MANHWA (MAGAZINE LAYOUT) --- */}
-      <section ref={manhwaRef} className="relative min-h-screen px-6 md:px-12 py-24 z-10 flex flex-col justify-center">
-         <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-4">
-            
-            {/* Header Section */}
-            <div className="col-span-12 mb-8 border-b-4 border-black pb-4 flex justify-between items-end">
-                <h2 className="font-anton text-6xl text-black">WEEKLY<br/>UPDATE</h2>
-                <div className="text-right font-mono text-xs text-black space-y-1">
-                    <p>GENRE: ACTION / SYSTEM</p>
-                    <p>TARGET: SHONEN</p>
-                    <HyperText text="READING STATUS: OBSESSED" />
-                </div>
-            </div>
+      {/* --- SECTION 2: BMW (THE ASYMMETRIC MACHINE) --- */}
+      <section ref={bmwRef} className="min-h-[120vh] relative py-20 overflow-hidden">
+          {/* Background Text Running Horizontal */}
+          <div className="absolute top-1/2 -translate-y-1/2 whitespace-nowrap opacity-10 font-anton text-[30vw] bmw-bg-text leading-none select-none pointer-events-none">
+              GERMAN ENGINEERING PERFECTION M-POWER
+          </div>
 
-            {/* Panel 1: Text Heavy (Swiss Style Column) */}
-            <div className="col-span-12 md:col-span-4 bg-white border-2 border-black p-6 flex flex-col justify-between min-h-[40vh]">
-                <div>
-                    <h3 className="font-anton text-3xl mb-4 bg-black text-white inline-block px-2">SOLO LEVELING</h3>
-                    <p className="font-mono text-xs leading-relaxed text-justify">
-                        In a world where hunters, humans who possess magical abilities, must battle deadly monsters to protect the human race from certain annihilation, a notoriously weak hunter named Sung Jinwoo finds himself in a seemingly endless struggle for survival.
-                    </p>
-                </div>
-                <div className="mt-8 pt-4 border-t border-black font-mono text-xs font-bold">
-                    <HyperText text="RATING: SSS-CLASS" />
-                </div>
-            </div>
+          <div className="container mx-auto px-6 h-full relative z-10">
+              {/* Layout "Berantakan" */}
+              
+              {/* 1. Judul Gede di Kiri Atas */}
+              <div className="absolute top-0 left-0 md:left-20">
+                  <h2 className="font-anton text-[10vw] leading-[0.8] mix-blend-exclusion">
+                      BAVARIAN<br/><span className="text-stroke">MOTOR</span>
+                  </h2>
+              </div>
 
-             {/* Panel 2: Visual Impact (Typography) */}
-             <div className="col-span-12 md:col-span-5 bg-black text-white p-6 flex items-center justify-center relative overflow-hidden group border-2 border-black">
-                <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
-                <h2 className="manhwa-text-move font-anton text-[8vw] md:text-[5vw] whitespace-nowrap leading-none group-hover:text-red-500 transition-colors">
-                    ARISE ARISE ARISE
-                </h2>
-             </div>
+              {/* 2. Elemen Visual (Kotak Miring) di Tengah Kanan */}
+              <div className="bmw-element absolute top-[30%] right-0 md:right-[15%] w-[60vw] md:w-[30vw] h-[40vh] border-4 border-[#3E6299] flex items-center justify-center bg-[#111]/80 backdrop-blur-sm z-0">
+                  <div className="font-mono text-[#3E6299] text-center">
+                      <span className="text-6xl font-bold block">E46</span>
+                      <span className="text-xs">CHASSIS CODE</span>
+                  </div>
+              </div>
 
-             {/* Panel 3: Stats */}
-             <div className="col-span-12 md:col-span-3 bg-[#E5E5E5] border-2 border-black p-6 flex flex-col gap-2">
-                <div className="bg-white border border-black p-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <span className="block font-mono text-[10px] text-gray-500">MANHWA 01</span>
-                    <span className="font-anton text-xl">OMNISCIENT READER</span>
-                </div>
-                <div className="bg-white border border-black p-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] translate-x-2">
-                    <span className="block font-mono text-[10px] text-gray-500">MANHWA 02</span>
-                    <span className="font-anton text-xl">LOOKISM</span>
-                </div>
-                <div className="bg-white border border-black p-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] translate-x-4">
-                    <span className="block font-mono text-[10px] text-gray-500">MANHWA 03</span>
-                    <span className="font-anton text-xl">WIND BREAKER</span>
-                </div>
-             </div>
-         </div>
+              {/* 3. Sticky Note Penjelasan (Numpuk di atas elemen lain) */}
+              <div className="absolute bottom-[10%] left-[10%] z-20">
+                  <StickyNote 
+                    title="The Machine" 
+                    text="Why BMW? Because driving shouldn't be numb. It's about the feedback, the oil smell, and the raw mechanics of an inline-six engine."
+                    rotation="3deg" 
+                  />
+              </div>
+
+              {/* 4. Detail Spek (Nyelip di kanan bawah) */}
+              <div className="absolute bottom-10 right-10 text-right font-mono text-xs text-[#FF4D00]">
+                  <p>CYLINDERS: 6</p>
+                  <p>ASPIRATION: N/A</p>
+                  <p>LAYOUT: RWD</p>
+              </div>
+          </div>
       </section>
 
-      {/* --- ZONE 3: CAT (ORGANIC CHAOS) --- */}
-      <section ref={catRef} className="relative min-h-screen px-6 md:px-12 py-24 z-10 flex flex-col justify-center cursor-none">
-         <div className="w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            
-            {/* Left: Typography */}
-            <div>
-                <HyperText text="THE REAL BOSS" className="font-mono text-xs tracking-widest mb-4 block text-[#5D4037]" />
-                <h1 className="font-anton text-[10vw] leading-[0.8] text-[#3E2723] mb-6">
-                    FELINE<br/>SUPREMACY
-                </h1>
-                <div className="font-mono text-sm leading-relaxed text-[#5D4037] max-w-md">
-                    <p className="mb-4">
-                        A dedicated section for the creature that sleeps on my keyboard while I try to debug production code.
-                    </p>
-                    <ul className="list-disc pl-4 space-y-1 opacity-70 text-xs">
-                        <li>Species: Felis catus</li>
-                        <li>Role: Senior Supervisor</li>
-                        <li>Skill: Ignoring me</li>
-                    </ul>
-                </div>
-            </div>
+      {/* --- SECTION 3: MANHWA (THE FLOATING PANELS) --- */}
+      <section ref={manhwaRef} className="min-h-[150vh] relative py-20 bg-[#EAEAEA] text-[#111] overflow-hidden">
+          {/* Background Grid Line (Coretan) */}
+          <div className="absolute inset-0 opacity-10 bg-[linear-gradient(45deg,#000_1px,transparent_1px)] bg-[size:20px_20px]"></div>
 
-            {/* Right: Abstract Playground */}
-            <div className="relative h-[40vh] border-2 border-[#3E2723] border-dashed rounded-full flex items-center justify-center opacity-50">
-                <span className="font-mono text-xs text-[#3E2723] animate-pulse">
-                    [ HOVER HERE TO PLAY ]
-                </span>
-                {/* Decorative floating elements */}
-                <div className="absolute top-10 right-20 w-4 h-4 bg-[#3E2723] rounded-full animate-bounce"></div>
-                <div className="absolute bottom-20 left-10 w-8 h-8 bg-[#3E2723] rounded-full animate-bounce" style={{animationDelay: '0.5s'}}></div>
-            </div>
+          <div className="container mx-auto px-6 relative h-full">
+              
+              {/* Judul Vertikal di Kanan */}
+              <div className="absolute top-20 right-6 md:right-20 writing-vertical hidden md:block z-10">
+                  <h2 className="font-anton text-[8vw] leading-none opacity-20">ESCAPISM</h2>
+              </div>
 
-         </div>
+              {/* Panel 1 (Kiri Atas) */}
+              <div className="manhwa-float absolute top-[10%] left-[5%] md:left-[15%] w-[80vw] md:w-[35vw] bg-black text-white p-8 border-4 border-black shadow-[10px_10px_0px_0px_#FF4D00] z-10">
+                  <span className="bg-[#FF4D00] text-black font-mono text-xs px-2 py-1 mb-4 inline-block font-bold">QUEST RECEIVED</span>
+                  <h3 className="font-anton text-5xl md:text-6xl uppercase leading-[0.9]">Solo<br/>Leveling</h3>
+              </div>
+
+              {/* Panel 2 (Tengah, Numpuk Panel 1 dikit) */}
+              <div className="manhwa-float absolute top-[40%] right-[5%] md:right-[30%] w-[70vw] md:w-[25vw] bg-white text-black p-6 border-4 border-black z-20 rotate-3">
+                  <p className="font-mono text-xs md:text-sm leading-relaxed">
+                      "I hope one day a quest board appears in front of me. A world where effort guarantees a level up."
+                  </p>
+              </div>
+
+              {/* Panel 3 (Bawah Kiri) */}
+              <div className="manhwa-float absolute bottom-[10%] left-[10%] md:left-[20%] w-[60vw] md:w-[30vw] border-4 border-black p-4 bg-transparent z-0">
+                  <h3 className="font-anton text-4xl text-transparent md:text-stroke text-stroke-black">
+                      OMNISCIENT<br/>READER
+                  </h3>
+              </div>
+              
+              {/* Konteks Penjelas (Sticky Note) */}
+              <div className="absolute top-[60%] right-[10%] z-30">
+                  <StickyNote 
+                    title="The Escape" 
+                    text="Logic is boring. Stories are wild. This is my cheat code to disconnect from reality."
+                    rotation="-2deg" 
+                  />
+              </div>
+          </div>
       </section>
+
+      {/* --- SECTION 4: CAT (ZERO GRAVITY) --- */}
+      <section ref={catRef} className="min-h-screen relative flex items-center justify-center bg-[#111] overflow-hidden">
+          
+          {/* Teks Gede di Tengah (Floating Magnetic) */}
+          <div className="cat-giant-text relative z-10 text-center mix-blend-difference">
+              <h2 className="font-anton text-[20vw] leading-[0.8] text-[#EAEAEA]">PAY</h2>
+              <h2 className="font-anton text-[20vw] leading-[0.8] text-transparent text-stroke">TRIBUTE</h2>
+          </div>
+
+          {/* Elemen Floating di sekitarnya */}
+          <div className="absolute top-[20%] left-[10%] font-mono text-xs text-[#FF4D00] animate-bounce">
+              [ 🐈 FELINE DETECTED ]
+          </div>
+
+          {/* Sticky Note di Tengah Bawah */}
+          <div className="absolute bottom-[20%] z-20">
+               <StickyNote 
+                 title="The Boss" 
+                 text="He sleeps on my keyboard. He judges my code. He drains my wallet. Worth it."
+                 rotation="0deg" 
+               />
+          </div>
+
+          {/* Orbiting Circles (Abstract Cat Toys) */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] border border-white/10 rounded-full animate-spin-slow pointer-events-none"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] border border-white/10 rounded-full animate-spin-reverse pointer-events-none"></div>
+      </section>
+
+      <footer className="py-12 border-t border-white/10 text-center">
+          <p className="font-mono text-xs opacity-50">RADYA.MY.ID / CHAOS_MODE / END</p>
+      </footer>
 
       <style jsx>{`
-        .writing-vertical {
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-        }
+        .writing-vertical { writing-mode: vertical-rl; }
+        .animate-spin-slow { animation: spin 20s linear infinite; }
+        .animate-spin-reverse { animation: spin 15s linear infinite reverse; }
+        @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+        .text-stroke-black { -webkit-text-stroke: 1px black; color: transparent; }
       `}</style>
     </main>
   );

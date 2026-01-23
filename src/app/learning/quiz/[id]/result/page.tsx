@@ -5,10 +5,12 @@ import { useEffect, useState } from 'react'
 import { useQuiz } from '@/hooks/useQuiz'
 import { motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
-import { Trophy, RefreshCcw, Home, XCircle, CheckCircle, Loader2, Clock, FileText } from 'lucide-react'
+import { Trophy, RefreshCcw, Home, XCircle, CheckCircle, Loader2, Clock, FileText, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import BackgroundEffects from '@/components/learning/UI/BackgroundEffects'
 import QuizReviewModule from '@/components/quiz/QuizReviewModule'
+import AiReviewModal from '@/components/quiz/AiReviewModal' 
+import toast from 'react-hot-toast'
 
 export default function QuizResultPage() {
   const params = useSearchParams()
@@ -20,6 +22,10 @@ export default function QuizResultPage() {
   const [attempt, setAttempt] = useState<any>(null)
   const [quiz, setQuiz] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+
+  const [aiModalOpen, setAiModalOpen] = useState(false)
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiResponse, setAiResponse] = useState('')
 
   useEffect(() => {
     const loadData = async () => {
@@ -46,6 +52,49 @@ export default function QuizResultPage() {
     }
   }, [attempt, quiz])
 
+  const handleAskAI = async () => {
+    if (!quiz || !attempt) return
+    
+    setAiModalOpen(true)
+
+    if (aiResponse) return 
+
+    setAiLoading(true)
+
+    let promptText = "Halo, tolong bertindak sebagai asisten penilai kuis. Berikan 'Quick Review' (Estimasi nilai 0-100 dan Feedback Singkat) untuk jawaban user di bawah ini. Gunakan bahasa Indonesia yang santai, supportif, dan menyemangati user.\n\n"
+    
+    quiz.questions.forEach((q: any, idx: number) => {
+        promptText += `Soal ${idx + 1}: ${q.question}\n`
+        promptText += `Jawaban User: ${attempt.answers[idx] || 'Tidak dijawab'}\n`
+        promptText += `Kunci/Inti Jawaban: ${q.explanation}\n\n`
+    })
+
+    promptText += "Total Estimasi Nilai, lalu Poin-poin feedback per nomor, dan kalimat penutup semangat. Tegaskan bahwa ini hanya prediksi AI."
+
+    try {
+        const res = await fetch('/api/chat/groq', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                persona: 'quiz',
+                history: [
+                    { role: 'user', text: promptText }
+                ]
+            })
+        })
+
+        if (!res.ok) throw new Error('AI Error')
+        
+        const data = await res.json()
+        setAiResponse(data.text)
+    } catch (error) {
+        toast.error('Gagal memanggil AI Advisor')
+        setAiModalOpen(false) 
+    } finally {
+        setAiLoading(false)
+    }
+  }
+
   if (loading || !attempt || !quiz) return (
     <div className="min-h-screen bg-black flex items-center justify-center">
       <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
@@ -59,6 +108,14 @@ export default function QuizResultPage() {
   return (
     <div className="min-h-screen bg-black relative flex flex-col items-center p-4">
       <BackgroundEffects />
+
+      {}
+      <AiReviewModal 
+        isOpen={aiModalOpen}
+        onClose={() => setAiModalOpen(false)}
+        loading={aiLoading}
+        response={aiResponse}
+      />
 
       <div className="max-w-3xl w-full relative z-10 pt-10">
         <motion.div 
@@ -117,7 +174,19 @@ export default function QuizResultPage() {
             </div>
           )}
 
-          <div className="flex gap-3 justify-center">
+          <div className="flex gap-3 justify-center items-center">
+            
+            {}
+            {isPending && (
+                <button
+                    onClick={handleAskAI}
+                    className="py-3 px-5 bg-purple-600/10 hover:bg-purple-600/20 text-purple-400 border border-purple-500/30 rounded-xl font-bold flex items-center gap-2 transition-all group"
+                >
+                    <Sparkles className="w-4 h-4 group-hover:text-purple-200" /> 
+                    Ask AI Check
+                </button>
+            )}
+            
             <Link 
               href="/learning/quiz"
               className="py-3 px-6 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl font-bold flex items-center gap-2 transition-all"

@@ -46,6 +46,7 @@ export default function QuizResultsList() {
                     <div key={att.id} className="bg-zinc-900 border border-white/10 p-4 rounded-xl flex items-center justify-between">
                         <div>
                             <p className="text-xs text-zinc-500 mb-1">User ID: {att.userId}</p>
+                            <p className="text-xs text-zinc-500 mb-1">Identitas: {att.displayName ? att.displayName : "Not Available"} | {att.email ? att.email : "Not Available"}</p>
                             <p className="text-xs text-zinc-500">
                                 Submitted: {att.completedAt ? format(new Date(att.completedAt.seconds * 1000), 'dd MMM HH:mm') : '-'}
                             </p>

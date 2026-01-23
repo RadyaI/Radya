@@ -179,19 +179,19 @@ export default function MaximalistPage() {
 
           <div className="cat-card md:col-span-5 relative h-[400px] border-4 border-black bg-white p-2 rotate-[-2deg]">
             <div className="absolute -top-4 -left-4 bg-orange-500 text-white font-bold px-4 py-2 border-2 border-black z-20">Apa sih</div>
-            <img src="/images/cat.png" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300" />
+            <img src="/images/cats/cat.png" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300" />
             <h4 className="absolute bottom-2 right-2 font-heavy text-5xl text-white stroke-black" style={{ WebkitTextStroke: "2px black" }}>MEOW</h4>
           </div>
 
           <div className="cat-card md:col-span-4 relative h-[400px] border-4 border-black bg-white p-2 rotate-[2deg] top-10">
-            <img src="/images/cat2.png" className="w-full h-full object-cover" />
+            <img src="/images/cats/cat2.png" className="w-full h-full object-cover" />
             <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/50">
               <span className="font-heavy text-white text-4xl">SLEEPING...</span>
             </div>
           </div>
 
           <div className="cat-card md:col-span-3 relative h-[400px] border-4 border-black bg-white p-2 rotate-[-1deg]">
-            <img src="/images/cat3.png" className="w-full h-full object-cover" />
+            <img src="/images/cats/cat3.png" className="w-full h-full object-cover" />
             <div className="absolute bottom-0 left-0 w-full bg-yellow-400 border-t-4 border-black p-2 text-center font-bold">WARNING</div>
           </div>
 

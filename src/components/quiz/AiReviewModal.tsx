@@ -39,7 +39,7 @@ export default function AiReviewModal({ isOpen, onClose, loading, response }: Pr
                     </button>
                 </div>
 
-                <div className="p-6 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-700">
+                <div className="custom-scrollbar p-6 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-700">
                     {loading ? (
                         <div className="flex flex-col items-center justify-center py-12 space-y-4">
                             <Loader2 className="w-10 h-10 text-purple-500 animate-spin" />

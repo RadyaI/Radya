@@ -56,11 +56,13 @@ export const useQuiz = (quizId?: string) => {
     }
   }, [])
 
-  const submitQuiz = async (userId: string, quizData: any, score: number, correct: number, answers: any) => {
+  const submitQuiz = async (userId: string, email: string, displayName: string, quizData: any, score: number, correct: number, answers: any) => {
     try {
       const docRef = await addDoc(collection(db, 'quiz_attempts'), {
         quizId: quizData.id,
         userId,
+        email,
+        displayName,
         score,
         totalQuestions: quizData.questions.length,
         correctAnswers: correct,

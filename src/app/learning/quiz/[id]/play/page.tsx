@@ -67,6 +67,8 @@ export default function PlayQuizPage() {
     try {
       const attemptId = await submitQuiz(
         user.uid,
+        user.email,
+        user.displayName,
         quiz,
         finalScore,
         correctCount,

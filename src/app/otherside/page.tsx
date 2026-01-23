@@ -1,293 +1,290 @@
 "use client";
 
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+const CONTENT = {
+  hero: {
+    big: "Yo\n oY",
+    sub: "PROGRAMMER BY DAY / DREAMER BY NIGHT",
+    tags: ["NEXT.JS", "GSAP", "BMW", "MANHWA", "CATS", "CARS", "SPEED"],
+  },
+  cats: {
+    title: "THE\nFELINE\nDYNASTY",
+    stats: [
+      { label: "Cuteness", val: "100%" },
+      { label: "Meow", val: "999%" },
+      { label: "Nap Time", val: "18h" },
+    ],
+    desc: "A cat (Felis catus) is a small, carnivorous mammal from the Felidae family, known for being a popular companion animal due to its independence, agility, and hunting skills, characterized by sharp claws, excellent senses, and a flexible body, living as pets, farm cats, or feral cats.",
+  },
+  bmw: {
+    title: "GERMAN\nPRECISION",
+    sub: "THE ULTIMATE DRIVING MACHINE",
+    specs: [
+      "INLINE 6 CYLINDER",
+      "REAR WHEEL DRIVE",
+      "DRIVING",
+      "BRUUUM"
+    ],
+    review: "A car (or automobile) is a wheeled motor vehicle, typically with four wheels, designed primarily to transport people on roads, powered by an engine or motor, and seating a small number of passengers (usually 1 to 8)."
+  },
+  manhwa: {
+    title: "VISUAL\nOVERDOSE",
+    list: ["SOLO LEVELING", "WINDBREAKER", "LOOKISM", "NANO MACHINE", "TOWER OF GOD", "ELECEED"]
+  }
+};
 
-// --- COMPONENT: CHAOTIC TEXT (HURUF MENCAR) ---
-const ChaoticTitle = ({ text }: { text: string }) => {
-    return (
-        <div className="relative h-[20vh] md:h-[40vh] w-full pointer-events-none select-none">
-            {text.split("").map((char, i) => {
-                // Random position & rotation buat efek "Chaos"
-                const randomRot = Math.random() * 20 - 10; 
-                const randomY = Math.random() * 50; 
-                return (
-                    <span 
-                        key={i} 
-                        className="inline-block font-anton text-[15vw] leading-none absolute will-change-transform mix-blend-difference text-[#EAEAEA]"
-                        style={{ 
-                            left: `${i * 12}%`, 
-                            top: `${randomY}px`,
-                            transform: `rotate(${randomRot}deg)` 
-                        }}
-                    >
-                        {char}
-                    </span>
-                )
-            })}
-        </div>
-    )
-}
+export default function MaximalistPage() {
+  const containerRef = useRef<HTMLDivElement>(null);
 
-// --- COMPONENT: STICKY NOTE (Konteks Penjelas) ---
-const StickyNote = ({ title, text, rotation = "0deg" }: { title: string, text: string, rotation?: string }) => {
-    return (
-        <div 
-            className="bg-[#FFFFF0] text-black p-6 w-64 md:w-80 border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative z-20"
-            style={{ transform: `rotate(${rotation})` }}
-        >
-            <div className="w-3 h-3 rounded-full bg-red-500 mb-4 border border-black"></div>
-            <h4 className="font-anton text-2xl mb-2 uppercase">{title}</h4>
-            <p className="font-mono text-xs leading-relaxed opacity-80">{text}</p>
-        </div>
-    )
-}
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
 
-export default function TheOtherSide() {
-  const mainRef = useRef<HTMLDivElement>(null);
-  
-  // Section Refs
-  const heroRef = useRef<HTMLDivElement>(null);
-  const bmwRef = useRef<HTMLDivElement>(null);
-  const manhwaRef = useRef<HTMLDivElement>(null);
-  const catRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      
-      // 1. HERO PARALLAX SCATTER
-      // Huruf-huruf di Hero gerak mencar pas di scroll
-      gsap.to(".hero-char", {
-          y: (i) => (i + 1) * -100, // Tiap huruf beda speed
-          x: (i) => (i % 2 === 0 ? -50 : 50), // Ganjil genap beda arah
-          rotation: (i) => i * 10,
+
+      gsap.to(".marquee-track", {
+        xPercent: -50,
+        ease: "none",
+        duration: 10,
+        repeat: -1
+      });
+
+      gsap.from(".hero-block", {
+        y: 100,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.1,
+        ease: "elastic.out(1, 0.7)"
+      });
+
+      gsap.utils.toArray(".cat-card").forEach((card: any, i) => {
+        gsap.from(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            toggleActions: "play none none reverse"
+          },
+          rotation: i % 2 === 0 ? -10 : 10,
+          y: 100,
           opacity: 0,
-          scrollTrigger: { trigger: heroRef.current, scrub: 0.5 }
+          duration: 0.8,
+          ease: "back.out(1.7)"
+        });
       });
 
-      // 2. BMW HORIZONTAL DRAG
-      // Teks background gerak horizontal kenceng
-      gsap.to(".bmw-bg-text", {
-          xPercent: -50,
-          scrollTrigger: { trigger: bmwRef.current, scrub: 1 }
-      });
-      // Gambar/Elemen miring ikut scroll
-      gsap.to(".bmw-element", {
-          yPercent: 30,
-          rotation: 5,
-          scrollTrigger: { trigger: bmwRef.current, scrub: 1 }
-      });
-
-      // 3. MANHWA PANELS FLOATING
-      // Panel komik melayang floating
-      gsap.utils.toArray<HTMLElement>(".manhwa-float").forEach((el, i) => {
-          gsap.to(el, {
-              y: (i + 1) * -50,
-              rotation: (i % 2 === 0 ? -5 : 5),
-              scrollTrigger: { trigger: manhwaRef.current, scrub: 1 }
-          });
+      gsap.utils.toArray(".bmw-img-wrapper img").forEach((img: any) => {
+        gsap.to(img, {
+          scale: 1.1,
+          scrollTrigger: {
+            trigger: img,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1
+          }
+        });
       });
 
-      // 4. CAT CHAOS
-      // Teks kucing "MEOW" ngikutin tapi delay (Magnetic)
-      const catText = document.querySelector(".cat-giant-text") as HTMLElement;
-      if (catText) {
-          window.addEventListener("mousemove", (e) => {
-              const x = (e.clientX / window.innerWidth - 0.5) * 50;
-              const y = (e.clientY / window.innerHeight - 0.5) * 50;
-              gsap.to(catText, { x: x, y: y, duration: 1, ease: "power2.out" });
-          });
-      }
+      gsap.utils.toArray(".highlight-text").forEach((el: any) => {
+        gsap.to(el, {
+          backgroundSize: "100% 100%",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 80%",
+          },
+          duration: 0.5,
+          ease: "power2.out"
+        });
+      });
 
-    }, mainRef);
+    }, containerRef);
+
     return () => ctx.revert();
   }, []);
 
   return (
-    <main ref={mainRef} className="min-h-screen bg-[#111] text-[#EAEAEA] font-sans overflow-x-hidden selection:bg-[#FF4D00] selection:text-white">
-      
+    <div ref={containerRef} className="bg-white text-black min-h-screen overflow-x-hidden font-sans selection:bg-black selection:text-white">
+
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
-        .font-anton { font-family: 'Anton', sans-serif; }
-        .font-mono { font-family: 'Space Mono', monospace; }
-        .text-stroke { -webkit-text-stroke: 1px rgba(255,255,255,0.2); color: transparent; }
+        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;700&display=swap');
+        .font-heavy { font-family: 'Archivo Black', sans-serif; }
+        .font-mono-pop { font-family: 'Space Grotesk', monospace; }
         
-        /* Noise Grain Texture */
-        .noise {
-             position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.05;
-             background: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+        .stroke-text {
+          -webkit-text-stroke: 2px black;
+          color: transparent;
+        }
+        .stroke-text:hover {
+          color: #FF5500;
         }
       `}</style>
-      
-      <div className="noise"></div>
 
-      {/* NAV (MINIMALIST POJOK) */}
-      <nav className="fixed top-6 left-6 z-50 mix-blend-difference">
-          <span className="font-anton text-xl tracking-wide block">RADYA</span>
-          <span className="font-mono text-xs opacity-50 block">/ OTHERSIDE</span>
-      </nav>
-      <div className="fixed top-6 right-6 z-50 font-mono text-xs border border-white/20 px-3 py-1 rounded-full hidden md:block mix-blend-difference">
-          SCROLL TO DECONSTRUCT ↓
-      </div>
-
-      {/* --- SECTION 1: HERO (THE SCATTER) --- */}
-      <section ref={heroRef} className="min-h-screen relative flex items-center justify-center overflow-hidden">
-          {/* Background Chaos Text */}
-          <div className="absolute inset-0 flex flex-col justify-center items-center opacity-10 pointer-events-none select-none">
-             <div className="text-[20vw] font-anton leading-[0.8]">CHAOS</div>
-             <div className="text-[20vw] font-anton leading-[0.8] ml-20">MODE</div>
+      <section className="min-h-screen pt-20 flex flex-col justify-between border-b-4 border-black relative">
+        <div className="px-4 md:px-10">
+          <div className="flex flex-wrap gap-4 mb-4">
+            {["RADYA"].map((tag, i) => (
+              <span key={i} className="hero-block inline-block px-4 py-1 border-2 border-black bg-yellow-300 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+                {tag}
+              </span>
+            ))}
           </div>
 
-          <div className="relative z-10 text-center w-full max-w-5xl mx-auto mt-20 md:mt-0">
-               {/* Huruf Mencar-mencar */}
-               <div className="flex justify-center flex-wrap gap-x-2 md:gap-x-8 px-4">
-                   {/* Huruf Manual satu-satu biar bisa dianimasiin mencar */}
-                   {["U", "N", "F", "I", "L", "T", "E", "R", "E", "D"].map((char, i) => (
-                       <span key={i} className="hero-char font-anton text-[12vw] md:text-[8vw] inline-block hover:text-[#FF4D00] transition-colors duration-300 cursor-default">
-                           {char}
-                       </span>
-                   ))}
-               </div>
-               
-               {/* Context Note (Miring dikit) */}
-               <div className="mt-12 max-w-md mx-auto transform -rotate-2 bg-[#FF4D00] text-black p-4 inline-block shadow-[8px_8px_0px_0px_#fff]">
-                   <p className="font-mono text-xs md:text-sm font-bold">
-                       [ SYSTEM ALERT ] <br/>
-                       This is the deconstructed version of Radya. 
-                       No grid system found. Enter at your own risk.
-                   </p>
-               </div>
+          <h1 className="hero-block font-heavy text-[15vw] leading-[0.8] tracking-tighter text-black mix-blend-hard-light z-10 relative">
+            {CONTENT.hero.big}
+          </h1>
+
+          <div className="flex flex-col md:flex-row items-start md:items-end justify-between mt-10 border-t-4 border-black pt-6">
+            <p className="hero-block font-mono-pop text-2xl md:text-4xl font-bold max-w-lg leading-tight uppercase">
+              {CONTENT.hero.sub}
+            </p>
+            <div className="hero-block mt-6 md:mt-0 flex flex-col text-right">
+              <span className="font-heavy text-6xl text-orange-600">100%</span>
+              <span className="font-bold border-b-4 border-orange-600">PASSION RATE</span>
+            </div>
           </div>
+        </div>
+
+        <div className="w-full bg-black text-white py-4 overflow-hidden border-y-4 border-black mt-10 rotate-1 scale-105 origin-left">
+          <div className="marquee-track flex gap-8 whitespace-nowrap font-heavy text-4xl">
+            {[...CONTENT.hero.tags, ...CONTENT.hero.tags, ...CONTENT.hero.tags].map((t, i) => (
+              <span key={i} className="mx-4">{t} /// </span>
+            ))}
+          </div>
+        </div>
       </section>
 
-      {/* --- SECTION 2: BMW (THE ASYMMETRIC MACHINE) --- */}
-      <section ref={bmwRef} className="min-h-[120vh] relative py-20 overflow-hidden">
-          {/* Background Text Running Horizontal */}
-          <div className="absolute top-1/2 -translate-y-1/2 whitespace-nowrap opacity-10 font-anton text-[30vw] bmw-bg-text leading-none select-none pointer-events-none">
-              GERMAN ENGINEERING PERFECTION M-POWER
+
+      <section className="py-20 px-4 md:px-10 bg-yellow-50 border-b-4 border-black">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+
+          <div className="md:col-span-8 flex flex-col justify-center">
+            <h2 className="font-heavy text-7xl md:text-9xl mb-6 leading-[0.85]">
+              {CONTENT.cats.title}
+            </h2>
+            <p className="font-mono-pop text-xl md:text-2xl font-bold border-l-8 border-black pl-6 py-2 bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+              {CONTENT.cats.desc}
+            </p>
           </div>
 
-          <div className="container mx-auto px-6 h-full relative z-10">
-              {/* Layout "Berantakan" */}
-              
-              {/* 1. Judul Gede di Kiri Atas */}
-              <div className="absolute top-0 left-0 md:left-20">
-                  <h2 className="font-anton text-[10vw] leading-[0.8] mix-blend-exclusion">
-                      BAVARIAN<br/><span className="text-stroke">MOTOR</span>
-                  </h2>
+          <div className="md:col-span-4 bg-black text-white p-8 shadow-[10px_10px_0px_0px_#FF5500]">
+            <h3 className="font-heavy text-4xl mb-6 text-yellow-300">STATS_</h3>
+            {CONTENT.cats.stats.map((s, i) => (
+              <div key={i} className="flex justify-between items-end border-b border-gray-700 py-3 font-mono-pop text-xl">
+                <span>{s.label}</span>
+                <span className="font-bold text-2xl">{s.val}</span>
               </div>
-
-              {/* 2. Elemen Visual (Kotak Miring) di Tengah Kanan */}
-              <div className="bmw-element absolute top-[30%] right-0 md:right-[15%] w-[60vw] md:w-[30vw] h-[40vh] border-4 border-[#3E6299] flex items-center justify-center bg-[#111]/80 backdrop-blur-sm z-0">
-                  <div className="font-mono text-[#3E6299] text-center">
-                      <span className="text-6xl font-bold block">E46</span>
-                      <span className="text-xs">CHASSIS CODE</span>
-                  </div>
-              </div>
-
-              {/* 3. Sticky Note Penjelasan (Numpuk di atas elemen lain) */}
-              <div className="absolute bottom-[10%] left-[10%] z-20">
-                  <StickyNote 
-                    title="The Machine" 
-                    text="Why BMW? Because driving shouldn't be numb. It's about the feedback, the oil smell, and the raw mechanics of an inline-six engine."
-                    rotation="3deg" 
-                  />
-              </div>
-
-              {/* 4. Detail Spek (Nyelip di kanan bawah) */}
-              <div className="absolute bottom-10 right-10 text-right font-mono text-xs text-[#FF4D00]">
-                  <p>CYLINDERS: 6</p>
-                  <p>ASPIRATION: N/A</p>
-                  <p>LAYOUT: RWD</p>
-              </div>
+            ))}
           </div>
+
+          <div className="cat-card md:col-span-5 relative h-[400px] border-4 border-black bg-white p-2 rotate-[-2deg]">
+            <div className="absolute -top-4 -left-4 bg-orange-500 text-white font-bold px-4 py-2 border-2 border-black z-20">Apa sih</div>
+            <img src="/images/cat.png" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300" />
+            <h4 className="absolute bottom-2 right-2 font-heavy text-5xl text-white stroke-black" style={{ WebkitTextStroke: "2px black" }}>MEOW</h4>
+          </div>
+
+          <div className="cat-card md:col-span-4 relative h-[400px] border-4 border-black bg-white p-2 rotate-[2deg] top-10">
+            <img src="/images/cat2.png" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/50">
+              <span className="font-heavy text-white text-4xl">SLEEPING...</span>
+            </div>
+          </div>
+
+          <div className="cat-card md:col-span-3 relative h-[400px] border-4 border-black bg-white p-2 rotate-[-1deg]">
+            <img src="/images/cat3.png" className="w-full h-full object-cover" />
+            <div className="absolute bottom-0 left-0 w-full bg-yellow-400 border-t-4 border-black p-2 text-center font-bold">WARNING</div>
+          </div>
+
+        </div>
       </section>
 
-      {/* --- SECTION 3: MANHWA (THE FLOATING PANELS) --- */}
-      <section ref={manhwaRef} className="min-h-[150vh] relative py-20 bg-[#EAEAEA] text-[#111] overflow-hidden">
-          {/* Background Grid Line (Coretan) */}
-          <div className="absolute inset-0 opacity-10 bg-[linear-gradient(45deg,#000_1px,transparent_1px)] bg-[size:20px_20px]"></div>
 
-          <div className="container mx-auto px-6 relative h-full">
-              
-              {/* Judul Vertikal di Kanan */}
-              <div className="absolute top-20 right-6 md:right-20 writing-vertical hidden md:block z-10">
-                  <h2 className="font-anton text-[8vw] leading-none opacity-20">ESCAPISM</h2>
-              </div>
+      <section className="py-20 bg-blue-600 text-white border-b-4 border-black overflow-hidden relative">
+        <div className="absolute top-0 right-0 font-heavy text-[30vw] opacity-10 leading-none select-none">READ</div>
 
-              {/* Panel 1 (Kiri Atas) */}
-              <div className="manhwa-float absolute top-[10%] left-[5%] md:left-[15%] w-[80vw] md:w-[35vw] bg-black text-white p-8 border-4 border-black shadow-[10px_10px_0px_0px_#FF4D00] z-10">
-                  <span className="bg-[#FF4D00] text-black font-mono text-xs px-2 py-1 mb-4 inline-block font-bold">QUEST RECEIVED</span>
-                  <h3 className="font-anton text-5xl md:text-6xl uppercase leading-[0.9]">Solo<br/>Leveling</h3>
-              </div>
+        <div className="px-4 md:px-10 relative z-10">
+          <h2 className="font-heavy text-6xl md:text-8xl mb-10 text-white stroke-text" style={{ WebkitTextStroke: "2px white", color: "transparent" }}>
+            {CONTENT.manhwa.title}
+          </h2>
 
-              {/* Panel 2 (Tengah, Numpuk Panel 1 dikit) */}
-              <div className="manhwa-float absolute top-[40%] right-[5%] md:right-[30%] w-[70vw] md:w-[25vw] bg-white text-black p-6 border-4 border-black z-20 rotate-3">
-                  <p className="font-mono text-xs md:text-sm leading-relaxed">
-                      "I hope one day a quest board appears in front of me. A world where effort guarantees a level up."
-                  </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-4">
+            {CONTENT.manhwa.list.map((item, i) => (
+              <div key={i} className="group border-b-2 border-white/30 py-6 flex items-center justify-between hover:bg-black hover:px-4 transition-all duration-300 cursor-pointer">
+                <span className="font-heavy text-3xl md:text-5xl uppercase">{item}</span>
               </div>
-
-              {/* Panel 3 (Bawah Kiri) */}
-              <div className="manhwa-float absolute bottom-[10%] left-[10%] md:left-[20%] w-[60vw] md:w-[30vw] border-4 border-black p-4 bg-transparent z-0">
-                  <h3 className="font-anton text-4xl text-transparent md:text-stroke text-stroke-black">
-                      OMNISCIENT<br/>READER
-                  </h3>
-              </div>
-              
-              {/* Konteks Penjelas (Sticky Note) */}
-              <div className="absolute top-[60%] right-[10%] z-30">
-                  <StickyNote 
-                    title="The Escape" 
-                    text="Logic is boring. Stories are wild. This is my cheat code to disconnect from reality."
-                    rotation="-2deg" 
-                  />
-              </div>
+            ))}
           </div>
+
+          <div className="mt-20 p-6 border-4 border-white bg-black w-full md:w-1/2 ml-auto rotate-1">
+            <p className="font-mono-pop text-xl md:text-2xl leading-relaxed">
+              "Manhwa (만화) is the Korean word for comics and print cartoons, similar to Japanese manga or Chinese manhua, covering diverse genres like action, romance, and fantasy, typically read from left to right."
+            </p>
+          </div>
+        </div>
       </section>
 
-      {/* --- SECTION 4: CAT (ZERO GRAVITY) --- */}
-      <section ref={catRef} className="min-h-screen relative flex items-center justify-center bg-[#111] overflow-hidden">
-          
-          {/* Teks Gede di Tengah (Floating Magnetic) */}
-          <div className="cat-giant-text relative z-10 text-center mix-blend-difference">
-              <h2 className="font-anton text-[20vw] leading-[0.8] text-[#EAEAEA]">PAY</h2>
-              <h2 className="font-anton text-[20vw] leading-[0.8] text-transparent text-stroke">TRIBUTE</h2>
+
+      <section className="py-20 px-4 md:px-10 bg-white min-h-screen">
+        <div className="flex flex-col md:flex-row justify-between items-end border-b-8 border-black pb-6 mb-10">
+          <h2 className="font-heavy text-7xl md:text-[10vw] leading-[0.8]">
+            BMW<br /><span className="text-orange-600">SERIES</span>
+          </h2>
+          <div className="text-right mb-2">
+            <p className="font-bold text-xl uppercase tracking-widest">{CONTENT.bmw.sub}</p>
+            <div className="flex gap-2 justify-end mt-2">
+              <div className="w-8 h-8 bg-blue-600 rounded-full border-2 border-black"></div>
+              <div className="w-8 h-8 bg-black rounded-full border-2 border-black"></div>
+              <div className="w-8 h-8 bg-white rounded-full border-2 border-black"></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 grid-rows-[auto_auto]">
+
+          <div className="md:col-span-8 border-4 border-black relative h-[300px] md:h-[500px] overflow-hidden group bmw-img-wrapper">
+            <img src="/images/bmw1.png" className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500" />
+            <div className="absolute top-4 left-4 bg-black text-white px-3 py-1 font-bold text-sm">FIG 01. SIDE PROFILE</div>
           </div>
 
-          {/* Elemen Floating di sekitarnya */}
-          <div className="absolute top-[20%] left-[10%] font-mono text-xs text-[#FF4D00] animate-bounce">
-              [ 🐈 FELINE DETECTED ]
+          <div className="md:col-span-4 flex flex-col gap-4">
+            <div className="bg-gray-100 border-4 border-black p-6 h-full flex flex-col justify-center">
+              <h3 className="font-heavy text-3xl mb-4 underline decoration-4 decoration-orange-500">SPECIFICATION</h3>
+              <ul className="space-y-3 font-mono-pop font-bold text-lg">
+                {CONTENT.bmw.specs.map((spec, i) => (
+                  <li key={i} className="flex items-center gap-2">
+                    <span className="w-3 h-3 bg-black"></span> {spec}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          {/* Sticky Note di Tengah Bawah */}
-          <div className="absolute bottom-[20%] z-20">
-               <StickyNote 
-                 title="The Boss" 
-                 text="He sleeps on my keyboard. He judges my code. He drains my wallet. Worth it."
-                 rotation="0deg" 
-               />
+          <div className="md:col-span-4 border-4 border-black bg-black relative h-[300px] overflow-hidden group bmw-img-wrapper">
+            <img src="/images/bmw2.png" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute bottom-4 right-4 bg-white text-black px-3 py-1 font-bold text-sm border-2 border-black">FIG 02. DETAIL</div>
           </div>
 
-          {/* Orbiting Circles (Abstract Cat Toys) */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] border border-white/10 rounded-full animate-spin-slow pointer-events-none"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] border border-white/10 rounded-full animate-spin-reverse pointer-events-none"></div>
+          <div className="md:col-span-4 border-4 border-black bg-orange-600 p-8 flex items-center text-white">
+            <p className="font-heavy text-2xl md:text-1xl leading-tight">
+              "{CONTENT.bmw.review}"
+            </p>
+          </div>
+
+          <div className="md:col-span-4 border-4 border-black bg-white relative h-[300px] overflow-hidden group bmw-img-wrapper">
+            <img src="/images/bmw3.png" className="w-full h-full object-cover group-hover:rotate-1 transition-transform" />
+            <div className="absolute top-4 right-4 bg-yellow-400 text-black px-3 py-1 font-bold text-sm border-2 border-black">FIG 03. ANGLE</div>
+          </div>
+
+        </div>
+
+        <div className="mt-20 border-t-4 border-black pt-10 flex justify-center">
+          <div className="w-40 h-40 rounded-full border-4 border-black flex items-center justify-center animate-spin-slow bg-black text-white">
+            <span className="font-heavy text-center leading-none">THE<br />END</span>
+          </div>
+        </div>
+
       </section>
 
-      <footer className="py-12 border-t border-white/10 text-center">
-          <p className="font-mono text-xs opacity-50">RADYA.MY.ID / CHAOS_MODE / END</p>
-      </footer>
-
-      <style jsx>{`
-        .writing-vertical { writing-mode: vertical-rl; }
-        .animate-spin-slow { animation: spin 20s linear infinite; }
-        .animate-spin-reverse { animation: spin 15s linear infinite reverse; }
-        @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
-        .text-stroke-black { -webkit-text-stroke: 1px black; color: transparent; }
-      `}</style>
-    </main>
+    </div>
   );
 }

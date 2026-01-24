@@ -137,7 +137,7 @@ export default function PlanDetail() {
                             onClick={() => router.push("/cat")}
                             src={`/images/cats/${catImage}`} 
                             alt="Learning Companion" 
-                            className="w-24 h-24 object-contain relative z-10"
+                            className="cursor-pointer w-24 h-24 object-contain relative z-10"
                             style={{ imageRendering: 'pixelated' }} 
                         />
                         

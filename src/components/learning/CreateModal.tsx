@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, Variant } from 'framer-motion'
 import { X, Loader2, ChevronDown, Save } from 'lucide-react'
 
 interface Props {
@@ -35,7 +35,7 @@ export default function CreateModal({ isOpen, onClose, onSubmit }: Props) {
     }
   }
 
-  const modalVariants = {
+  const modalVariants: any = {
     hidden: { opacity: 0, scale: 0.95, y: 20 },
     visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.2, ease: "easeOut" } },
     exit: { opacity: 0, scale: 0.95, y: 20, transition: { duration: 0.15 } }

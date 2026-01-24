@@ -8,7 +8,7 @@ interface Props {
   onSubmit: (title: string, desc: string, cat: string) => Promise<boolean>
 }
 
-const CATEGORIES = [
+const CATEGORIES: string[] = [
   "Frontend Development",
   "Backend & Database",
   "Fullstack Development",

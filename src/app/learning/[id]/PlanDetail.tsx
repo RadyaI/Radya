@@ -1,6 +1,6 @@
 'use client'
 
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { ArrowLeft, Trash2, Tag, Layers, Calendar, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { usePlanDetail } from '@/hooks/usePlanDetail'
@@ -13,6 +13,7 @@ import { useMemo } from 'react'
 
 export default function PlanDetail() {
   const { id } = useParams()
+  const router = useRouter()
   const {
     plan,
     loading,
@@ -133,6 +134,7 @@ export default function PlanDetail() {
                         
                         {}
                         <img 
+                            onClick={() => router.push("/cat")}
                             src={`/images/cats/${catImage}`} 
                             alt="Learning Companion" 
                             className="w-24 h-24 object-contain relative z-10"

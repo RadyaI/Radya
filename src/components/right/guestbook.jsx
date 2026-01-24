@@ -1,11 +1,11 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import Cookies from "js-cookie";
 import { auth, db } from "../../utils/firebase";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { addDoc, collection, onSnapshot, orderBy, query, Timestamp, deleteDoc, doc } from "firebase/firestore";
 import { Send, Trash2, LogIn, MessageSquare, User, Loader2 } from "lucide-react";
-import 'animate.css';
 import toast, { Toaster } from "react-hot-toast";
+import gsap from "gsap";
 
 export default function Guestbook() {
 
@@ -14,8 +14,10 @@ export default function Guestbook() {
     const [isAdmin, setIsAdmin] = useState(false);
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
 
     const messagesEndRef = useRef(null);
+    const containerRef = useRef(null);
 
     async function handleLogin() {
         try {
@@ -54,12 +56,11 @@ export default function Guestbook() {
         }
     }
 
-    const scrollToBottom = () => {
+    useEffect(() => {
         if (messagesEndRef.current) {
-            const { scrollHeight, clientHeight } = messagesEndRef.current;
-            messagesEndRef.current.scrollTop = scrollHeight - clientHeight;
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
-    };
+    }, [messages]);
 
     async function handleSend() {
         if (!input.trim()) return;
@@ -74,9 +75,6 @@ export default function Guestbook() {
                 msg: input,
             });
             setInput("");
-
-            setTimeout(scrollToBottom, 100);
-
         } catch (error) {
             console.error("Send Failed:", error);
         } finally {
@@ -113,80 +111,91 @@ export default function Guestbook() {
                 id: doc.id
             }));
             setMessages(tempData);
-
-            setTimeout(scrollToBottom, 200);
         });
 
         return () => unsubscribe();
     }, []);
 
+    useLayoutEffect(() => {
+        if (messages.length > 0 && isInitialLoad) {
+            let ctx = gsap.context(() => {
+                gsap.from(".msg-card", {
+                    y: 20,
+                    opacity: 0,
+                    duration: 0.5,
+                    stagger: 0.05,
+                    ease: "back.out(1.2)",
+                    clearProps: "all",
+                    onComplete: () => setIsInitialLoad(false)
+                });
+            }, containerRef);
+            return () => ctx.revert();
+        }
+    }, [messages, isInitialLoad]);
+
     return (
         <>
-            <Toaster
-                position="top-right"
-            />
-            <div className="h-full relative overflow-hidden flex flex-col">
+            <Toaster position="top-right" />
+            <div ref={containerRef} className="h-full w-full relative overflow-hidden flex flex-col bg-white text-neutral-900">
 
                 <style>{`
-                .scroll-container {
-                    overflow-y: auto;
-                    height: 100%;
-                    padding-right: 8px;
-                    scroll-behavior: smooth; /* Biar halus */
-                }
-                .scroll-container::-webkit-scrollbar { width: 4px; }
-                .scroll-container::-webkit-scrollbar-track { background: transparent; }
-                .scroll-container::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
-                .scroll-container::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
-            `}</style>
+                    .scroll-container {
+                        overflow-y: auto;
+                        padding-right: 8px;
+                        scroll-behavior: smooth;
+                    }
+                    .scroll-container::-webkit-scrollbar { width: 6px; }
+                    .scroll-container::-webkit-scrollbar-track { background: transparent; }
+                    .scroll-container::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; border: 1px solid #000; }
+                    .scroll-container::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+                `}</style>
 
-                <div className="px-2 md:px-4 mb-4 shrink-0 animate__animated animate__fadeInDown">
-                    <div className="flex justify-between items-end border-b border-white/10 pb-4">
-                        <div>
-                            <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter">
-                                GUESTBOOK
-                            </h2>
-                            <div className="flex items-center gap-2 text-purple-400 font-mono text-sm mt-1">
-                                <span>// 06</span>
-                                <span className="text-gray-500">Public Logs</span>
-                            </div>
+                <div className="px-2 md:px-4 pt-4 pb-2 border-b-2 border-black bg-white/95 backdrop-blur-sm z-30 shrink-0 flex justify-between items-end">
+                    <div>
+                        <div className="flex items-center gap-2 mb-1">
+                            <span className="font-mono text-sm font-bold bg-black text-white px-2 py-0.5 rounded-sm">06 //</span>
+                            <span className="text-xs font-bold uppercase tracking-widest text-gray-500">Public Logs</span>
                         </div>
-                        <div className="bg-white/5 px-3 py-1 rounded-full text-xs font-bold text-gray-400 flex items-center gap-2">
-                            <MessageSquare className="w-3 h-3" />
-                            {messages.length} Msgs
-                        </div>
+                        <h2 className="text-3xl font-black text-black tracking-tighter uppercase">
+                            GUESTBOOK
+                        </h2>
+                    </div>
+                    <div className="bg-gray-100 border border-black px-3 py-1 rounded-md text-xs font-bold text-black flex items-center gap-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                        <MessageSquare className="w-3 h-3" />
+                        {messages.length} Msgs
                     </div>
                 </div>
 
-                <div
-                    ref={messagesEndRef}
-                    className="scroll-container flex-1 px-2 md:px-4 pb-4"
-                >
-                    <div className="flex flex-col gap-3">
+                <div className="scroll-container flex-1 min-h-0 px-2 md:px-4 pb-4 pt-4">
+                    <div className="flex flex-col gap-6">
                         {messages.length === 0 ? (
-                            <div className="text-center text-gray-600 mt-10 font-mono text-sm">
+                            <div className="text-center text-gray-500 mt-10 font-mono text-sm border-2 border-dashed border-gray-300 p-8 rounded-lg">
                                 &lt;No transmissions yet. Be the first./&gt;
                             </div>
                         ) : (
                             messages.map((msg) => (
-                                <div key={msg.id} className="group flex gap-3 p-3 bg-[#111] border border-white/5 hover:border-white/10 rounded-xl transition-all animate__animated animate__fadeInUp">
-                                    {/* Avatar */}
-                                    <div className="shrink-0">
+                                <div key={msg.id} className="msg-card group relative flex gap-4 p-4 bg-white border-2 border-black rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all">
+                                    
+                                    <div 
+                                        className="absolute -top-3 left-1/2 -translate-x-1/2 w-12 h-4 bg-yellow-200/80 rotate-1 shadow-sm border-l border-r border-white/40 z-10"
+                                    ></div>
+
+                                    <div className="shrink-0 relative z-10">
                                         {msg.photoURL ? (
-                                            <img src={msg.photoURL} alt="User" className="w-8 h-8 rounded-full border border-gray-700" />
+                                            <img src={msg.photoURL} alt="User" className="w-10 h-10 rounded-full border-2 border-black bg-gray-200" />
                                         ) : (
-                                            <div className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
-                                                <User className="w-4 h-4 text-gray-500" />
+                                            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center border-2 border-black text-black">
+                                                <User className="w-5 h-5" />
                                             </div>
                                         )}
                                     </div>
 
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex justify-between items-start">
-                                            <div className="flex items-baseline gap-2">
-                                                <span className="text-sm font-bold text-gray-200">{msg.name}</span>
+                                    <div className="flex-1 min-w-0 relative z-10">
+                                        <div className="flex justify-between items-start mb-1">
+                                            <div className="flex items-baseline gap-2 flex-wrap">
+                                                <span className="text-sm font-black text-black">{msg.name}</span>
                                                 {msg.email === "radyaiftikhar@gmail.com" && (
-                                                    <span className="text-[9px] bg-blue-900/30 text-blue-400 px-1.5 py-0.5 rounded border border-blue-500/20 font-bold uppercase">
+                                                    <span className="text-[9px] bg-black text-white px-2 py-0.5 rounded border border-black font-bold uppercase tracking-wider">
                                                         Owner
                                                     </span>
                                                 )}
@@ -195,65 +204,63 @@ export default function Guestbook() {
                                             {isAdmin && (
                                                 <button
                                                     onClick={() => handleDelete(msg.id)}
-                                                    className="opacity-0 group-hover:opacity-100 p-1.5 bg-red-900/10 text-red-400 hover:bg-red-500 hover:text-white rounded-lg transition duration-200"
+                                                    className="opacity-0 group-hover:opacity-100 p-1.5 bg-red-100 text-red-600 border border-red-600 hover:bg-red-500 hover:text-white rounded shadow-sm transition duration-200"
                                                     title="Delete Message"
                                                 >
                                                     <Trash2 className="w-3 h-3" />
                                                 </button>
                                             )}
                                         </div>
-                                        <p className="text-sm text-gray-400 mt-1 break-words leading-relaxed font-mono">
+                                        <p className="text-sm text-gray-800 break-words leading-relaxed font-serif">
                                             {msg.msg}
                                         </p>
                                     </div>
                                 </div>
                             ))
                         )}
+                        <div ref={messagesEndRef} className="h-1" />
                     </div>
                 </div>
 
-                <div className="px-2 md:px-4 pt-4 pb-2 bg-gradient-to-t from-[#050505] to-transparent shrink-0">
+                <div className="px-2 md:px-4 pt-4 pb-4 border-t-2 border-black bg-[#f4f1ea] shrink-0 z-40">
                     {!user ? (
                         <button
                             onClick={handleLogin}
-                            className="w-full py-3 flex items-center justify-center gap-2 bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/30 text-blue-400 hover:text-blue-300 rounded-xl transition font-bold text-sm"
+                            className="w-full py-3 flex items-center justify-center gap-2 bg-blue-100 hover:bg-blue-200 border-2 border-black text-black rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition font-bold text-sm"
                         >
                             <LogIn className="w-4 h-4" />
                             <span>Sign in with Google to Chat</span>
                         </button>
                     ) : (
-                        <div className="flex gap-2">
+                        <div className="flex gap-3 items-end">
                             <div className="relative flex-1">
+                                <div className="flex justify-between items-center mb-2 px-1">
+                                    <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+                                        Identity: <span className="text-black">{user.email}</span>
+                                    </span>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="text-[10px] font-bold text-red-500 hover:text-red-700 hover:underline"
+                                    >
+                                        SIGN OUT
+                                    </button>
+                                </div>
                                 <input
                                     type="text"
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                                    placeholder="Write a transmission..."
-                                    className="w-full bg-[#111] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500/50 transition placeholder:text-gray-700 font-mono"
+                                    placeholder="Write a message..."
+                                    className="w-full bg-white border-2 border-black rounded-lg px-4 py-3 text-sm text-black focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all placeholder:text-gray-400 font-mono"
                                     disabled={isLoading}
                                 />
                             </div>
                             <button
                                 onClick={handleSend}
                                 disabled={isLoading || !input.trim()}
-                                className="bg-white text-black p-3 rounded-xl hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center"
+                                className="bg-black text-white h-[46px] w-[46px] rounded-lg border-2 border-black hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(100,100,100,1)] active:shadow-none active:translate-x-[2px] active:translate-y-[2px]"
                             >
                                 {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-                            </button>
-                        </div>
-                    )}
-
-                    {user && (
-                        <div className="flex justify-between items-center mt-2 px-1">
-                            <span className="text-[10px] text-gray-600">
-                                Logged as: <span className="text-gray-400">{user.email}</span>
-                            </span>
-                            <button
-                                onClick={handleLogout}
-                                className="text-[10px] text-red-500/50 hover:text-red-400 underline"
-                            >
-                                Sign Out
                             </button>
                         </div>
                     )}

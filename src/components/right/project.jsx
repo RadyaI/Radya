@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { Github, Globe, Box, Layers, Code2 } from "lucide-react";
-import 'animate.css';
+import { useState, useRef, useLayoutEffect } from "react";
+import { Github, Globe, Box, Layers, Code2, FolderOpen } from "lucide-react";
+import gsap from "gsap";
 
 export default function Project() {
+    const containerRef = useRef(null);
 
     const [projectData] = useState([
         {
@@ -125,97 +126,120 @@ export default function Project() {
         },
     ]);
 
+    useLayoutEffect(() => {
+        let ctx = gsap.context(() => {
+            gsap.from(".project-card", {
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: "power2.out"
+            });
+        }, containerRef);
+        return () => ctx.revert();
+    }, []);
+
+    const onEnter = ({ currentTarget }) => {
+        gsap.to(currentTarget, { scale: 1, translateY: 3, translateX: 1, boxShadow: "4px 4px 0px 0px rgba(0,0,0,0.8)", duration: 0.2 });
+    };
+    
+    const onLeave = ({ currentTarget }) => {
+        gsap.to(currentTarget, { scale: 1, translateY: 0, translateX: 0, rotation: 0, boxShadow: "8px 8px 0px 0px rgba(0,0,0,8)", duration: 0.2 });
+    };
+
     return (
-        <div className="h-full relative overflow-hidden">
+        <div ref={containerRef} className="h-full relative overflow-hidden bg-white text-neutral-900">
 
             <style>{`
                 .scroll-container {
                     overflow-y: auto;
                     height: 100%;
-                    padding-right: 8px; /* Jarak scrollbar kanan */
+                    padding-right: 8px;
+                    padding-left: 2px;
+                    padding-bottom: 20px;
                 }
-                
-                .scroll-container::-webkit-scrollbar { width: 4px; }
+                .scroll-container::-webkit-scrollbar { width: 6px; }
                 .scroll-container::-webkit-scrollbar-track { background: transparent; }
-                .scroll-container::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
-                .scroll-container::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
+                .scroll-container::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; border: 1px solid #000; }
+                .scroll-container::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
             `}</style>
 
-            <div className="scroll-container">
-                <div className="px-2 md:px-4 pb-10 font-sans text-gray-300">
+            <div className="scroll-container px-2 md:px-4 pb-10">
 
-                    <div className="mb-8 animate__animated animate__fadeInDown">
-                        <div className="relative z-10 flex justify-end items-center gap-3">
-                            <span className="text-purple-400 font-mono text-sm">// 04</span>
-                            <h3 className="text-2xl font-bold text-white text-right">Selected Works.</h3>
-                        </div>
+                <div className="mb-8 pt-4 flex justify-between items-end border-b-2 border-black pb-2 sticky top-0 bg-white/90 backdrop-blur-sm z-20">
+                    <div className="flex items-center gap-2">
+                        <FolderOpen className="w-6 h-6 text-black" strokeWidth={2.5} />
+                        <h3 className="text-2xl font-black text-black uppercase tracking-tighter">Selected Works</h3>
                     </div>
+                    <span className="font-mono text-sm font-bold bg-black text-white px-2 py-0.5 rounded-sm">// 04</span>
+                </div>
 
-                    <div className="grid grid-cols-1 gap-6">
-                        {projectData.map((item, idx) => (
-                            <div
-                                key={idx}
-                                className="group relative bg-[#111] border border-white/5 rounded-2xl p-6 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl animate__animated animate__fadeInUp"
-                                style={{ animationDelay: `${idx * 100}ms` }}
-                            >
-                                <div
-                                    className="absolute left-0 top-6 bottom-6 w-1 rounded-r-full shadow-[0_0_10px_currentColor] opacity-60 group-hover:opacity-100 transition duration-500"
-                                    style={{ backgroundColor: item.color, color: item.color }}
-                                ></div>
+                <div className="grid grid-cols-1 gap-8">
+                    {projectData.map((item, idx) => (
+                        <div
+                            key={idx}
+                            className="project-card group relative bg-white border-2 border-black rounded-lg p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                            onMouseEnter={onEnter}
+                            onMouseLeave={onLeave}
+                        >
+                            <div 
+                                className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 rotate-1 opacity-90 shadow-sm z-10 border-l border-r border-white/30 backdrop-blur-[1px]"
+                                style={{ backgroundColor: item.color }}
+                            ></div>
 
-                                <div className="flex justify-between items-start mb-3 pl-4">
-                                    <h3 className="text-xl font-bold text-white group-hover:text-blue-200 transition">
-                                        {item.title}
-                                    </h3>
-                                    <div className="p-2 rounded-lg bg-white/5 border border-white/5 text-gray-400">
-                                        {item.tech.includes('React') || item.tech.includes('Next') ? <Box className="w-4 h-4" /> :
-                                            item.tech.includes('Typescript') || item.tech.includes('Javascript') ? <Code2 className="w-4 h-4" /> :
-                                                <Layers className="w-4 h-4" />}
-                                    </div>
-                                </div>
-
-                                <p className="text-sm text-gray-400 leading-relaxed mb-6 pl-4 line-clamp-3">
-                                    {item.desc}
-                                </p>
-
-                                <div className="flex flex-wrap gap-2 pl-4 mb-6">
-                                    {item.tag.map((t, i) => (
-                                        <span key={i} className="px-2 py-1 text-[10px] uppercase font-bold tracking-wider text-gray-300 bg-white/5 border border-white/10 rounded-md">
-                                            {t}
-                                        </span>
-                                    ))}
-                                </div>
-
-                                <div className="flex gap-3 pl-4 pt-4 border-t border-white/5">
-                                    {item.repo_link !== "-" && (
-                                        <a
-                                            href={item.repo_link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center gap-2 px-4 py-2 text-xs font-bold bg-[#1a1a1a] hover:bg-[#222] border border-white/10 rounded-lg text-gray-300 hover:text-white transition"
-                                        >
-                                            <Github className="w-3 h-3" />
-                                            <span>Code</span>
-                                        </a>
-                                    )}
-
-                                    {item.live_link !== "-" && (
-                                        <a
-                                            href={item.live_link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center gap-2 px-4 py-2 text-xs font-bold bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/20 text-blue-400 hover:text-blue-300 rounded-lg transition"
-                                        >
-                                            <Globe className="w-3 h-3" />
-                                            <span>Live Demo</span>
-                                        </a>
-                                    )}
+                            <div className="flex justify-between items-start mb-3 mt-2">
+                                <h3 className="text-xl font-black text-black group-hover:underline decoration-2 underline-offset-2">
+                                    {item.title}
+                                </h3>
+                                
+                                <div className="p-1.5 rounded bg-gray-100 border border-black text-black">
+                                    {item.tech.includes('React') || item.tech.includes('Next') ? <Box className="w-4 h-4" strokeWidth={2.5} /> :
+                                     item.tech.includes('Typescript') || item.tech.includes('Javascript') ? <Code2 className="w-4 h-4" strokeWidth={2.5} /> :
+                                     <Layers className="w-4 h-4" strokeWidth={2.5} />}
                                 </div>
                             </div>
-                        ))}
-                    </div>
 
+                            <p className="text-sm font-serif text-gray-700 leading-relaxed mb-6 line-clamp-3">
+                                {item.desc}
+                            </p>
+
+                            <div className="flex flex-wrap gap-2 mb-6">
+                                {item.tag.map((t, i) => (
+                                    <span key={i} className="px-2 py-1 text-[10px] uppercase font-bold tracking-wider text-black bg-gray-100 border border-black rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,0.5)]">
+                                        {t}
+                                    </span>
+                                ))}
+                            </div>
+
+                            <div className="flex gap-3 pt-4 border-t-2 border-dashed border-gray-300">
+                                {item.repo_link !== "-" && (
+                                    <a
+                                        href={item.repo_link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-2 px-3 py-2 text-xs font-bold bg-white hover:bg-black hover:text-white border-2 border-black rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
+                                    >
+                                        <Github className="w-3 h-3" strokeWidth={3} />
+                                        <span>Code</span>
+                                    </a>
+                                )}
+
+                                {item.live_link !== "-" && (
+                                    <a
+                                        href={item.live_link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-2 px-3 py-2 text-xs font-bold bg-yellow-200 hover:bg-yellow-300 border-2 border-black rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none text-black transition-all"
+                                    >
+                                        <Globe className="w-3 h-3" strokeWidth={3} />
+                                        <span>Live Demo</span>
+                                    </a>
+                                )}
+                            </div>
+                        </div>
+                    ))}
                 </div>
+
             </div>
         </div>
     );

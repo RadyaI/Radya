@@ -1,15 +1,17 @@
-import { useState, useEffect } from "react";
-import { BookOpen, Calendar, Clock, ArrowUpRight, Hash, Feather, Loader2 } from "lucide-react";
+import { useState, useEffect, useRef, useLayoutEffect } from "react";
+import { Calendar, Clock, ArrowUpRight, Hash, Feather, Loader2 } from "lucide-react";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { useRouter } from "next/navigation";
-import 'animate.css';
 import { format } from "date-fns";
 import Link from "next/link";
+import gsap from "gsap";
 
 export default function Blog() {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
+    const containerRef = useRef(null);
+
     const mediumBlogs = [
         {
             title: "Memahami Percabangan pada Bahasa Pemrograman Java",
@@ -74,6 +76,12 @@ export default function Blog() {
     useEffect(() => {
         const fetchArticles = async () => {
             try {
+                if (!db) {
+                    console.log("Firebase DB not initialized yet");
+                    setLoading(false);
+                    return;
+                }
+
                 const q = query(collection(db, "articles"), orderBy("createdAt", "desc"));
                 const querySnapshot = await getDocs(q);
 
@@ -103,92 +111,110 @@ export default function Blog() {
         fetchArticles();
     }, []);
 
+    useLayoutEffect(() => {
+        if (!loading && containerRef.current) {
+            let ctx = gsap.context(() => {
+                gsap.from(".blog-card", {
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.6,
+                    stagger: 0.1,
+                    ease: "power2.out",
+                    clearProps: "all"
+                });
+            }, containerRef);
+            return () => ctx.revert();
+        }
+    }, [loading]);
+
     const getTheme = (tag) => {
-        if (!tag) return { color: 'text-gray-400', border: 'border-gray-500/30', bg: 'bg-gray-500/10' };
+        if (!tag) return { color: 'text-gray-900', bg: 'bg-gray-200', tape: '#9ca3af' };
         const t = tag.toUpperCase();
-        if (t.includes('REACT')) return { color: 'text-blue-400', border: 'border-blue-500/30', bg: 'bg-blue-500/10' };
-        if (t.includes('JAVA')) return { color: 'text-orange-400', border: 'border-orange-500/30', bg: 'bg-orange-500/10' };
-        if (t.includes('C LANG')) return { color: 'text-gray-400', border: 'border-gray-500/30', bg: 'bg-gray-500/10' };
-        return { color: 'text-purple-400', border: 'border-purple-500/30', bg: 'bg-purple-500/10' };
+        if (t.includes('REACT')) return { color: 'text-blue-900', bg: 'bg-blue-100', tape: '#60a5fa' };
+        if (t.includes('JAVA') || t.includes('SCRIPT')) return { color: 'text-yellow-900', bg: 'bg-yellow-100', tape: '#facc15' };
+        if (t.includes('C LANG')) return { color: 'text-gray-900', bg: 'bg-gray-200', tape: '#9ca3af' };
+        return { color: 'text-purple-900', bg: 'bg-purple-100', tape: '#a855f7' };
     };
 
     return (
-        <div className="h-full relative overflow-hidden bg-[#0a0a0a]">
-            <style>{`
-                .scroll-left-container { direction: rtl; overflow-y: auto; height: 100%; padding-left: 8px; }
-                .content-fix { direction: ltr; }
-                .scroll-left-container::-webkit-scrollbar { width: 4px; }
-                .scroll-left-container::-webkit-scrollbar-track { background: transparent; }
-                .scroll-left-container::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
-            `}</style>
+        <div ref={containerRef} className="h-full w-full bg-white text-neutral-900 flex flex-col">
+            
+            <div className="px-2 md:px-4 pt-4 pb-2 border-b-2 border-black bg-white/95 backdrop-blur-sm z-30 shrink-0 flex items-center gap-3">
+                <span className="font-mono text-sm font-bold bg-black text-white px-2 py-0.5 rounded-sm">03 //</span>
+                <h3 className="text-2xl font-black text-black uppercase tracking-tighter">Archive Logs.</h3>
+            </div>
 
-            <div className="scroll-left-container">
-                <div className="content-fix px-2 md:px-4 pb-10 font-sans text-gray-300">
+            <div className="flex-1 overflow-y-auto px-2 md:px-4 pb-10 pt-4 custom-scrollbar">
+                
+                <style>{`
+                    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+                    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+                    .custom-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; border: 1px solid #000; }
+                    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+                    
+                    /* Untuk Firefox */
+                    .custom-scrollbar {
+                        scrollbar-width: thin;
+                        scrollbar-color: #d1d5db transparent;
+                    }
+                `}</style>
 
-                    <div className="mb-8 animate__animated animate__fadeInDown flex justify-between items-end">
-                        <div>
-                            <div className="relative z-10 flex items-center gap-3">
-                                <span className="text-purple-400 font-mono text-sm">03 //</span>
-                                <h3 className="text-2xl font-bold text-white">Archive Logs.</h3>
-                            </div>
-                        </div>
+                {loading ? (
+                    <div className="flex justify-center py-20">
+                        <Loader2 className="animate-spin text-black w-8 h-8" />
                     </div>
+                ) : (
+                    <div className="grid grid-cols-1 gap-6">
+                        {blogs.map((item, idx) => {
+                            const tag = item.tags[0] || "General";
+                            const theme = getTheme(tag);
+                            const isInternal = item.type === "internal";
+                            const Component = isInternal ? Link : 'a';
+                            const linkProps = isInternal
+                                ? { href: item.link }
+                                : { href: item.link, target: "_blank", rel: "noopener noreferrer" };
 
-                    {loading ? (
-                        <div className="flex justify-center py-10"><Loader2 className="animate-spin text-purple-500" /></div>
-                    ) : (
-                        <div className="grid grid-cols-1 gap-4">
-                            {blogs.map((item, idx) => {
-                                const tag = item.tags[0] || "General";
-                                const theme = getTheme(tag);
-                                const isInternal = item.type === "internal";
+                            return (
+                                <Component
+                                    key={idx}
+                                    {...linkProps}
+                                    className="blog-card group relative block p-5 rounded-lg bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all duration-200 cursor-pointer"
+                                >
+                                    <div 
+                                        className="absolute -top-2.5 -left-2 w-16 h-4 rotate-[-10deg] shadow-sm opacity-90 z-10 border-l border-r border-white/40"
+                                        style={{ backgroundColor: theme.tape }}
+                                    ></div>
 
-                                const Component = isInternal ? Link : 'a';
-
-                                const linkProps = isInternal
-                                    ? { href: item.link }
-                                    : { href: item.link, target: "_blank", rel: "noopener noreferrer" };
-
-                                return (
-                                    <Component
-                                        key={idx}
-                                        {...linkProps}
-                                        className="group relative block p-5 rounded-2xl bg-[#111] border border-white/5 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer animate__animated animate__fadeInUp"
-                                        style={{ animationDelay: `${idx * 50}ms` }}
-                                    >
-                                        <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-r from-transparent via-transparent to-${theme.color.split('-')[1]}-900/10 pointer-events-none rounded-2xl`}></div>
-
-                                        <div className="flex justify-between items-start mb-3">
-                                            <div className={`flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-bold tracking-widest ${theme.bg} ${theme.color} ${theme.border} border`}>
-                                                <Hash className="w-3 h-3" /> {tag}
-                                            </div>
-                                            {isInternal ? (
-                                                <div className="bg-purple-500/20 text-purple-400 p-1 rounded-full animate-pulse" title="Radya's Original">
-                                                    <Feather className="w-3 h-3" />
-                                                </div>
-                                            ) : (
-                                                <ArrowUpRight className="w-4 h-4 text-gray-600 group-hover:text-white transition" />
-                                            )}
+                                    <div className="flex justify-between items-start mb-3 relative z-10">
+                                        <div className={`flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-black uppercase tracking-widest border border-black ${theme.bg} ${theme.color}`}>
+                                            <Hash className="w-3 h-3" /> {tag}
                                         </div>
-
-                                        <h3 className="text-lg font-bold text-gray-200 group-hover:text-white mb-2 leading-snug transition-colors">
-                                            {item.title}
-                                        </h3>
-
-                                        <div className="flex items-center gap-4 text-xs font-mono text-gray-500 border-t border-white/5 pt-3">
-                                            <div className="flex items-center gap-1.5">
-                                                <Calendar className="w-3 h-3" /> <span>{item.date}</span>
+                                        {isInternal ? (
+                                            <div className="bg-black text-white p-1 rounded-full shadow-sm" title="Original Article">
+                                                <Feather className="w-3 h-3" />
                                             </div>
-                                            <div className="flex items-center gap-1.5">
-                                                <Clock className="w-3 h-3" /> <span>{item.read}</span>
-                                            </div>
+                                        ) : (
+                                            <ArrowUpRight className="w-4 h-4 text-black group-hover:scale-125 transition-transform" />
+                                        )}
+                                    </div>
+
+                                    <h3 className="text-lg font-black text-black mb-3 leading-snug group-hover:underline decoration-2 underline-offset-2 transition-all">
+                                        {item.title}
+                                    </h3>
+
+                                    <div className="flex items-center gap-4 text-xs font-mono font-bold text-gray-500 border-t-2 border-dashed border-gray-300 pt-3 group-hover:border-black transition-colors">
+                                        <div className="flex items-center gap-1.5">
+                                            <Calendar className="w-3 h-3" /> <span>{item.date}</span>
                                         </div>
-                                    </Component>
-                                );
-                            })}
-                        </div>
-                    )}
-                </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <Clock className="w-3 h-3" /> <span>{item.read}</span>
+                                        </div>
+                                    </div>
+                                </Component>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
         </div>
     );

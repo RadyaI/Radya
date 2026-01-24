@@ -1,78 +1,119 @@
 import { Github, Linkedin, Instagram, Terminal, ArrowUpRight } from "lucide-react";
-import 'animate.css';
+import { useLayoutEffect, useRef } from "react";
+import gsap from "gsap";
 
 export default function Home() {
+    const comp = useRef(null);
+
+    useLayoutEffect(() => {
+        let ctx = gsap.context(() => {
+            const tl = gsap.timeline();
+
+            tl.from(".paper-item", {
+                y: 50,
+                opacity: 0,
+                rotation: () => Math.random() * 6 - 3, 
+                duration: 1,
+                ease: "back.out(1.4)",
+                stagger: 0.1,
+            });
+
+            gsap.to(".badge-pulse", {
+                scale: 1.2,
+                repeat: -1,
+                yoyo: true,
+                duration: 0.8,
+                ease: "power1.inOut"
+            });
+        }, comp);
+
+        return () => ctx.revert();
+    }, []);
+
+    const onEnter = ({ currentTarget }) => {
+        gsap.to(currentTarget, { scale: 1.05, rotation: 2, x: 2, y: -2, boxShadow: "6px 6px 0px 0px rgba(0,0,0,1)", duration: 0.2 });
+    };
+    
+    const onLeave = ({ currentTarget }) => {
+        gsap.to(currentTarget, { scale: 1, rotation: 0, x: 0, y: 0, boxShadow: "3px 3px 0px 0px rgba(0,0,0,1)", duration: 0.2 });
+    };
+
     return (
-        <div className="relative h-full flex flex-col justify-center px-2 md:px-4 font-sans select-none">
+        <div ref={comp} className="bg-yellow-50 relative w-full h-full flex flex-col justify-center px-2 md:px-4 font-sans select-none overflow-x-hidden overflow-y-auto no-scrollbar">
             
-            <div className="animate__animated animate__fadeInDown">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm mb-6 hover:bg-white/10 transition cursor-default">
-                    <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                    </span>
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Online</span>
+            <div className="absolute inset-0 opacity-5 pointer-events-none" 
+                 style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
+            </div>
+
+            <div className="paper-item mb-6 w-fit">
+                <div className="relative group cursor-default">
+                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-12 h-3 bg-yellow-200/80 rotate-2 z-10 opacity-80 backdrop-blur-[1px]"></div>
+                    
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rotate-[-1deg] transition-transform group-hover:rotate-0">
+                        <span className="relative flex h-2.5 w-2.5">
+                            <span className="badge-pulse absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500 border border-black"></span>
+                        </span>
+                        <span className="text-[10px] font-black font-mono uppercase tracking-widest text-black">Online</span>
+                    </div>
                 </div>
             </div>
 
-            <div className="mb-8 relative z-10">
+            <div className="relative z-10 w-full">
                 
-                <p className="text-blue-400 font-mono text-sm mb-2 animate__animated animate__fadeInLeft">
-                    &lt;😼 /&gt; I am
+                <p className="paper-item text-blue-700 font-mono text-xs md:text-sm mb-3 font-bold bg-blue-100 w-fit px-2 border border-blue-300 -rotate-1">
+                    &lt;😼 /&gt; Hello, I am
                 </p>
 
-                <h1 className="text-6xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter mb-4 animate__animated animate__fadeInUp animate__delay-1s mix-blend-overlay opacity-90">
-                    RADYA <br /> IFTIKHAR.
+                <h1 className="paper-item text-5xl md:text-6xl lg:text-7xl font-black leading-[0.9] tracking-tighter mb-4 text-neutral-900 break-words mix-blend-multiply">
+                    RADYA <br /> 
+                    <span className="text-transparent bg-clip-text bg-gradient-to-b from-neutral-800 to-neutral-900" style={{ WebkitTextStroke: '1.5px black' }}>
+                        IFTIKHAR.
+                    </span>
                 </h1>
 
-                <div className="flex flex-col gap-1 animate__animated animate__fadeInUp animate__delay-2s">
-                    <div className="flex items-center gap-3 text-lg md:text-xl font-bold text-gray-500">
-                        <span className="relative italic opacity-60">
-                            In This Economy?
-                        </span>
-                        <span className="hidden md:inline-block w-8 h-[1px] bg-gray-700"></span>
+                <div className="paper-item flex flex-col gap-2 mb-8">
+                    <div className="flex items-center gap-2 text-base font-bold text-neutral-500">
+                        <span className="italic font-serif">"In This Economy?"</span>
+                        <span className="w-8 h-[2px] bg-black"></span>
                     </div>
                     
-                    <div className="text-2xl decoration-red-500/80 decoration-2 line-through md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-white">
-                        FULLSTACK DEV
+                    <div className="relative w-fit max-w-full">
+                        <div className="absolute inset-0 bg-yellow-300 -rotate-1 skew-x-3 h-full w-full -z-10 border-2 border-black translate-y-1 rounded-sm"></div>
+                        <div className="text-xl md:text-3xl font-black text-black px-2 decoration-wavy decoration-red-500 line-through decoration-2 break-words">
+                            FULLSTACK DEV
+                        </div>
                     </div>
                 </div>
 
-                <div className="mt-6 flex items-center gap-2 text-gray-500 font-mono text-sm border-l-2 border-gray-700 pl-4 animate__animated animate__fadeIn animate__delay-3s">
-                    <Terminal className="w-4 h-4" />
-                    <span>"Ngoding apa aja dah."</span>
+                <div className="paper-item inline-flex items-center gap-2 bg-white border-2 border-black p-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rotate-1 max-w-full">
+                    <Terminal className="w-4 h-4 text-black flex-shrink-0" />
+                    <span className="font-mono text-xs md:text-sm font-bold text-neutral-700 truncate">"Ngoding apa aja dah."</span>
                 </div>
             </div>
 
-            <div className="flex gap-4 animate__animated animate__fadeInUp animate__delay-4s">
-                <SocialLink href="https://instagram.com/radyaif" icon={Instagram} label="IG" />
-                <SocialLink href="https://www.linkedin.com/in/radyaa/" icon={Linkedin} label="IN" />
-                <SocialLink href="https://github.com/RadyaI" icon={Github} label="GIT" />
-            </div>
-
-            <div className="absolute top-1/4 right-0 w-64 h-64 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none -z-10 animate-pulse"></div>
-            <div className="absolute bottom-10 right-10 flex gap-1 opacity-20">
-                <div className="w-2 h-2 bg-white rounded-full"></div>
-                <div className="w-2 h-2 bg-white rounded-full"></div>
-                <div className="w-2 h-2 bg-white rounded-full"></div>
+            <div className="paper-item flex flex-wrap gap-3 mt-8 pb-4">
+                <SocialLink href="https://instagram.com/radyaif" icon={Instagram} label="IG" onEnter={onEnter} onLeave={onLeave} color="bg-pink-100" />
+                <SocialLink href="https://www.linkedin.com/in/radyaa/" icon={Linkedin} label="IN" onEnter={onEnter} onLeave={onLeave} color="bg-blue-100" />
+                <SocialLink href="https://github.com/RadyaI" icon={Github} label="GIT" onEnter={onEnter} onLeave={onLeave} color="bg-gray-100" />
             </div>
 
         </div>
     );
 }
 
-function SocialLink({ href, icon: Icon, label }) {
+function SocialLink({ href, icon: Icon, onEnter, onLeave, color = "bg-white" }) {
     return (
         <a 
             href={href} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="group relative w-14 h-14 flex items-center justify-center bg-white/5 border border-white/10 rounded-2xl overflow-hidden transition-all duration-300 hover:scale-110 hover:border-blue-500/50 hover:bg-white/10"
+            onMouseEnter={onEnter}
+            onMouseLeave={onLeave}
+            className={`relative w-12 h-12 md:w-14 md:h-14 flex items-center justify-center ${color} border-2 border-black rounded-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-colors`}
         >
-            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <Icon className="w-6 h-6 text-gray-400 group-hover:text-white transition-colors relative z-10" />
-            
-            <ArrowUpRight className="absolute top-1 right-1 w-3 h-3 text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <Icon className="w-5 h-5 md:w-6 md:h-6 text-black stroke-[2.5px]" />
+            <ArrowUpRight className="absolute top-0.5 right-0.5 w-3 h-3 text-black opacity-60" />
         </a>
     )
 }

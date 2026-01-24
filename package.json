@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@google/genai": "^1.34.0",
+    "@gsap/react": "^2.1.2",
     "@studio-freight/lenis": "^1.0.42",
     "@types/leaflet": "^1.9.21",
     "@uiw/react-md-editor": "^4.0.11",

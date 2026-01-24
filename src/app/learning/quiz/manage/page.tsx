@@ -2,7 +2,7 @@
 
 import { useLearning } from '@/hooks/useLearning'
 import { isAdmin } from '@/utils/admins'
-import AdminQuizForm from '@/components/quiz/AdminQuizForm'
+import AdminQuizForm from '@/components/quiz1/AdminQuizForm'
 import { ShieldAlert, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import BackgroundEffects from '@/components/learning/UI/BackgroundEffects'

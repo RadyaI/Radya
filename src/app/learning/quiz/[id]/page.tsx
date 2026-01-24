@@ -8,7 +8,7 @@ import { motion } from 'framer-motion'
 import { Play, Clock, Trophy, ShieldCheck, ArrowLeft, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import BackgroundEffects from '@/components/learning/UI/BackgroundEffects'
-import AttemptHistoryList from '../../../../components/quiz/AttemptHistoryList'
+import AttemptHistoryList from '../../../../components/quiz1/AttemptHistoryList'
 
 export default function QuizPreStartPage() {
   const { id } = useParams()

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useQuiz } from '@/hooks/useQuiz'
-import AdminQuizForm from '@/components/quiz/AdminQuizForm'
+import AdminQuizForm from '@/components/quiz1/AdminQuizForm'
 import { Loader2 } from 'lucide-react'
 import BackgroundEffects from '@/components/learning/UI/BackgroundEffects'
 import { Toaster } from 'react-hot-toast'

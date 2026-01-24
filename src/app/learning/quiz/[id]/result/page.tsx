@@ -8,8 +8,8 @@ import confetti from 'canvas-confetti'
 import { Trophy, RefreshCcw, Home, XCircle, CheckCircle, Loader2, Clock, FileText, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import BackgroundEffects from '@/components/learning/UI/BackgroundEffects'
-import QuizReviewModule from '@/components/quiz/QuizReviewModule'
-import AiReviewModal from '@/components/quiz/AiReviewModal' 
+import QuizReviewModule from '@/components/quiz1/QuizReviewModule'
+import AiReviewModal from '@/components/quiz1/AiReviewModal' 
 import toast from 'react-hot-toast'
 
 export default function QuizResultPage() {

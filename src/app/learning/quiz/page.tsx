@@ -8,7 +8,7 @@ import { db } from '@/utils/firebase'
 import { collection, query, getDocs, orderBy } from 'firebase/firestore'
 import Link from 'next/link'
 import BackgroundEffects from '@/components/learning/UI/BackgroundEffects'
-import QuizCard from '@/components/quiz/QuizCard'
+import QuizCard from '@/components/quiz1/QuizCard'
 
 export default function QuizDashboard() {
   const { user, login, logout } = useLearning()

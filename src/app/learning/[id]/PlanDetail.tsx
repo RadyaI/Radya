@@ -9,7 +9,7 @@ import JournalModule from '@/components/learning/JournalModule'
 import ResourceModule from '@/components/learning/ResourceModule'
 import { Toaster } from 'react-hot-toast'
 import { motion } from 'framer-motion'
-import { useMemo } from 'react' 
+import { useEffect, useMemo } from 'react' 
 
 export default function PlanDetail() {
   const { id } = useParams()
@@ -41,6 +41,10 @@ export default function PlanDetail() {
       deletePlan()
     }
   }
+
+  useEffect(() => {
+    router.prefetch("/cat")
+  }, [router])
 
   if (loading) return (
     <div className="min-h-screen bg-[#09090b] flex flex-col items-center justify-center font-pixel text-white">

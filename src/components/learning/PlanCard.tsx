@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, CheckCircle2, CircleDashed, Clock } from 'lucide-react'
+import { ArrowRight, CheckSquare, Clock, Circle, Terminal } from 'lucide-react'
 import Link from 'next/link'
 import { twMerge } from 'tailwind-merge'
 
@@ -16,68 +16,95 @@ interface Props {
 }
 
 export default function PlanCard({ data, index }: Props) {
-  const getStatusColor = (status: string) => {
+  
+  const getStatusTheme = (status: string) => {
     switch (status) {
-      case 'in_progress': return 'text-amber-500 bg-amber-500/10 border-amber-500/20'
-      case 'completed': return 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20'
-      default: return 'text-zinc-500 bg-zinc-500/10 border-zinc-500/20'
+      case 'in_progress': 
+        return {
+            border: 'border-l-yellow-400', 
+            text: 'text-yellow-400',
+            icon: <Clock className="w-5 h-5 text-yellow-400" strokeWidth={3} />
+        }
+      case 'completed': 
+        return {
+            border: 'border-l-green-500', 
+            text: 'text-green-500',
+            icon: <CheckSquare className="w-5 h-5 text-green-500" strokeWidth={3} />
+        }
+      default: 
+        return {
+            border: 'border-l-zinc-500', 
+            text: 'text-zinc-500',
+            icon: <Circle className="w-5 h-5 text-zinc-500" strokeWidth={3} />
+        }
     }
   }
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'in_progress': return <Clock className="w-4 h-4" />
-      case 'completed': return <CheckCircle2 className="w-4 h-4" />
-      default: return <CircleDashed className="w-4 h-4" />
-    }
-  }
+  const theme = getStatusTheme(data.status)
+  const progressColor = data.progress === 100 ? 'bg-green-500' : 'bg-blue-600'
 
   return (
     <Link href={`/learning/${data.id}`} className="block h-full">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.1 }}
-        className="group relative h-full bg-zinc-900/50 hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-2xl p-6 transition-all duration-300"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: index * 0.05 }}
+        className={twMerge(
+          "group relative h-full bg-zinc-900 border-2 border-zinc-800 border-l-[6px] p-5 flex flex-col justify-between transition-all hover:-translate-y-1 hover:border-zinc-500 hover:shadow-[6px_6px_0px_0px_#111]",
+          theme.border
+        )}
       >
-        <div className="absolute top-6 right-6">
-          <span className={twMerge("flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border", getStatusColor(data.status))}>
-            {getStatusIcon(data.status)}
-            {data.status.replace('_', ' ').toUpperCase()}
-          </span>
-        </div>
-
-        <div className="mb-4">
-          <span className="text-xs font-semibold text-blue-500 mb-2 block tracking-wider uppercase">
-            {data.category}
-          </span>
-          <h3 className="text-xl font-bold text-zinc-100 mb-2 group-hover:text-blue-400 transition-colors">
+        
+        {}
+        <div className="flex justify-between items-start gap-4 mb-3">
+           {}
+           <h3 className="text-2xl md:text-3xl font-bold text-white leading-none uppercase tracking-wide group-hover:text-blue-400 transition-colors">
             {data.title}
           </h3>
-          <p className="text-zinc-400 text-sm line-clamp-2">
-            {data.description}
-          </p>
+          <div className="shrink-0 pt-1">
+            {theme.icon}
+          </div>
         </div>
 
-        <div className="space-y-4">
-          <div className="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
-            <motion.div 
-              initial={{ width: 0 }}
-              animate={{ width: `${data.progress}%` }}
-              className="h-full bg-blue-500 rounded-full"
-            />
-          </div>
-          
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-zinc-500 font-medium">
-              {data.progress}% Complete
-            </span>
-            
-            <div className="flex items-center gap-2 text-sm font-medium text-zinc-300 group-hover:text-white transition-colors">
-              Continue <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </div>
-          </div>
+        {}
+        <div className="mb-4">
+             {}
+             <span className="inline-flex items-center gap-2 px-2 py-1 bg-black border border-zinc-700 text-sm text-zinc-300 font-bold uppercase tracking-widest">
+                <Terminal className="w-3.5 h-3.5" />
+                {data.category.split(' ')[0]} 
+             </span>
         </div>
+
+        {}
+        {}
+        <p className="text-zinc-400 text-lg leading-relaxed line-clamp-3 mb-6 font-medium tracking-wide">
+            {data.description}
+        </p>
+
+        {}
+        <div className="mt-auto pt-4 border-t-2 border-dashed border-zinc-800">
+            {}
+            <div className="flex justify-between items-end mb-2">
+                 <span className={twMerge("text-sm uppercase font-bold tracking-widest", theme.text)}>
+                    {data.status.replace('_', ' ')}
+                </span>
+                <span className="text-xl font-bold text-white">{data.progress}%</span>
+            </div>
+            
+            {}
+            <div className="w-full h-5 bg-black border-2 border-zinc-700 relative">
+                <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${data.progress}%` }}
+                    className={twMerge("h-full relative", progressColor)}
+                >
+                     <div className="absolute inset-0 w-full h-full opacity-30" 
+                        style={{backgroundImage: 'linear-gradient(90deg, transparent 50%, #000 50%)', backgroundSize: '4px 100%'}}>
+                    </div>
+                </motion.div>
+            </div>
+        </div>
+
       </motion.div>
     </Link>
   )

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, Check, Loader2, Trash2, Pencil, X } from 'lucide-react'
+import { Plus, Check, Loader2, Trash2, Pencil, ListTodo } from 'lucide-react'
 import { clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
 
 interface Props {
   milestones?: { id: string; text: string; isDone: boolean }[]
@@ -40,38 +41,44 @@ export default function ChecklistModule({ milestones = [], onAdd, onToggle, onEd
   }
 
   return (
-    <div className="bg-zinc-900/30 backdrop-blur-md border border-white/5 rounded-3xl p-6 md:p-8 h-full">
-      <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-        <span className="w-2 h-8 bg-blue-500 rounded-full inline-block"/>
-        Target & Milestones
+    <div className="bg-zinc-900 p-6 h-full font-pixel">
+      
+      {}
+      <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3 border-b-2 border-zinc-700 pb-4">
+        <div className="w-8 h-8 bg-blue-600 flex items-center justify-center border border-white shadow-[2px_2px_0px_0px_#000]">
+           <ListTodo className="w-5 h-5 text-white" />
+        </div>
+        <span className="uppercase tracking-widest">Targets</span>
       </h3>
 
+      {}
       <div className="space-y-3 mb-8">
         <AnimatePresence mode='popLayout'>
           {milestones.map((item) => (
             <motion.div
               key={item.id}
               layout
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
               className={clsx(
-                "group flex items-start gap-3 p-4 rounded-xl border transition-all select-none relative",
+                "group flex items-start gap-4 p-3 border-2 transition-all relative",
                 item.isDone 
-                  ? "bg-blue-500/10 border-blue-500/20 text-zinc-400" 
-                  : "bg-zinc-800/40 border-white/5 hover:bg-zinc-800/60 hover:border-white/10 text-zinc-200"
+                  ? "bg-green-900/20 border-green-600 text-green-500" 
+                  : "bg-black border-zinc-700 hover:border-white text-zinc-300 hover:bg-zinc-900"
               )}
             >
+              {}
               <div 
                 onClick={() => !editingId && onToggle(item.id, item.isDone)}
                 className={clsx(
-                  "mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border flex items-center justify-center transition-colors cursor-pointer",
-                  item.isDone ? "bg-blue-500 border-blue-500" : "border-zinc-600 group-hover:border-zinc-400"
+                  "mt-1 flex-shrink-0 w-6 h-6 border-2 flex items-center justify-center transition-none cursor-pointer hover:shadow-[2px_2px_0px_0px_#fff]",
+                  item.isDone ? "bg-green-500 border-green-500" : "bg-black border-zinc-500 group-hover:border-white"
                 )}>
-                {item.isDone && <Check className="cursor-pointer w-3.5 h-3.5 text-white" />}
+                {item.isDone && <Check className="w-4 h-4 text-black stroke-[4]" />}
               </div>
 
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 pt-0.5">
                 {editingId === item.id ? (
                   <form 
                     onSubmit={(e) => { e.preventDefault(); saveEdit(item.id); }}
@@ -82,7 +89,7 @@ export default function ChecklistModule({ milestones = [], onAdd, onToggle, onEd
                       type="text"
                       value={editText}
                       onChange={(e) => setEditText(e.target.value)}
-                      className="w-full bg-zinc-950 border border-blue-500/50 rounded px-2 py-0.5 text-sm text-white focus:outline-none"
+                      className="w-full bg-black border-2 border-blue-500 px-2 py-1 text-lg text-white focus:outline-none font-bold uppercase"
                       onBlur={() => saveEdit(item.id)}
                     />
                   </form>
@@ -90,8 +97,8 @@ export default function ChecklistModule({ milestones = [], onAdd, onToggle, onEd
                   <span 
                     onClick={() => onToggle(item.id, item.isDone)}
                     className={clsx(
-                      "text-sm font-medium transition-all block break-words cursor-pointer",
-                      item.isDone && "line-through opacity-50"
+                      "text-lg font-bold uppercase tracking-wide cursor-pointer leading-tight block",
+                      item.isDone && "line-through opacity-60 decoration-2"
                     )}
                   >
                     {item.text}
@@ -99,43 +106,51 @@ export default function ChecklistModule({ milestones = [], onAdd, onToggle, onEd
                 )}
               </div>
 
+              {}
               {editingId !== item.id && (
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity absolute right-3 top-3 bg-zinc-900/80 backdrop-blur-sm rounded-lg p-1 border border-white/5">
+                <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-none absolute right-2 top-2 bg-black border border-white p-1 shadow-[2px_2px_0px_0px_#000]">
                   <button 
                     onClick={() => startEdit(item.id, item.text)}
-                    className="cursor-pointer p-1.5 hover:bg-blue-500/20 rounded text-zinc-400 hover:text-blue-400 transition-colors"
+                    className="cursor-pointer p-1 hover:bg-blue-600 hover:text-white text-zinc-400 transition-none"
                     title="Edit"
                   >
-                    <Pencil className="w-3.5 h-3.5" />
+                    <Pencil className="w-4 h-4" />
                   </button>
                   <button 
                     onClick={() => onDelete(item.id)}
-                    className="cursor-pointer p-1.5 hover:bg-red-500/20 rounded text-zinc-400 hover:text-red-400 transition-colors"
+                    className="cursor-pointer p-1 hover:bg-red-600 hover:text-white text-zinc-400 transition-none"
                     title="Delete"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
               )}
             </motion.div>
           ))}
         </AnimatePresence>
+        
+        {milestones.length === 0 && (
+            <div className="text-zinc-600 text-center py-4 border-2 border-dashed border-zinc-800 text-sm uppercase font-bold">
+                No targets set.
+            </div>
+        )}
       </div>
 
-      <form onSubmit={handleSubmit} className="relative">
+      {}
+      <form onSubmit={handleSubmit} className="relative mt-auto">
         <input
           type="text"
           value={newItem}
           onChange={(e) => setNewItem(e.target.value)}
-          placeholder="Add new target..."
-          className="w-full bg-zinc-950/50 border border-zinc-800 rounded-xl py-3 pl-4 pr-12 text-sm text-white focus:outline-none focus:border-blue-500/50 transition-colors placeholder:text-zinc-600"
+          placeholder="ADD NEW TARGET..."
+          className="w-full bg-black border-2 border-zinc-600 py-3 pl-4 pr-12 text-lg text-white focus:outline-none focus:border-blue-500 transition-colors placeholder:text-zinc-700 font-bold uppercase"
         />
         <button 
           disabled={isAdding || !newItem}
           type="submit"
-          className="absolute right-2 top-2 p-1.5 bg-zinc-800 rounded-lg hover:bg-blue-600 text-zinc-400 hover:text-white transition-all disabled:opacity-0"
+          className="absolute right-2 top-2 bottom-2 px-3 bg-blue-600 text-white border border-white hover:bg-blue-500 transition-none disabled:opacity-0 flex items-center justify-center shadow-[2px_2px_0px_0px_#000] active:translate-y-[2px] active:shadow-none"
         >
-          {isAdding ? <Loader2 className="w-4 h-4 animate-spin"/> : <Plus className="w-4 h-4"/>}
+          {isAdding ? <Loader2 className="w-5 h-5 animate-spin"/> : <Plus className="w-5 h-5 stroke-[3]"/>}
         </button>
       </form>
     </div>

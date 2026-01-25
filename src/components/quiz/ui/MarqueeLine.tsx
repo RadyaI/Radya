@@ -14,7 +14,7 @@ export default function MarqueeLine({ isDark }: { isDark: boolean }) {
     const repeatedContent = content.repeat(10);
 
     return (
-        <div className={`fixed bottom-8 left-0 w-full overflow-hidden whitespace-nowrap border-y-2 py-2 z-10 ${isDark ? 'bg-zinc-900 border-white text-white' : 'bg-white border-black text-black'} -rotate-1 shadow-lg`}>
+        <div className={`fixed left-0 w-full bottom-1 -rotate-1 shadow-lg overflow-hidden whitespace-nowrap border-y-2 py-2 z-10 ${isDark ? 'bg-zinc-900 border-white text-white' : 'bg-white border-black text-black'}`}>
             <div ref={textRef} className="font-mono font-bold text-sm tracking-widest uppercase">
                 {repeatedContent}
             </div>

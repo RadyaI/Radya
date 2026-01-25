@@ -7,7 +7,7 @@ import { useGSAP } from '@gsap/react';
 
 import { useAuth } from '@/hooks/useAuth'; 
 import { quizData } from '@/utils/quiz-data';
-import { getQuizHistory } from '@/utils/firebase-quiz';
+import { getQuizHistory } from '@/utils/quiz/firebase-quiz';
 
 import NoiseBackground from '@/components/quiz/ui/NoiseBackground';
 import ThemeToggle from '@/components/quiz/ui/ThemeToggle';
@@ -98,7 +98,7 @@ export default function QuizDetail() {
                  {user ? (
                     <Link href={`/quiz/${slug}/play`}>
                       <button className={`w-full py-5 font-bold text-2xl uppercase tracking-wider border-2 border-transparent hover:border-current transition-all ${buttonClasses}`}>
-                        START ASSIGNMENT
+                        START
                       </button>
                     </Link>
                  ) : (

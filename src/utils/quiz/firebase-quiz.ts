@@ -1,10 +1,12 @@
-import { db } from './firebase';
+import { db } from '../firebase';
 import { collection, addDoc, query, where, getDocs, orderBy, doc, getDoc } from 'firebase/firestore';
 
-export const saveQuizResult = async (userId: string, quizSlug: string, score: number, total: number, answers: any[]) => {
+export const saveQuizResult = async (userId: string, displayName: string, email: string, quizSlug: string, score: number, total: number, answers: any[]) => {
   try {
     const docRef = await addDoc(collection(db, "quiz_answers"), {
       userId,
+      displayName,
+      email,
       quizSlug,
       score,
       totalQuestions: total,

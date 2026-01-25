@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { quizData } from '@/utils/quiz-data';
-import { saveQuizResult } from '@/utils/firebase-quiz';
+import { saveQuizResult } from '@/utils/quiz/firebase-quiz';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ArrowLeft, ArrowRight, CheckCircle, Disc } from 'lucide-react';
@@ -20,7 +20,7 @@ export default function QuizPlay() {
   
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<(string | null)[]>([]); 
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export default function QuizPlay() {
     const correctCount = formattedAnswers.filter(a => a.isCorrect).length;
     const finalScore = Math.round((correctCount / quiz.questions.length) * 100);
 
-    const resultId = await saveQuizResult(user.uid, slug as string, finalScore, quiz.questions.length, formattedAnswers);
+    const resultId = await saveQuizResult(user.uid, user.displayName, user.email, slug as string, finalScore, quiz.questions.length, formattedAnswers);
     
     if (resultId) {
       router.push(`/quiz/${slug}/result?id=${resultId}`);
@@ -114,9 +114,7 @@ export default function QuizPlay() {
         </div>
 
         <div className={`question-card border-4 p-8 md:p-12 shadow-[12px_12px_0_0_rgba(0,0,0,0.1)] relative ${cardBg}`}>
-            <div className={`absolute -top-6 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 ${isDark ? 'bg-white border-white' : 'bg-black border-black'}`} />
-
-            <h2 className="text-2xl md:text-4xl font-serif font-black leading-tight mb-10">
+            <h2 className="text-2xl md:text-2xl font-serif font-black leading-relaxed mb-10">
                 {currentQuestion.q}
             </h2>
 
@@ -127,7 +125,7 @@ export default function QuizPlay() {
                         <button
                             key={idx}
                             onClick={() => handleSelectOption(opt)}
-                            className={`w-full text-left p-5 border-2 font-mono font-bold text-lg transition-all flex justify-between items-center group ${isSelected ? optionSelected : optionDefault}`}
+                            className={`w-full text-left p-5 border-2 font-mono font-bold text-md transition-all flex justify-between items-center group ${isSelected ? optionSelected : optionDefault}`}
                         >
                             <div className="flex items-center gap-4">
                                 <span className={`w-8 h-8 flex items-center justify-center border rounded-full text-sm ${isSelected ? (isDark ? 'border-black' : 'border-white') : (isDark ? 'border-white' : 'border-black')}`}>

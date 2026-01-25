@@ -34,30 +34,24 @@ export default function QuizDashboard() {
     <main ref={containerRef} className="min-h-screen text-black p-6 md:p-12 overflow-hidden relative font-sans">
       <NoiseBackground />
 
-      {}
-      
-      {}
       <img 
         src="/images/cats/cat.png" 
         className="cat-decor absolute top-[150px] -left-12 w-48 md:w-64 z-0 rotate-12 opacity-90" 
         alt="decoration" 
       />
 
-      {}
       <img 
         src="/images/cats/cat2.png" 
         className="cat-decor absolute bottom-[5%] -right-8 w-40 md:w-56 z-20 -rotate-12" 
         alt="decoration" 
       />
 
-      {}
       <img 
         src="/images/cats/cat3.png" 
         className="cat-decor absolute top-10 right-[10%] w-24 md:w-32 z-0 blur-[1px] opacity-60" 
         alt="decoration" 
       />
 
-      {}
       <div className="abstract-decor absolute top-1/2 left-[5%] text-9xl select-none opacity-10 font-black">
         ❋
       </div>

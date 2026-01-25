@@ -46,12 +46,12 @@ export default function HeaderDashboard({ user, onOpenModal, onLogout }: Props) 
           className="group flex-1 lg:flex-none cursor-pointer flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 border-2 border-white shadow-[6px_6px_0px_0px_#111] active:translate-y-[4px] active:translate-x-[4px] active:shadow-none transition-none"
         >
           <Plus className="w-6 h-6" strokeWidth={4} />
-          <span className="font-bold tracking-widest uppercase text-lg">New Quest</span>
+          <span className="font-bold tracking-widest uppercase text-lg">New Learning</span>
         </button>
 
         {}
         <button
-          onClick={() => router.push("/learning/quiz")}
+          onClick={() => router.push("/quiz")}
           className="cursor-pointer flex items-center justify-center gap-3 bg-yellow-400 hover:bg-yellow-300 text-black px-6 py-4 border-2 border-white shadow-[6px_6px_0px_0px_#111] active:translate-y-[4px] active:translate-x-[4px] active:shadow-none transition-none"
           title="Start Quiz"
         >

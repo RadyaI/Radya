@@ -11,7 +11,7 @@ export interface QuizSet {
   description: string;
   category: string;
   level: "Easy" | "Medium" | "Hard";
-  Status?: "NEW",
+  status?: "New",
   questions: Question[];
   color: string;
 }
@@ -24,6 +24,7 @@ export const quizData: QuizSet[] = [
     description: "Quiz dasar Modul 1 Basis Data: database, DBMS, ERD, CDM, PDM, entitas, dan atribut.",
     category: "Database",
     level: "Easy",
+    status: "New",
     color: "#4f46e5",
     questions: [
       {
@@ -199,6 +200,7 @@ export const quizData: QuizSet[] = [
     description: "Quiz Modul 2 berbasis studi kasus: UID, relasi, kardinalitas, opsionalitas, ERD, dan precision & scale.",
     category: "Database",
     level: "Easy",
+    status: "New",
     color: "#0f766e",
     questions: [
       {

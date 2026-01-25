@@ -37,3 +37,25 @@ export const getQuizResultById = async (resultId: string) => {
   if (docSnap.exists()) return { id: docSnap.id, ...docSnap.data() };
   return null;
 };
+
+export const getAllQuizResults = async () => {
+  try {
+    const q = query(
+      collection(db, "quiz_answers"),
+      orderBy("timestamp", "desc")
+    );
+    const querySnapshot = await getDocs(q);
+    
+    return querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      return { 
+        id: doc.id, 
+        ...data,
+        timestamp: data.timestamp?.toDate ? data.timestamp.toDate() : new Date(data.timestamp)
+      };
+    });
+  } catch (error) {
+    console.error("Error fetching all results:", error);
+    return [];
+  }
+};

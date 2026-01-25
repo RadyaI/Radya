@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import AuthButton from './AuthButton';
+import LearningButton from './LearningButton';
 
 const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+-=[]{}|;:,.<>?";
 
@@ -104,6 +105,7 @@ export default function Header() {
          </div>
          <AuthButton />
       </div>
+      <LearningButton></LearningButton>
     </header>
   );
 }

@@ -9,6 +9,8 @@ import { useGSAP } from '@gsap/react';
 import { ArrowLeft, ArrowRight, CheckCircle, Disc } from 'lucide-react';
 import NoiseBackground from '@/components/quiz/ui/NoiseBackground';
 import ThemeToggle from '@/components/quiz/ui/ThemeToggle';
+import { useAntiCheat } from '@/hooks/useAntiCheat';
+import { Toaster } from 'react-hot-toast';
 
 export default function QuizPlay() {
   const { slug } = useParams();
@@ -22,6 +24,8 @@ export default function QuizPlay() {
   const [answers, setAnswers] = useState<(string | null)[]>([]); 
   const [isDark, setIsDark] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useAntiCheat(true)
 
   useEffect(() => {
     if (quiz) {
@@ -95,6 +99,7 @@ export default function QuizPlay() {
   return (
     <main ref={containerRef} className={`min-h-screen flex flex-col items-center justify-center p-6 md:p-12 relative overflow-hidden transition-colors duration-300 ${theme}`}>
       <NoiseBackground />
+      <Toaster position="top-right" />
       <ThemeToggle isDark={isDark} toggle={() => setIsDark(!isDark)} />
 
       <div className="fixed top-0 left-0 w-full h-2 bg-gray-300 z-50">
@@ -114,7 +119,7 @@ export default function QuizPlay() {
         </div>
 
         <div className={`question-card border-4 p-8 md:p-12 shadow-[12px_12px_0_0_rgba(0,0,0,0.1)] relative ${cardBg}`}>
-            <h2 className="text-2xl md:text-2xl font-serif font-black leading-relaxed mb-10">
+            <h2 className="select-none text-2xl md:text-2xl font-serif font-black leading-relaxed mb-10">
                 {currentQuestion.q}
             </h2>
 
@@ -125,7 +130,7 @@ export default function QuizPlay() {
                         <button
                             key={idx}
                             onClick={() => handleSelectOption(opt)}
-                            className={`w-full text-left p-5 border-2 font-mono font-bold text-md transition-all flex justify-between items-center group ${isSelected ? optionSelected : optionDefault}`}
+                            className={`select-none w-full text-left p-5 border-2 font-mono font-bold text-md transition-all flex justify-between items-center group ${isSelected ? optionSelected : optionDefault}`}
                         >
                             <div className="flex items-center gap-4">
                                 <span className={`w-8 h-8 flex items-center justify-center border rounded-full text-sm ${isSelected ? (isDark ? 'border-black' : 'border-white') : (isDark ? 'border-white' : 'border-black')}`}>

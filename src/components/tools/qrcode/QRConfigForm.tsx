@@ -30,7 +30,7 @@ export default function QRConfigForm({ data, style, onDataChange, onStyleChange 
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-5 gap-2 bg-neutral-100 dark:bg-neutral-800 p-1.5 rounded-xl transition-colors">
-        {tabs.map((tab) => (
+        {tabs.map((tab: any) => (
           <button
             key={tab.id}
             onClick={() => handleTypeChange(tab.id)}

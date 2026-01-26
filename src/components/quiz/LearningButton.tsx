@@ -5,7 +5,6 @@ export default function LearningButton() {
     return (
         <Link
             href="/learning"
-            // UBAH DISINI: Ganti absolute jadi fixed, atur koordinat, dan kasih z-index tinggi
             className="fixed top-6 left-6 z-50 px-4 py-2 
             bg-white border-2 border-black font-black text-lg
             shadow-[4px_4px_0px_0px_#000]
@@ -15,8 +14,7 @@ export default function LearningButton() {
         >
             <span className="flex items-center gap-2">
                 <ArrowBigLeft className="w-6 h-6" />
-                {/* Hidden di mobile biar ga menuhin layar, muncul di desktop */}
-                <span className="hidden md:inline leading-none">Back To Learning</span>
+                <span className="leading-none">Learning</span>
             </span>
         </Link>
     )

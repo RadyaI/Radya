@@ -23,7 +23,7 @@ export default function Project() {
             color: "#00f310",
             live_link: "/learning",
             repo_link: "https://github.com/RadyaI/Radya/tree/master/src/app/isthismap",
-            tag: ["Nextjs", "leaflet", "Tailwind", "Maps", "Earth"],
+            tag: ["Nextjs", "Firebase", "Tailwind", "Learning"],
         },
         {
             title: "Is This Map",
@@ -32,7 +32,8 @@ export default function Project() {
             color: "#bf9e31",
             live_link: "/isthismap",
             repo_link: "https://github.com/RadyaI/Radya/tree/master/src/app/learning",
-            tag: ["Nextjs", "Firebase", "Tailwind", "Learning"],
+            tag: ["Nextjs", "leaflet", "Tailwind", "Maps", "Earth"],
+
         },
         {
             no: 2,
@@ -142,7 +143,7 @@ export default function Project() {
     const onEnter = ({ currentTarget }) => {
         gsap.to(currentTarget, { scale: 1, translateY: 3, translateX: 1, boxShadow: "4px 4px 0px 0px rgba(0,0,0,0.8)", duration: 0.2 });
     };
-    
+
     const onLeave = ({ currentTarget }) => {
         gsap.to(currentTarget, { scale: 1, translateY: 0, translateX: 0, rotation: 0, boxShadow: "8px 8px 0px 0px rgba(0,0,0,8)", duration: 0.2 });
     };
@@ -182,7 +183,7 @@ export default function Project() {
                             onMouseEnter={onEnter}
                             onMouseLeave={onLeave}
                         >
-                            <div 
+                            <div
                                 className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 rotate-1 opacity-90 shadow-sm z-10 border-l border-r border-white/30 backdrop-blur-[1px]"
                                 style={{ backgroundColor: item.color }}
                             ></div>
@@ -191,11 +192,11 @@ export default function Project() {
                                 <h3 className="text-xl font-black text-black group-hover:underline decoration-2 underline-offset-2">
                                     {item.title}
                                 </h3>
-                                
+
                                 <div className="p-1.5 rounded bg-gray-100 border border-black text-black">
                                     {item.tech.includes('React') || item.tech.includes('Next') ? <Box className="w-4 h-4" strokeWidth={2.5} /> :
-                                     item.tech.includes('Typescript') || item.tech.includes('Javascript') ? <Code2 className="w-4 h-4" strokeWidth={2.5} /> :
-                                     <Layers className="w-4 h-4" strokeWidth={2.5} />}
+                                        item.tech.includes('Typescript') || item.tech.includes('Javascript') ? <Code2 className="w-4 h-4" strokeWidth={2.5} /> :
+                                            <Layers className="w-4 h-4" strokeWidth={2.5} />}
                                 </div>
                             </div>
 

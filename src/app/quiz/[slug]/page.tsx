@@ -55,10 +55,8 @@ export default function QuizDetail() {
       <BackgroundDecor isDark={isDark} />
       <MarqueeLine isDark={isDark} />
       
-      {}
       <ThemeToggle isDark={isDark} toggle={() => setIsDark(!isDark)} />
 
-      {}
       <div className="relative z-10">
           
           <Link href="/quiz" className={`inline-block mb-8 font-mono font-bold hover:underline px-4 py-1 border-2 transition-all hover:-translate-y-1 ${isDark ? 'border-white bg-black' : 'border-black bg-white'}`}>
@@ -67,9 +65,7 @@ export default function QuizDetail() {
 
           <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-start mt-8 mb-24">
             
-            {}
             <div className="space-y-6 relative">
-              {}
               <div className={`absolute -top-6 -left-6 w-12 h-12 rounded-full border-2 border-dashed ${isDark ? 'border-white' : 'border-black'} animate-spin-slow opacity-50`}></div>
 
               <div className={`reveal border-l-8 pl-8 py-4 ${isDark ? 'border-white' : 'border-black'}`}>
@@ -92,7 +88,6 @@ export default function QuizDetail() {
               </div>
 
               <div className="reveal relative group">
-                 {}
                  <div className={`absolute top-2 left-2 w-full h-full border-2 ${isDark ? 'border-white bg-white/10' : 'border-black bg-black'} -z-10 transition-transform group-hover:translate-x-1 group-hover:translate-y-1`}></div>
                  
                  {user ? (
@@ -109,9 +104,7 @@ export default function QuizDetail() {
               </div>
             </div>
 
-            {}
             <div className={`reveal border-4 p-8 relative shadow-[10px_10px_0px_0px_rgba(0,0,0,0.2)] ${cardClasses}`}>
-              {}
               <div className={`absolute -top-6 left-1/2 -translate-x-1/2 w-8 h-12 border-x-2 border-t-2 rounded-t-full bg-transparent ${isDark ? 'border-white' : 'border-black'}`}></div>
 
               <div className={`absolute -top-4 right-4 px-4 py-1 font-mono text-xs font-bold rotate-2 border ${isDark ? 'bg-blue-600 text-white border-white' : 'bg-blue-500 text-white border-black'}`}>
@@ -143,7 +136,6 @@ export default function QuizDetail() {
                 )}
               </div>
 
-              {}
               <div className={`stamp-effect absolute bottom-4 right-4 opacity-20 pointer-events-none border-4 rounded-full w-24 h-24 flex items-center justify-center -rotate-12 ${isDark ? 'border-white text-white' : 'border-black text-black'}`}>
                 <span className="font-black text-xs">MIAW CERTIFIED</span>
               </div>

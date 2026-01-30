@@ -29,10 +29,8 @@ export default function QuizCard({ data, index }: { data: QuizSet; index: number
 
   return (
     <div ref={cardRef} onMouseEnter={onEnter} onMouseLeave={onLeave} className="relative group h-full">
-      { }
       <WashiTape color={(data as any).tapeColor} className="-top-4 left-1/2 -translate-x-1/2 z-10 rotate-1 w-24" />
 
-      { }
       <div className="bg-white border-2 border-black p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] h-full flex flex-col justify-between transition-shadow hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)]">
 
         <div>
@@ -41,7 +39,14 @@ export default function QuizCard({ data, index }: { data: QuizSet; index: number
               {data.category}
             </span>
             <span className="flex gap-2">
-              <span className="font-mono text-xs font-bold border border-black px-1 rounded-full">
+              <span
+                className={`font-mono text-xs font-bold border px-1 rounded-full ${{
+                    Easy: "border-green-600 text-green-600 bg-green-50",
+                    Medium: "border-orange-600 text-orange-600 bg-yellow-50",
+                    Hard: "border-red-600 text-red-600 bg-red-50",
+                  }[data.level]
+                  }`}
+              >
                 {data.level}
               </span>
               {data.status === 'New' && (

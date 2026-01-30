@@ -369,7 +369,469 @@ export const quizData: QuizSet[] = [
         correctIndex: 2
       }
     ]
+  },
+  //========================Relasi & Notasi=========================//
+  {
+    "slug": "advanced-relationship-modeling-modul-3",
+    "title": "Relasi & Notasi",
+    "description": "Quiz Modul 3: Supertype, Arc, Barred, Transferability, dan Recursive relationship di Oracle Data Modeler.",
+    "category": "Database",
+    "level": "Medium",
+    "status": "New",
+    "color": "blue",
+    "questions": [
+      {
+        "id": 1,
+        "q": "Apa tujuan utama penggunaan Supertype dan Subtype dalam pemodelan data?",
+        "options": [
+          "Untuk membuat tabel terlihat lebih banyak",
+          "Mengelompokkan entitas yang punya karakteristik umum yang sama",
+          "Menghapus semua atribut dari entitas induk",
+          "Membuat relasi antar tabel menjadi many-to-many otomatis"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 2,
+        "q": "Dalam hierarki Supertype dan Subtype, sifat 'Inheritance' berarti...",
+        "options": [
+          "Subtype mewarisi semua atribut dan relasi dari Supertype",
+          "Supertype mengambil semua atribut unik dari Subtype",
+          "Subtype tidak boleh punya atribut sendiri",
+          "Supertype dan Subtype tidak saling berhubungan"
+        ],
+        "correctIndex": 0
+      },
+      {
+        "id": 3,
+        "q": "Simbol visual untuk Subtype di Oracle Data Modeler biasanya digambarkan sebagai...",
+        "options": [
+          "Lingkaran di luar kotak entitas",
+          "Garis putus-putus yang menghubungkan dua entitas",
+          "Kotak di dalam kotak entitas Supertype",
+          "Tanda panah menunjuk ke entitas lain"
+        ],
+        "correctIndex": 2
+      },
+      {
+        "id": 4,
+        "q": "Kapan kita sebaiknya menggunakan Arc Relationship?",
+        "options": [
+          "Saat satu entitas harus berhubungan dengan semua entitas lain secara bersamaan",
+          "Saat sebuah entitas hanya boleh memiliki satu hubungan aktif dari beberapa pilihan (XOR)",
+          "Saat kita ingin menghubungkan entitas dengan dirinya sendiri",
+          "Saat atribut entitas anak bergantung penuh pada entitas induk"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 5,
+        "q": "Contoh kasus yang paling pas buat pake Arc Relationship adalah...",
+        "options": [
+          "Seorang mahasiswa mengambil banyak mata kuliah",
+          "Pemenang undian cuma bisa pilih hadiah Motor ATAU Uang Tunai",
+          "Seorang pegawai punya satu manajer",
+          "Satu buku ditulis oleh banyak penulis"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 6,
+        "q": "Apa yang terjadi pada Foreign Key di tabel yang memiliki Arc Relationship?",
+        "options": [
+          "Semua Foreign Key harus bersifat Mandatory (Wajib)",
+          "Foreign Key yang dihasilkan harus bersifat Opsional karena salah satunya pasti kosong",
+          "Tidak ada Foreign Key yang terbentuk",
+          "Foreign Key akan otomatis menjadi Primary Key"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 7,
+        "q": "Barred Relationship (Identifying Relationship) ditandai dengan simbol apa di diagram?",
+        "options": [
+          "Garis putus-putus",
+          "Simbol Diamond (Belah Ketupat)",
+          "Garis vertikal kecil (Bar) di dekat entitas anak",
+          "Tanda panah dua arah"
+        ],
+        "correctIndex": 2
+      },
+      {
+        "id": 8,
+        "q": "Apa implikasi utama dari Barred Relationship terhadap UID (Unique Identifier) entitas anak?",
+        "options": [
+          "UID anak sepenuhnya independen dan tidak butuh UID induk",
+          "UID anak terdiri dari UID induk ditambah atribut lain milik anak",
+          "UID anak akan menghapus UID induk",
+          "Entitas anak tidak boleh punya UID sama sekali"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 9,
+        "q": "Kondisi mana yang mengharuskan penggunaan Barred Relationship?",
+        "options": [
+          "Ketika entitas anak bisa berdiri sendiri tanpa entitas induk",
+          "Ketika entitas anak merupakan bagian tak terpisahkan dari induk (weak entity)",
+          "Ketika hubungan antar entitas bersifat opsional",
+          "Ketika kita ingin memindahkan data antar tabel"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 10,
+        "q": "Apa yang dimaksud dengan Transferability dalam sebuah relasi?",
+        "options": [
+          "Kemampuan data untuk dihapus secara permanen",
+          "Nilai relasi antar entitas bisa dipindah atau diganti ke entitas lain",
+          "Kemampuan database untuk transfer data ke server lain",
+          "Sebuah entitas bisa berubah menjadi entitas lain"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 11,
+        "q": "Simbol Diamond (Belah Ketupat) pada garis relasi menandakan bahwa relasi tersebut bersifat...",
+        "options": [
+          "Transferable (Bisa dipindah)",
+          "Non-Transferable (Tidak bisa dipindah/diganti)",
+          "Optional (Boleh kosong)",
+          "Recursive (Berulang)"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 12,
+        "q": "Manakah contoh kasus yang paling tepat untuk Non-Transferable Relationship?",
+        "options": [
+          "Pegawai yang bisa dipindah tugaskan ke departemen lain",
+          "Buku dan Penulisnya (Penulis buku sejarahnya tidak bisa diganti orang lain)",
+          "Mahasiswa yang bisa ganti jurusan",
+          "Pelanggan yang bisa ganti alamat pengiriman"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 13,
+        "q": "Recursive Relationship adalah hubungan yang terjadi ketika...",
+        "options": [
+          "Satu entitas berhubungan dengan banyak entitas lain sekaligus",
+          "Sebuah entitas berhubungan dengan dirinya sendiri",
+          "Entitas induk memiliki banyak subtype",
+          "Hubungan antar entitas tidak memiliki cardinalitas"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 14,
+        "q": "Contoh nyata dari Recursive Relationship di dunia kerja adalah...",
+        "options": [
+          "Pegawai melapor ke Manajer, dimana Manajer juga seorang Pegawai",
+          "Pegawai bekerja di Departemen",
+          "Departemen memiliki banyak proyek",
+          "Proyek dikerjakan oleh vendor luar"
+        ],
+        "correctIndex": 0
+      },
+      {
+        "id": 15,
+        "q": "Bagaimana cara membuat Recursive Relationship di Oracle Data Modeler?",
+        "options": [
+          "Menarik garis dari entitas A ke entitas B",
+          "Klik tool relation, lalu klik dua kali pada entitas yang sama",
+          "Menggunakan tool 'New Arc'",
+          "Klik kanan pada entitas lalu pilih 'Make Recursive'"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 16,
+        "q": "Apa risiko utama jika Recursive Relationship tidak didesain dengan hati-hati?",
+        "options": [
+          "Data menjadi terlalu sedikit",
+          "Terjadi looping tanpa henti (infinite loop) saat query data hierarki",
+          "Tabel akan otomatis terhapus",
+          "Tidak bisa membuat Primary Key"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 17,
+        "q": "Dalam Supertype 'tb_karyawan', atribut 'gaji' bersifat mandatory. Apa dampaknya bagi Subtype?",
+        "options": [
+          "Subtype boleh tidak punya atribut gaji",
+          "Subtype otomatis memiliki atribut gaji dan sifatnya juga mandatory",
+          "Subtype harus membuat atribut gaji baru dengan nama beda",
+          "Atribut gaji di Subtype menjadi optional"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 18,
+        "q": "Jika sebuah entitas memiliki ARC yang menghubungkan 2 relasi, dan kedua relasi itu mandatory, maka...",
+        "options": [
+          "Data harus terisi di kedua relasi tersebut secara bersamaan",
+          "Data boleh kosong di kedua relasi",
+          "Data harus terisi di salah satu relasi saja, tidak boleh keduanya",
+          "Data di salah satu relasi boleh dihapus sembarangan"
+        ],
+        "correctIndex": 2
+      },
+      {
+        "id": 19,
+        "q": "Di Oracle Data Modeler, langkah pertama untuk membuat Subtype adalah...",
+        "options": [
+          "Membuat relasi one-to-many biasa",
+          "Membuat entitas baru di dalam kotak entitas Supertype yang sudah ada",
+          "Menghapus entitas Supertype",
+          "Mengganti nama tabel menjadi huruf kapital semua"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 20,
+        "q": "Sifat hubungan data yang 'harus ada dan saling melengkapi' paling cocok digambarkan dengan notasi...",
+        "options": [
+          "Recursive",
+          "Non-Transferable",
+          "Barred (Identifying)",
+          "Arc"
+        ],
+        "correctIndex": 2
+      }
+    ]
+  },
+  //========================Logika & Aturan Normalisasi=========================//
+  {
+    "slug": "normalisasi-data-logic-rules-modul-3",
+    "title": "Logika & Aturan Normalisasi",
+    "description": "Quiz modul 3: Aturan 1NF, 2NF, 3NF, dan cara benerin data yang redundan biar database-nya efisien.",
+    "category": "Database Normalization",
+    "level": "Medium",
+    "status": "New",
+    "color": "purple",
+    "questions": [
+      {
+        "id": 1,
+        "q": "Apa sih tujuan utama dari melakukan normalisasi data?",
+        "options": [
+          "Biar tabelnya jadi banyak dan terlihat kompleks",
+          "Mengurangi kemubaziran (redundansi) data dan menjaga integritas data",
+          "Supaya data bisa dibaca oleh manusia tanpa query SQL",
+          "Menggabungkan semua data menjadi satu tabel besar (Big Data)"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 2,
+        "q": "Kondisi di mana satu sel dalam tabel berisi lebih dari satu nilai (misal: '08123, 08199') melanggar aturan normalisasi bentuk keberapa?",
+        "options": [
+          "First Normal Form (1NF)",
+          "Second Normal Form (2NF)",
+          "Third Normal Form (3NF)",
+          "Zero Normal Form (unnormalized)"
+        ],
+        "correctIndex": 0
+      },
+      {
+        "id": 3,
+        "q": "Syarat mutlak agar sebuah tabel dikatakan memenuhi 1NF (First Normal Form) adalah...",
+        "options": [
+          "Harus punya Primary Key ganda",
+          "Setiap atribut harus bernilai atomik (tunggal/single-value)",
+          "Tidak boleh ada atribut yang kosong (NULL)",
+          "Tabel harus sudah terhubung dengan tabel lain"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 4,
+        "q": "Jika kamu nemu atribut 'Hobi' yang isinya banyak (multi-value) dalam satu entitas, apa solusi normalisasinya?",
+        "options": [
+          "Hapus atribut Hobi dari database",
+          "Biarkan saja, nanti dipisahkan pakai koma di aplikasi",
+          "Buat entitas baru untuk Hobi dan hubungkan dengan relasi 1:M",
+          "Jadikan atribut Hobi sebagai Primary Key"
+        ],
+        "correctIndex": 2
+      },
+      {
+        "id": 5,
+        "q": "Second Normal Form (2NF) baru bisa dilakukan kalau syarat ini terpenuhi, yaitu...",
+        "options": [
+          "Tabel sudah memenuhi 1NF",
+          "Tabel sudah memenuhi 3NF",
+          "Tabel tidak memiliki Primary Key",
+          "Data dalam tabel sudah lebih dari 1000 baris"
+        ],
+        "correctIndex": 0
+      },
+      {
+        "id": 6,
+        "q": "Fokus utama dari aturan 2NF adalah menghilangkan...",
+        "options": [
+          "Ketergantungan Transitif (Transitive Dependency)",
+          "Ketergantungan Parsial (Partial Dependency)",
+          "Atribut yang bernilai ganda",
+          "Data yang duplikat di semua baris"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 7,
+        "q": "Apa yang dimaksud dengan Ketergantungan Parsial (Partial Dependency)?",
+        "options": [
+          "Atribut non-key bergantung pada atribut non-key lainnya",
+          "Atribut non-key hanya bergantung pada sebagian dari Primary Key (biasanya pada Composite Key)",
+          "Atribut key bergantung pada atribut non-key",
+          "Tidak ada atribut yang saling bergantung"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 8,
+        "q": "Dalam tabel 'Nilai_Mahasiswa' dengan UID gabungan (NIM, Kode_Matkul), atribut 'Nama_Mahasiswa' sebaiknya dipindah. Kenapa?",
+        "options": [
+          "Karena nama mahasiswa terlalu panjang",
+          "Karena nama mahasiswa hanya bergantung pada NIM, bukan pada Kode_Matkul (Parsial)",
+          "Karena nama mahasiswa bergantung pada Kode_Matkul saja",
+          "Karena nama mahasiswa harusnya dienkripsi"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 9,
+        "q": "Third Normal Form (3NF) melarang adanya jenis ketergantungan apa?",
+        "options": [
+          "Ketergantungan Fungsional Penuh",
+          "Ketergantungan Parsial",
+          "Ketergantungan Transitif (Transitive Dependency)",
+          "Ketergantungan Antar Tabel"
+        ],
+        "correctIndex": 2
+      },
+      {
+        "id": 10,
+        "q": "Contoh kasus Ketergantungan Transitif yang paling tepat adalah...",
+        "options": [
+          "A tergantung pada B, dan B adalah Primary Key",
+          "A tergantung pada B, dan B tergantung pada C (di mana C adalah Primary Key)",
+          "A dan B sama-sama Primary Key",
+          "A tidak tergantung pada siapa-siapa"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 11,
+        "q": "Di tabel 'Order', ada atribut 'Kota_Tujuan' yang bergantung pada 'Kode_Pos', bukan langsung ke 'ID_Order'. Ini melanggar...",
+        "options": [
+          "1NF",
+          "2NF",
+          "3NF",
+          "Aturan Integritas Data"
+        ],
+        "correctIndex": 2
+      },
+      {
+        "id": 12,
+        "q": "Apa solusi untuk mengatasi pelanggaran 3NF (Transitive Dependency)?",
+        "options": [
+          "Hapus atribut yang menjadi penyebab ketergantungan",
+          "Pindahkan atribut yang bergantung transitif ke entitas baru yang sesuai",
+          "Gabungkan semua atribut menjadi satu string panjang",
+          "Ubah Primary Key tabel utama"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 13,
+        "q": "Apa istilah untuk bentuk data mentah yang belum melalui proses normalisasi sama sekali?",
+        "options": [
+          "Abnormal Form",
+          "Pre-Normalized Data",
+          "Unnormalized Form (UNF)",
+          "Raw Material Data"
+        ],
+        "correctIndex": 2
+      },
+      {
+        "id": 14,
+        "q": "Intersection Entity (Entitas Perantara) biasanya muncul saat kita menormalisasi hubungan...",
+        "options": [
+          "One-to-One (1:1)",
+          "One-to-Many (1:M)",
+          "Many-to-Many (M:N)",
+          "Recursive"
+        ],
+        "correctIndex": 2
+      },
+      {
+        "id": 15,
+        "q": "Dalam studi kasus Faktur Pembelian, kenapa data 'Supplier' harus dipisah dari tabel Faktur?",
+        "options": [
+          "Supaya tabel fakturnya terlihat lebih bersih",
+          "Karena data nama supplier akan berulang-ulang ditulis setiap ada faktur baru (Redundansi)",
+          "Karena supplier tidak penting dalam transaksi",
+          "Agar jumlah kolom di tabel faktur genap"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 16,
+        "q": "Jika sebuah tabel sudah memenuhi 3NF, apakah otomatis sudah memenuhi 2NF?",
+        "options": [
+          "Tidak, urutannya terbalik",
+          "Ya, karena 3NF adalah tahap lanjut yang mewajibkan 2NF terpenuhi dulu",
+          "Tergantung datanya",
+          "Tidak ada hubungannya"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 17,
+        "q": "Salah satu alasan kenapa kita harus menghindari 'Data Anomaly' (anomali data) adalah...",
+        "options": [
+          "Agar ukuran database menjadi sangat besar",
+          "Mencegah ketidakkonsistenan data saat melakukan Insert, Update, atau Delete",
+          "Supaya programmer punya pekerjaan lebih banyak",
+          "Agar database bisa dijual lebih mahal"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 18,
+        "q": "Dalam notasi CDM (Logical), Intersection Entity dari hubungan M:N seringkali digambarkan dengan...",
+        "options": [
+          "Dua relasi One-to-Many yang mengarah ke entitas baru tersebut",
+          "Satu garis lurus tanpa panah",
+          "Entitas tanpa atribut UID",
+          "Relasi Arc"
+        ],
+        "correctIndex": 0
+      },
+      {
+        "id": 19,
+        "q": "Jika UID (Unique Identifier) terdiri dari satu atribut saja (Simple UID), apakah mungkin terjadi pelanggaran 2NF?",
+        "options": [
+          "Sangat mungkin terjadi",
+          "Tidak mungkin, karena 2NF hanya bermasalah pada Composite UID",
+          "Pasti terjadi di setiap tabel",
+          "Tergantung jumlah baris datanya"
+        ],
+        "correctIndex": 1
+      },
+      {
+        "id": 20,
+        "q": "Langkah pertama yang paling logis saat menerima data nota/kuitansi mentah untuk dinormalisasi adalah...",
+        "options": [
+          "Langsung buat tabel 3NF",
+          "Identifikasi atribut dan tuliskan bentuk UNF (Unnormalized)-nya dulu",
+          "Membuat coding aplikasi",
+          "Menghapus data yang terlihat jelek"
+        ],
+        "correctIndex": 1
+      }
+    ]
   }
-
-
 ]

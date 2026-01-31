@@ -96,6 +96,11 @@ export default function QuizResult() {
                       <span className="font-bold text-black">{ans.correctAnswer}</span>
                     </div>
                   )}
+                  
+                    <div className="text-sm font-mono bg-blue-50 text-blur-700 border-l-4 border-blue-500 p-3 mt-1 w-full">
+                      <span className="font-bold block text-xs uppercase text-blue-400 mb-1">Explanation:</span>
+                      <span className="text-black">{ans.explanation}</span>
+                    </div>
                 </div>
 
               </div>

@@ -69,7 +69,8 @@ export default function QuizPlay() {
       questionId: q.id,
       selectedOption: answers[idx] || "Skipped",
       isCorrect: answers[idx] === q.options[q.correctIndex],
-      correctAnswer: q.options[q.correctIndex]
+      correctAnswer: q.options[q.correctIndex],
+      explanation: q.explanation
     }));
 
     const correctCount = formattedAnswers.filter(a => a.isCorrect).length;

@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { isAdmin } from '@/utils/admins';
-import { getAllQuizResults } from '@/utils/quiz/firebase-quiz';
+import { getAllQuizResults, deleteQuizAnswer } from '@/utils/quiz/firebase-quiz';
+import Swal from 'sweetalert2';
+import toast, { Toaster } from 'react-hot-toast';
 
 interface QuizResultData {
   id: string;
@@ -25,8 +26,7 @@ interface Stats {
 
 export default function AdminDashboard() {
   const { user, loading: authLoading } = useAuth();
-  const router = useRouter();
-  
+
   const [results, setResults] = useState<QuizResultData[]>([]);
   const [loadingData, setLoadingData] = useState(true);
   const [stats, setStats] = useState<Stats>({ totalAttempts: 0, uniqueUsers: 0, avgScore: 0, passRate: 0 });
@@ -36,7 +36,7 @@ export default function AdminDashboard() {
     if (authLoading) return;
 
     if (!user || !isAdmin(user.email)) {
-      return; 
+      return;
     }
 
     const fetchData = async () => {
@@ -65,12 +65,29 @@ export default function AdminDashboard() {
     });
   };
 
-  const filteredResults = results.filter(r => 
+  const filteredResults = results.filter(r =>
     r.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     r.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     r.quizSlug.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const deleteAnswer = async (id: string) => {
+    const alert = await Swal.fire({
+      title: "Mau dihapus?",
+      icon: "question",
+      confirmButtonText: "Iya",
+      cancelButtonText: "Engga",
+      showCancelButton: true,
+      focusConfirm: false,
+      focusCancel: true
+    })
+
+    if (alert.isConfirmed) {
+      deleteQuizAnswer(id)
+      setResults(prev => prev.filter(i => i.id !== id))
+      toast.success("Deleted")
+    }
+  }
 
   if (authLoading) return <div className="min-h-screen flex items-center justify-center bg-[#f4f3ef] dark:bg-zinc-950 font-mono">Loading Auth...</div>;
 
@@ -88,9 +105,10 @@ export default function AdminDashboard() {
 
   return (
     <main className="min-h-screen bg-[#f4f3ef] dark:bg-zinc-950 text-black dark:text-zinc-100 font-sans transition-colors duration-300">
+      <Toaster position='bottom-right' />
       <div className="max-w-7xl mx-auto p-6 md:p-12">
-        
-         
+
+
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 border-b-4 border-black dark:border-white pb-6 gap-4">
           <div>
             <h1 className="text-4xl md:text-5xl font-black font-serif uppercase tracking-tight">
@@ -99,35 +117,35 @@ export default function AdminDashboard() {
             <p className="font-mono text-gray-500 dark:text-gray-400 mt-2">Welcome, Commander {user.displayName || "Admin"}</p>
           </div>
           <div className="flex gap-2">
-             <Link href="/quiz" className="px-6 py-3 border-2 border-black dark:border-zinc-500 font-bold hover:bg-black hover:text-white dark:hover:bg-zinc-800 transition-all uppercase text-sm">
-                Exit
-             </Link>
+            <Link href="/quiz" className="px-6 py-3 border-2 border-black dark:border-zinc-500 font-bold hover:bg-black hover:text-white dark:hover:bg-zinc-800 transition-all uppercase text-sm">
+              Exit
+            </Link>
           </div>
         </div>
 
-         
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-           <StatCard label="Total Attempts" value={stats.totalAttempts} color="bg-yellow-200 dark:bg-yellow-900" />
-           <StatCard label="Unique Users" value={stats.uniqueUsers} color="bg-blue-200 dark:bg-blue-900" />
-           <StatCard label="Avg. Score" value={stats.avgScore} color="bg-purple-200 dark:bg-purple-900" suffix="/100" />
-           <StatCard label="Pass Rate" value={`${stats.passRate}%`} color="bg-green-200 dark:bg-green-900" />
+          <StatCard label="Total Attempts" value={stats.totalAttempts} color="bg-yellow-200 dark:bg-yellow-900" />
+          <StatCard label="Unique Users" value={stats.uniqueUsers} color="bg-blue-200 dark:bg-blue-900" />
+          <StatCard label="Avg. Score" value={stats.avgScore} color="bg-purple-200 dark:bg-purple-900" suffix="/100" />
+          <StatCard label="Pass Rate" value={`${stats.passRate}%`} color="bg-green-200 dark:bg-green-900" />
         </div>
 
-         
+
         <div className="mb-6">
-          <input 
-            type="text" 
-            placeholder="Search user, email, or slug..." 
+          <input
+            type="text"
+            placeholder="Search user, email, or slug..."
             className="w-full md:w-1/3 p-4 border-2 border-black dark:border-zinc-600 bg-white dark:bg-zinc-900 focus:outline-none focus:shadow-[4px_4px_0px_0px_#000] dark:focus:shadow-[4px_4px_0px_0px_#fff] transition-all font-mono text-sm"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
-         
+
         <div className="bg-white dark:bg-zinc-900 border-2 border-black dark:border-zinc-700 shadow-[8px_8px_0px_0px_#000] dark:shadow-[8px_8px_0px_0px_#555] overflow-hidden">
           {loadingData ? (
-             <div className="p-12 text-center font-mono animate-pulse">Scanning database...</div>
+            <div className="p-12 text-center font-mono animate-pulse">Scanning database...</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
@@ -144,42 +162,48 @@ export default function AdminDashboard() {
                   {filteredResults.length > 0 ? (
                     filteredResults.map((result) => (
                       <tr key={result.id} className="hover:bg-yellow-50 dark:hover:bg-zinc-800/50 transition-colors group">
-                        
-                         
+
+
                         <td className="p-4 font-mono text-xs whitespace-nowrap text-gray-600 dark:text-gray-400">
-                          {result.timestamp.toLocaleDateString('id-ID')} <br/>
-                          {result.timestamp.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})}
+                          {result.timestamp.toLocaleDateString('id-ID')} <br />
+                          {result.timestamp.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
                         </td>
 
-                         
+
                         <td className="p-4">
                           <div className="font-bold text-sm">{result.displayName}</div>
                           <div className="font-mono text-xs text-gray-500 dark:text-gray-400">{result.email}</div>
                         </td>
 
-                         
+
                         <td className="p-4 font-mono text-xs">
-                           <span className="bg-gray-200 dark:bg-zinc-700 px-2 py-1 rounded-sm border border-black/20 dark:border-zinc-500">
-                             {result.quizSlug}
-                           </span>
+                          <span className="bg-gray-200 dark:bg-zinc-700 px-2 py-1 rounded-sm border border-black/20 dark:border-zinc-500">
+                            {result.quizSlug}
+                          </span>
                         </td>
 
-                         
+
                         <td className="p-4 text-center">
-                           <span className={`inline-block font-black text-lg ${result.score >= 70 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                              {result.score}
-                           </span>
+                          <span className={`inline-block font-black text-lg ${result.score >= 70 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                            {result.score}
+                          </span>
                         </td>
 
-                         
-                        <td className="p-4 text-center">
-                          <Link 
+
+                        <td className="p-4 text-center items-center justify-center flex gap-2">
+                          <Link
                             href={`/quiz/${result.quizSlug}/result?id=${result.id}`}
                             target="_blank"
                             className="inline-block border border-black dark:border-zinc-500 bg-white dark:bg-zinc-800 px-3 py-1 text-xs font-bold uppercase hover:bg-black hover:text-white dark:hover:bg-zinc-100 dark:hover:text-black shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#777] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all"
                           >
                             Inspect
                           </Link>
+                          <button
+                            onClick={() => deleteAnswer(result.id)}
+                            className="inline-block border border-black dark:border-zinc-500 bg-red-300 px-3 py-1 text-xs font-bold uppercase hover:bg-red-500 hover:border-red-400 hover:text-white dark:hover:bg-zinc-100 dark:hover:text-black shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#777] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all"
+                          >
+                            Delete
+                          </button>
                         </td>
                       </tr>
                     ))
@@ -201,11 +225,11 @@ export default function AdminDashboard() {
 function StatCard({ label, value, color, suffix = '' }: { label: string, value: string | number, color: string, suffix?: string }) {
   return (
     <div className={`p-4 border-2 border-black dark:border-zinc-600 shadow-[4px_4px_0px_0px_#000] dark:shadow-[4px_4px_0px_0px_#555] ${color} text-black dark:text-zinc-100 flex flex-col justify-between h-32 md:h-40 transition-transform hover:-translate-y-1`}>
-       <span className="font-mono text-xs uppercase font-bold tracking-widest opacity-70">{label}</span>
-       <div className="text-right">
-          <span className="text-4xl md:text-5xl font-black">{value}</span>
-          {suffix && <span className="text-lg font-mono ml-1">{suffix}</span>}
-       </div>
+      <span className="font-mono text-xs uppercase font-bold tracking-widest opacity-70">{label}</span>
+      <div className="text-right">
+        <span className="text-4xl md:text-5xl font-black">{value}</span>
+        {suffix && <span className="text-lg font-mono ml-1">{suffix}</span>}
+      </div>
     </div>
   );
 }

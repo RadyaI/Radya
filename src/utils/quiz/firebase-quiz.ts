@@ -1,5 +1,5 @@
 import { db } from '../firebase';
-import { collection, addDoc, query, where, getDocs, orderBy, doc, getDoc } from 'firebase/firestore';
+import { collection, addDoc, query, where, getDocs, orderBy, doc, getDoc, deleteDoc } from 'firebase/firestore';
 
 export const saveQuizResult = async (userId: string, displayName: string, email: string, quizSlug: string, score: number, total: number, answers: any[]) => {
   try {
@@ -45,11 +45,11 @@ export const getAllQuizResults = async () => {
       orderBy("timestamp", "desc")
     );
     const querySnapshot = await getDocs(q);
-    
+
     return querySnapshot.docs.map(doc => {
       const data = doc.data();
-      return { 
-        id: doc.id, 
+      return {
+        id: doc.id,
         ...data,
         timestamp: data.timestamp?.toDate ? data.timestamp.toDate() : new Date(data.timestamp)
       };
@@ -59,3 +59,14 @@ export const getAllQuizResults = async () => {
     return [];
   }
 };
+
+export const deleteQuizAnswer = async (id: string) => {
+  try {
+    const q = doc(db, "quiz_answers", id)
+    await deleteDoc(q)
+    return true;
+  } catch (error) {
+    console.error("Deleting Quiz Answer: ", error)
+    return false;
+  }
+}

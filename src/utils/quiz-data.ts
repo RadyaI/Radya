@@ -418,7 +418,7 @@ export const quizData: QuizSet[] = [
         "q": "Kapan kita sebaiknya menggunakan Arc Relationship?",
         "options": [
           "Saat satu entitas harus berhubungan dengan semua entitas lain secara bersamaan",
-          "Saat sebuah entitas hanya boleh memiliki satu hubungan aktif dari beberapa pilihan (XOR)",
+          "Saat sebuah entitas hanya boleh memiliki satu hubungan aktif dari beberapa pilihan",
           "Saat kita ingin menghubungkan entitas dengan dirinya sendiri",
           "Saat atribut entitas anak bergantung penuh pada entitas induk"
         ],
@@ -429,7 +429,7 @@ export const quizData: QuizSet[] = [
         "q": "Contoh kasus yang paling pas buat pake Arc Relationship adalah...",
         "options": [
           "Seorang mahasiswa mengambil banyak mata kuliah",
-          "Pemenang undian cuma bisa pilih hadiah Motor ATAU Uang Tunai",
+          "Pemenang undian cuma bisa pilih hadiah Motor Atau Uang",
           "Seorang pegawai punya satu manajer",
           "Satu buku ditulis oleh banyak penulis"
         ],
@@ -440,7 +440,7 @@ export const quizData: QuizSet[] = [
         "q": "Apa yang terjadi pada Foreign Key di tabel yang memiliki Arc Relationship?",
         "options": [
           "Semua Foreign Key harus bersifat Mandatory (Wajib)",
-          "Foreign Key yang dihasilkan harus bersifat Opsional karena salah satunya pasti kosong",
+          "Foreign Key yang dihasilkan harus bersifat Opsional",
           "Tidak ada Foreign Key yang terbentuk",
           "Foreign Key akan otomatis menjadi Primary Key"
         ],
@@ -459,7 +459,7 @@ export const quizData: QuizSet[] = [
       },
       {
         "id": 8,
-        "q": "Apa implikasi utama dari Barred Relationship terhadap UID (Unique Identifier) entitas anak?",
+        "q": "Apa dampak dari Barred Relationship terhadap UID (Unique Identifier) entitas anak?",
         "options": [
           "UID anak sepenuhnya independen dan tidak butuh UID induk",
           "UID anak terdiri dari UID induk ditambah atribut lain milik anak",
@@ -484,7 +484,7 @@ export const quizData: QuizSet[] = [
         "q": "Apa yang dimaksud dengan Transferability dalam sebuah relasi?",
         "options": [
           "Kemampuan data untuk dihapus secara permanen",
-          "Nilai relasi antar entitas bisa dipindah atau diganti ke entitas lain",
+          "Nilai relasi antar entitas bisa dipindah ke entitas lain",
           "Kemampuan database untuk transfer data ke server lain",
           "Sebuah entitas bisa berubah menjadi entitas lain"
         ],
@@ -495,7 +495,7 @@ export const quizData: QuizSet[] = [
         "q": "Simbol Diamond (Belah Ketupat) pada garis relasi menandakan bahwa relasi tersebut bersifat...",
         "options": [
           "Transferable (Bisa dipindah)",
-          "Non-Transferable (Tidak bisa dipindah/diganti)",
+          "Non-Transferable (Tidak bisa dipindah)",
           "Optional (Boleh kosong)",
           "Recursive (Berulang)"
         ],
@@ -506,7 +506,7 @@ export const quizData: QuizSet[] = [
         "q": "Manakah contoh kasus yang paling tepat untuk Non-Transferable Relationship?",
         "options": [
           "Pegawai yang bisa dipindah tugaskan ke departemen lain",
-          "Buku dan Penulisnya (Penulis buku sejarahnya tidak bisa diganti orang lain)",
+          "Buku dan Penulisnya",
           "Mahasiswa yang bisa ganti jurusan",
           "Pelanggan yang bisa ganti alamat pengiriman"
         ],
@@ -527,7 +527,7 @@ export const quizData: QuizSet[] = [
         "id": 14,
         "q": "Contoh nyata dari Recursive Relationship di dunia kerja adalah...",
         "options": [
-          "Pegawai melapor ke Manajer, dimana Manajer juga seorang Pegawai",
+          "Pegawai melapor ke Manajer",
           "Pegawai bekerja di Departemen",
           "Departemen memiliki banyak proyek",
           "Proyek dikerjakan oleh vendor luar"
@@ -550,7 +550,7 @@ export const quizData: QuizSet[] = [
         "q": "Apa risiko utama jika Recursive Relationship tidak didesain dengan hati-hati?",
         "options": [
           "Data menjadi terlalu sedikit",
-          "Terjadi looping tanpa henti (infinite loop) saat query data hierarki",
+          "Terjadi looping tanpa henti",
           "Tabel akan otomatis terhapus",
           "Tidak bisa membuat Primary Key"
         ],
@@ -561,7 +561,7 @@ export const quizData: QuizSet[] = [
         "q": "Dalam Supertype 'tb_karyawan', atribut 'gaji' bersifat mandatory. Apa dampaknya bagi Subtype?",
         "options": [
           "Subtype boleh tidak punya atribut gaji",
-          "Subtype otomatis memiliki atribut gaji dan sifatnya juga mandatory",
+          "Subtype otomatis memiliki atribut gaji",
           "Subtype harus membuat atribut gaji baru dengan nama beda",
           "Atribut gaji di Subtype menjadi optional"
         ],
@@ -583,7 +583,7 @@ export const quizData: QuizSet[] = [
         "q": "Di Oracle Data Modeler, langkah pertama untuk membuat Subtype adalah...",
         "options": [
           "Membuat relasi one-to-many biasa",
-          "Membuat entitas baru di dalam kotak entitas Supertype yang sudah ada",
+          "Membuat entitas baru di dalam entitas yang sudah ada",
           "Menghapus entitas Supertype",
           "Mengganti nama tabel menjadi huruf kapital semua"
         ],
@@ -595,7 +595,7 @@ export const quizData: QuizSet[] = [
         "options": [
           "Recursive",
           "Non-Transferable",
-          "Barred (Identifying)",
+          "Barred",
           "Arc"
         ],
         "correctIndex": 2

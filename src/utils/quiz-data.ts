@@ -617,7 +617,7 @@ export const quizData: QuizSet[] = [
         "q": "Apa sih tujuan utama dari melakukan normalisasi data?",
         "options": [
           "Biar tabelnya jadi banyak dan terlihat kompleks",
-          "Mengurangi kemubaziran (redundansi) data dan menjaga integritas data",
+          "Mengurangi duplikat data dan anomali",
           "Supaya data bisa dibaca oleh manusia tanpa query SQL",
           "Menggabungkan semua data menjadi satu tabel besar (Big Data)"
         ],
@@ -636,10 +636,10 @@ export const quizData: QuizSet[] = [
       },
       {
         "id": 3,
-        "q": "Syarat mutlak agar sebuah tabel dikatakan memenuhi 1NF (First Normal Form) adalah...",
+        "q": "Syarat WAJIBBB agar sebuah tabel dikatakan memenuhi 1NF (First Normal Form) adalah...",
         "options": [
           "Harus punya Primary Key ganda",
-          "Setiap atribut harus bernilai atomik (tunggal/single-value)",
+          "Setiap atribut harus bernilai tunggal",
           "Tidak boleh ada atribut yang kosong (NULL)",
           "Tabel harus sudah terhubung dengan tabel lain"
         ],
@@ -683,7 +683,7 @@ export const quizData: QuizSet[] = [
         "q": "Apa yang dimaksud dengan Ketergantungan Parsial (Partial Dependency)?",
         "options": [
           "Atribut non-key bergantung pada atribut non-key lainnya",
-          "Atribut non-key hanya bergantung pada sebagian dari Primary Key (biasanya pada Composite Key)",
+          "Atribut non-key hanya bergantung pada sebagian dari Primary Key",
           "Atribut key bergantung pada atribut non-key",
           "Tidak ada atribut yang saling bergantung"
         ],
@@ -706,7 +706,7 @@ export const quizData: QuizSet[] = [
         "options": [
           "Ketergantungan Fungsional Penuh",
           "Ketergantungan Parsial",
-          "Ketergantungan Transitif (Transitive Dependency)",
+          "Ketergantungan Transitif",
           "Ketergantungan Antar Tabel"
         ],
         "correctIndex": 2
@@ -768,12 +768,12 @@ export const quizData: QuizSet[] = [
       },
       {
         "id": 15,
-        "q": "Dalam studi kasus Faktur Pembelian, kenapa data 'Supplier' harus dipisah dari tabel Faktur?",
+        "q": "Dalam studi kasus Invoice Pembelian, kenapa data 'Supplier' harus dipisah dari tabel Invoice?",
         "options": [
           "Supaya tabel fakturnya terlihat lebih bersih",
-          "Karena data nama supplier akan berulang-ulang ditulis setiap ada faktur baru (Redundansi)",
+          "Karena data nama supplier akan berulang-ulang ditulis setiap ada Invoice baru (Redundansi)",
           "Karena supplier tidak penting dalam transaksi",
-          "Agar jumlah kolom di tabel faktur genap"
+          "Agar jumlah kolom di tabel Invoice genap"
         ],
         "correctIndex": 1
       },
@@ -782,7 +782,7 @@ export const quizData: QuizSet[] = [
         "q": "Jika sebuah tabel sudah memenuhi 3NF, apakah otomatis sudah memenuhi 2NF?",
         "options": [
           "Tidak, urutannya terbalik",
-          "Ya, karena 3NF adalah tahap lanjut yang mewajibkan 2NF terpenuhi dulu",
+          "Iya",
           "Tergantung datanya",
           "Tidak ada hubungannya"
         ],
@@ -793,7 +793,7 @@ export const quizData: QuizSet[] = [
         "q": "Salah satu alasan kenapa kita harus menghindari 'Data Anomaly' (anomali data) adalah...",
         "options": [
           "Agar ukuran database menjadi sangat besar",
-          "Mencegah ketidakkonsistenan data saat melakukan Insert, Update, atau Delete",
+          "Mencegah ketidakkonsistenan data",
           "Supaya programmer punya pekerjaan lebih banyak",
           "Agar database bisa dijual lebih mahal"
         ],
@@ -803,7 +803,7 @@ export const quizData: QuizSet[] = [
         "id": 18,
         "q": "Dalam notasi CDM (Logical), Intersection Entity dari hubungan M:N seringkali digambarkan dengan...",
         "options": [
-          "Dua relasi One-to-Many yang mengarah ke entitas baru tersebut",
+          "Penengah relasi 2 entitas",
           "Satu garis lurus tanpa panah",
           "Entitas tanpa atribut UID",
           "Relasi Arc"
@@ -815,7 +815,7 @@ export const quizData: QuizSet[] = [
         "q": "Jika UID (Unique Identifier) terdiri dari satu atribut saja (Simple UID), apakah mungkin terjadi pelanggaran 2NF?",
         "options": [
           "Sangat mungkin terjadi",
-          "Tidak mungkin, karena 2NF hanya bermasalah pada Composite UID",
+          "Tidak mungkin",
           "Pasti terjadi di setiap tabel",
           "Tergantung jumlah baris datanya"
         ],
@@ -826,9 +826,9 @@ export const quizData: QuizSet[] = [
         "q": "Langkah pertama yang paling logis saat menerima data nota/kuitansi mentah untuk dinormalisasi adalah...",
         "options": [
           "Langsung buat tabel 3NF",
-          "Identifikasi atribut dan tuliskan bentuk UNF (Unnormalized)-nya dulu",
+          "Identifikasi Unnormalized-nya",
           "Membuat coding aplikasi",
-          "Menghapus data yang terlihat jelek"
+          "Menghapus data yang kosong"
         ],
         "correctIndex": 1
       }

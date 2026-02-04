@@ -1,8 +1,12 @@
+export type QuestionType = 'multiple-choice' | 'essay';
+
 export interface Question {
   id: number;
+  type?: QuestionType;
   q: string;
-  options: string[];
-  correctIndex: number;
+  options?: string[];
+  correctIndex?: number;
+  answerKey?: string;
   explanation?: string;
 }
 
@@ -18,14 +22,12 @@ export interface QuizSet {
 }
 
 export const quizData: QuizSet[] = [
-  //========================konsep-dasar-basis-data=========================//
   {
     "slug": "konsep-dasar-basis-data",
     "title": "Konsep Dasar Basis Data",
     "description": "Quiz dasar Modul 1 Basis Data: database, DBMS, ERD, CDM, PDM, entitas, dan atribut.",
     "category": "Database",
     "level": "Easy",
-    // "status": "New",
     "color": "#4f46e5",
     "questions": [
       {
@@ -213,14 +215,12 @@ export const quizData: QuizSet[] = [
       }
     ]
   },
-  //========================Studi Kasus Pemodelan Data Relasional=========================//
   {
     "slug": "modul-2-studi-kasus",
     "title": "Studi Kasus Pemodelan Data Relasional",
     "description": "Quiz Modul 2 berbasis studi kasus: UID, relasi, kardinalitas, opsionalitas, ERD, dan precision & scale.",
     "category": "Database",
     "level": "Easy",
-    // "status": "New",
     "color": "#0f766e",
     "questions": [
       {
@@ -410,7 +410,6 @@ export const quizData: QuizSet[] = [
       }
     ]
   },
-  //========================Relasi & Notasi=========================//
   {
     "slug": "advanced-relationship-modeling-modul-3",
     "title": "Relasi & Notasi",
@@ -662,7 +661,6 @@ export const quizData: QuizSet[] = [
       }
     ]
   },
-  //========================Logika & Aturan Normalisasi=========================//
   {
     "slug": "normalisasi-data-logic-rules-modul-3",
     "title": "Logika & Aturan Normalisasi",
@@ -911,6 +909,80 @@ export const quizData: QuizSet[] = [
         ],
         "correctIndex": 1,
         "explanation": "Proses normalisasi selalu dimulai dari memahami bentuk data mentah (UNF) sebelum dipecah ke bentuk normal."
+      }
+    ]
+  },
+
+
+  {
+    slug: "mixed-tech-test",
+    title: "Fullstack Basic Test",
+    description: "Tes kemampuan dasar seputar React, Database, dan Konsep Web. Hati-hati typo di sesi Essay!",
+    category: "Engineering",
+    level: "Medium",
+    status: "New",
+    color: "bg-blue-500",
+    questions: [
+      {
+        id: 1,
+        type: 'essay',
+        q: "Dalam React, hook apa yang digunakan untuk menangani 'side effects' seperti fetching data atau langganan event?",
+        answerKey: "useEffect",
+        explanation: "useEffect didesain untuk menangani efek samping (side effects) dalam functional component."
+      },
+      {
+        id: 2,
+        type: 'essay',
+        q: "Perintah SQL dasar (keyword) apa yang digunakan untuk mengambil/membaca data dari sebuah tabel?",
+        answerKey: "SELECT",
+        explanation: "SELECT digunakan untuk memilih data dari database (contoh: SELECT * FROM users)."
+      },
+      {
+        id: 3,
+        type: 'essay',
+        q: "Method HTTP apa yang secara spesifik digunakan untuk mengirimkan data baru ke server (create resource)?",
+        answerKey: "POST",
+        explanation: "POST digunakan untuk mengirim data ke server untuk membuat/mengupdate resource."
+      },
+
+      {
+        id: 4,
+        type: 'multiple-choice',
+        q: "Manakah class Tailwind CSS yang benar untuk membuat elemen menjadi Flexbox?",
+        options: [
+          "display-flex",
+          "flex",
+          "flexbox",
+          "grid-flex"
+        ],
+        correctIndex: 1, 
+        explanation: "Di Tailwind, cukup gunakan class 'flex' untuk menerapkan display: flex."
+      },
+      {
+        id: 5,
+        type: 'multiple-choice',
+        q: "Apa ekstensi file standar untuk komponen React yang menggunakan TypeScript?",
+        options: [
+          ".js",
+          ".ts",
+          ".jsx",
+          ".tsx"
+        ],
+        correctIndex: 3, 
+        explanation: "Ekstensi .tsx memungkinkan kita menulis sintaks JSX di dalam file TypeScript."
+      },
+      {
+        id: 6,
+        type: 'multiple-choice',
+        q: "Manakah di bawah ini yang BUKAN merupakan tipe data primitif di JavaScript?",
+        options: [
+          "String",
+          "Boolean",
+          "Object",
+          "Undefined"
+        ],
+        correctIndex: 2, 
+        explanation: "Object (dan Array) adalah tipe data referensi (complex), sedangkan String, Boolean, Null, Undefined adalah primitif."
       }
     ]
   }

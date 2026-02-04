@@ -7,6 +7,7 @@ import { quizData } from '@/utils/quiz-data';
 import NoiseBackground from '@/components/quiz/ui/NoiseBackground';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { Info } from 'lucide-react';
 
 export default function QuizResult() {
   const searchParams = useSearchParams();
@@ -30,8 +31,9 @@ export default function QuizResult() {
   if (!result) return <div className="p-10 font-mono">Retrieving data...</div>;
 
   const currentQuizData = quizData.find((q) => q.slug === result.quizSlug);
-
   const passed = result.score >= 70;
+
+  const hasEssay = currentQuizData?.questions.some(q => q.type === 'essay');
 
   return (
     <main ref={containerRef} className="min-h-screen p-6 md:p-12 bg-[#f4f3ef] text-black font-sans relative">
@@ -54,30 +56,45 @@ export default function QuizResult() {
         <div className="text-center mb-12">
           <span className="block font-mono text-sm tracking-widest uppercase mb-2">Final Score</span>
           <span className="text-9xl font-black leading-none">{result.score}</span>
-          <span className="text-xl font-mono block text-gray-500">/ 100</span>
+          <div className="flex flex-col items-center mt-2">
+             <span className="text-xl font-mono text-gray-500">/ 100</span>
+              
+             {hasEssay && (
+                <div className="flex items-center gap-2 mt-4 text-xs font-mono bg-yellow-100 px-3 py-1 border border-yellow-400 text-yellow-800">
+                    <Info size={14} />
+                    <span>Score calculated from Multiple Choice only</span>
+                </div>
+             )}
+          </div>
         </div>
 
-         
+          
         <div className="space-y-4 mb-12">
           <h3 className="font-bold border-b border-black inline-block mb-4">ANSWER BREAKDOWN</h3>
 
           {result.answers.map((ans: any, idx: number) => {
-            const questionText = currentQuizData?.questions[idx]?.q || "Question text unavailable";
+            const originalQuestion = currentQuizData?.questions[idx];
+            const questionText = originalQuestion?.q || "Question text unavailable";
+            const isEssay = originalQuestion?.type === 'essay';
 
             return (
               <div key={idx} className="item-row p-5 border border-black/20 bg-gray-50 flex flex-col gap-4">
 
-                 
                 <div className="flex items-center gap-2">
                   <span className="font-mono font-bold bg-black text-white px-2 py-0.5 text-xs">Q.{idx + 1}</span>
-                  {ans.isCorrect ? (
-                    <span className="bg-green-200 text-green-800 text-xs px-2 py-0.5 font-bold border border-green-800">CORRECT</span>
+                  
+                   
+                  {isEssay ? (
+                     <span className="bg-yellow-200 text-yellow-800 text-xs px-2 py-0.5 font-bold border border-yellow-800">SELF CHECK</span>
                   ) : (
-                    <span className="bg-red-200 text-red-800 text-xs px-2 py-0.5 font-bold border border-red-800">WRONG</span>
+                      ans.isCorrect ? (
+                        <span className="bg-green-200 text-green-800 text-xs px-2 py-0.5 font-bold border border-green-800">CORRECT</span>
+                      ) : (
+                        <span className="bg-red-200 text-red-800 text-xs px-2 py-0.5 font-bold border border-red-800">WRONG</span>
+                      )
                   )}
                 </div>
 
-                 
                 <p className="font-serif font-bold text-lg leading-snug border-b-2 border-dashed border-black/10 pb-3">
                   {questionText}
                 </p>
@@ -85,22 +102,39 @@ export default function QuizResult() {
                 <div className="flex flex-col gap-2">
 
                   <p className="text-sm font-mono text-gray-600">
-                    You chose: <span className={`font-bold ${!ans.isCorrect ? 'text-red-600 line-through decoration-2 decoration-red-400' : 'text-black'}`}>
+                    You chose: <span className={`font-bold text-black`}>
                       {ans.selectedOption}
                     </span>
+                     
+                    {!isEssay && !ans.isCorrect && (
+                        <span className="ml-2 text-red-600 font-bold text-xs">[WRONG]</span>
+                    )}
                   </p>
 
-                  {!ans.isCorrect && (
+                   
+                   
+                  {isEssay && (
+                    <div className="text-sm font-mono bg-green-50 text-green-900 border-l-4 border-green-500 p-3 mt-1 w-full">
+                      <span className="font-bold block text-xs uppercase text-green-500 mb-1">Answer / Keyword:</span>
+                      <span className="font-bold text-black">{ans.correctAnswer}</span>
+                    </div>
+                  )}
+
+                   
+                  {!isEssay && !ans.isCorrect && (
                     <div className="text-sm font-mono bg-red-50 text-red-700 border-l-4 border-red-500 p-3 mt-1 w-full">
                       <span className="font-bold block text-xs uppercase text-red-400 mb-1">Correct Answer:</span>
                       <span className="font-bold text-black">{ans.correctAnswer}</span>
                     </div>
                   )}
                   
-                    <div className="text-sm font-mono bg-blue-50 text-blur-700 border-l-4 border-blue-500 p-3 mt-1 w-full">
+                   
+                  {ans.explanation && (
+                    <div className="text-sm font-mono bg-blue-50 text-blue-600 border-l-4 border-blue-500 p-3 mt-1 w-full">
                       <span className="font-bold block text-xs uppercase text-blue-400 mb-1">Explanation:</span>
                       <span className="text-black">{ans.explanation}</span>
                     </div>
+                  )}
                 </div>
 
               </div>

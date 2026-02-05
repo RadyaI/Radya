@@ -22,19 +22,27 @@ export default function AIFeedbackButton({ result, questions = [], quizTitle }: 
 
         let details = "";
         if (incorrectAnswers.length > 0) {
-            details = incorrectAnswers.map((a: any) => {
-                let originalQuestion = questions.find(q => q.id == a.questionId);
+            details = incorrectAnswers.map((a: any, i: number) => {
+                let originalQuestion = questions.find(q => String(q.id) === String(a.questionId));
+
                 if (!originalQuestion) {
-                    const qIndex = result.answers.findIndex((ans: any) => ans.questionId === a.questionId);
-                    originalQuestion = questions[qIndex];
+                    const indexInResult = result.answers.findIndex((ans: any) => ans.questionId === a.questionId);
+                    if (indexInResult !== -1 && questions[indexInResult]) {
+                        originalQuestion = questions[indexInResult];
+                    }
                 }
+
                 const finalQuestion = originalQuestion || {};
                 const qText = finalQuestion.q || 'Teks soal tidak tersedia';
+                const qExplanation = finalQuestion.explanation || 'Tidak ada penjelasan.';
 
-                return `- Soal: "${qText}". Jawaban user: "${a.selectedOption}". Jawaban benar: "${a.correctAnswer}". Di paling akhir kasih quotes random dari tokoh terkenal yang kira kira cocok, gunakan format quote markdown.`;
+                return `[Poin Evaluasi ${i + 1}]
+                    - Soal: "${qText}"
+                    - Jawaban User: "${a.selectedOption}" (SALAH)
+                    - Jawaban Benar: "${a.correctAnswer}"
+                    - Penjelasan Asli: "${qExplanation}"`;
             }).join("\n");
         }
-
         return `
       Context: User baru saja menyelesaikan kuis berjudul "${quizTitle}".
       

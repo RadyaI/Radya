@@ -14,6 +14,7 @@ export default function AnswerList({ answers, currentQuizData, result }: AnswerL
 
             <AIFeedbackButton
                 result={result}
+                questions={currentQuizData?.questions || []}
                 quizTitle={currentQuizData?.title || 'Quiz'}
             />
 

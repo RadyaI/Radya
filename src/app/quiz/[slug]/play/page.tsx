@@ -11,6 +11,7 @@ import NoiseBackground from '@/components/quiz/ui/NoiseBackground';
 import ThemeToggle from '@/components/quiz/ui/ThemeToggle';
 import { useAntiCheat } from '@/hooks/useAntiCheat';
 import { Toaster } from 'react-hot-toast';
+import ReactMarkdown from 'react-markdown';
 
 export default function QuizPlay() {
   const { slug } = useParams();
@@ -26,6 +27,25 @@ export default function QuizPlay() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useAntiCheat(true)
+
+  const markdownComponents = {
+    pre: ({ node, ...props }: any) => (
+      <pre className="bg-gray-900 text-gray-100 p-4 rounded-md overflow-x-auto my-4 font-mono text-sm shadow-md border-l-4 border-yellow-500 text-left" {...props} />
+    ),
+    code: ({ node, inline, className, children, ...props }: any) => {
+      if (inline) {
+        return (
+          <code className="bg-gray-200 text-red-600 px-1.5 py-0.5 rounded-md font-mono text-sm font-bold" {...props}>
+            {children}
+          </code>
+        );
+      }
+      return <code className="bg-transparent font-mono text-inherit" {...props}>{children}</code>;
+    },
+    p: ({ node, ...props }: any) => <p className="mb-2 last:mb-0" {...props} />,
+    ul: ({ node, ...props }: any) => <ul className="list-disc pl-5 space-y-1 my-2" {...props} />,
+    ol: ({ node, ...props }: any) => <ol className="list-decimal pl-5 space-y-1 my-2" {...props} />,
+  };
 
   useEffect(() => {
     if (quiz) {
@@ -145,18 +165,18 @@ export default function QuizPlay() {
             <span className="text-xl">0{currentIndex + 1} <span className="opacity-40">/ {quiz.questions.length}</span></span>
           </div>
           <div className={`px-3 py-1 border text-xs tracking-widest flex items-center gap-2 ${isDark ? 'border-white' : 'border-black'}`}>
-            { }
             {currentQuestion.type === 'essay' ? <PenTool size={12} /> : <Disc size={12} />}
             {currentQuestion.type === 'essay' ? 'ESSAY' : 'CHOICE'}
           </div>
         </div>
 
         <div className={`question-card border-4 p-8 md:p-12 shadow-[12px_12px_0_0_rgba(0,0,0,0.1)] relative ${cardBg}`}>
-          <h2 className="select-none text-2xl md:text-2xl font-serif font-black leading-relaxed mb-10">
-            {currentQuestion.q}
-          </h2>
+          <div className="select-none text-xl md:text-2xl font-serif font-black leading-relaxed mb-10 text-left">
+            <ReactMarkdown components={markdownComponents}>
+              {currentQuestion.q}
+            </ReactMarkdown>
+          </div>
 
-          { }
           {currentQuestion.type === 'essay' ? (
             <div className="relative">
               <textarea
@@ -181,11 +201,16 @@ export default function QuizPlay() {
                     onClick={() => handleAnswerChange(opt)}
                     className={`select-none w-full text-left p-5 border-2 font-mono font-bold text-md transition-all flex justify-between items-center group ${isSelected ? optionSelected : optionDefault}`}
                   >
-                    <div className="flex items-center gap-4">
-                      <span className={`w-8 h-8 flex items-center justify-center border rounded-full text-sm ${isSelected ? (isDark ? 'border-black' : 'border-white') : (isDark ? 'border-white' : 'border-black')}`}>
+                    <div className="flex items-center gap-4 w-full">
+                      <span className={`w-8 h-8 flex-shrink-0 flex items-center justify-center border rounded-full text-sm ${isSelected ? (isDark ? 'border-black' : 'border-white') : (isDark ? 'border-white' : 'border-black')}`}>
                         {String.fromCharCode(65 + idx)}
                       </span>
-                      <span>{opt}</span>
+
+                      <div className="text-left flex-1 min-w-0">
+                        <ReactMarkdown components={markdownComponents}>
+                          {opt}
+                        </ReactMarkdown>
+                      </div>
                     </div>
                     {isSelected && <CheckCircle size={20} />}
                   </button>
@@ -208,8 +233,8 @@ export default function QuizPlay() {
             onClick={handleNext}
             disabled={!currentAnswer || currentAnswer.trim() === "" || isSubmitting}
             className={`flex items-center gap-2 font-mono font-bold px-8 py-3 border-2 transition-all shadow-[6px_6px_0_0_rgba(0,0,0,0.2)] active:shadow-none active:translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed ${isDark
-                ? 'bg-white text-black border-white hover:bg-gray-200'
-                : 'bg-black text-white border-black hover:bg-yellow-400 hover:text-black'
+              ? 'bg-white text-black border-white hover:bg-gray-200'
+              : 'bg-black text-white border-black hover:bg-yellow-400 hover:text-black'
               }`}
           >
             {isSubmitting ? (

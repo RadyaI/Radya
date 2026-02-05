@@ -108,7 +108,7 @@ export default function AIFeedbackButton({ result, questions = [], quizTitle }: 
                 className="mt-3 group flex items-center gap-2 bg-black text-white hover:bg-gray-800 px-4 py-2 text-xs md:text-sm font-bold uppercase tracking-wider border border-transparent hover:border-black transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)]"
             >
                 <BrainCircuit size={16} />
-                <span>Analisis AI</span>
+                <span>Analisis AI (Multiple Choice only)</span>
                 <Sparkles size={12} className="text-yellow-400" />
             </button>
 

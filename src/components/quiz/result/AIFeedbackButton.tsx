@@ -23,7 +23,7 @@ export default function AIFeedbackButton({ result, questions = [], quizTitle }: 
         let details = "";
         if (incorrectAnswers.length > 0) {
             details = incorrectAnswers.map((a: any) => {
-                let originalQuestion = questions.find(q => q.id === a.questionId);
+                let originalQuestion = questions.find(q => q.id == a.questionId);
                 if (!originalQuestion) {
                     const qIndex = result.answers.findIndex((ans: any) => ans.questionId === a.questionId);
                     originalQuestion = questions[qIndex];
@@ -105,7 +105,7 @@ export default function AIFeedbackButton({ result, questions = [], quizTitle }: 
             </button>
 
             {isOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+                <div className="fixed h-screen inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
 
                     <div className="bg-white border-4 border-black shadow-[8px_8px_0px_0px_#000] w-full max-w-3xl flex flex-col max-h-[80vh] animate-in zoom-in-95 duration-200 relative">
 
@@ -135,10 +135,10 @@ export default function AIFeedbackButton({ result, questions = [], quizTitle }: 
                                 <div className="text-sm md:text-base text-gray-900 leading-relaxed pb-2">
                                     <ReactMarkdown
                                         components={{
-                                            
+
                                             h1: ({ node, ...props }) => <h1 className="text-xl font-bold" {...props} />,
                                             h2: ({ node, ...props }) => <h2 className="mb-5 mt-6 text-lg font-bold underline" {...props} />,
-                                            
+
                                             ul: ({ node, ...props }) => <ul className="list-disc pl-5 ml-8 space-y-2 my-4 text-gray-800" {...props} />,
 
                                             ol: ({ node, ...props }) => <ol className="list-decimal pl-5 ml-8 space-y-2 my-4 text-gray-800" {...props} />,

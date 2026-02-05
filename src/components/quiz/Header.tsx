@@ -4,10 +4,12 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import AuthButton from './AuthButton';
 import LearningButton from './LearningButton';
+import { useRouter } from 'next/navigation';
 
 const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+-=[]{}|;:,.<>?";
 
 export default function Header() {
+  const router = useRouter()
   const titleRef = useRef<HTMLHeadingElement>(null);
   const { contextSafe } = useGSAP({ scope: titleRef });
 
@@ -90,7 +92,7 @@ export default function Header() {
         className="cursor-crosshair select-none py-2"
       >
         <div className="inline-block bg-black text-white px-2 py-1 font-mono text-xs mb-2 -rotate-2">
-          EST. 2026 // RADYA.MY.ID
+          EST. 2026 // RADYA.MY.<span onClick={() => router.push("/quiz/admin")} className='cursor-pointer'>ID</span>
         </div>
         <h1 className="text-7xl md:text-9xl font-serif font-black tracking-tighter leading-[0.8]">
           {"QUIZ_CUY".split("").map((char, i) => (

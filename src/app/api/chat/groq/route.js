@@ -43,7 +43,7 @@ export async function POST(req) {
 
         // PARSE & VALIDASI BODY
         const body = await req.json();
-        const { history, persona = "radya" } = body ?? {};
+        const { history, persona = "default" } = body ?? {};
 
         if (!Array.isArray(history)) {
             return NextResponse.json(
@@ -82,7 +82,7 @@ export async function POST(req) {
         const groq = new Groq({ apiKey: API_KEY });
 
         const systemPrompt =
-            PERSONAS[persona] ?? PERSONAS["radya"];
+            PERSONAS[persona] ?? PERSONAS["default"];
 
         const messages = [
             { role: "system", content: systemPrompt },

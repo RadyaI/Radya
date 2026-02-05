@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { getQuizResultById } from '@/utils/quiz/firebase-quiz';
-import { quizData } from '@/utils/quiz-data'; 
+import { quizData } from '@/utils/quiz-data';
 import NoiseBackground from '@/components/quiz/ui/NoiseBackground';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
@@ -42,24 +42,22 @@ export default function QuizResult() {
       <NoiseBackground />
 
       <div className="max-w-3xl mx-auto bg-white border-2 border-black shadow-[8px_8px_0px_0px_#000] p-8 md:p-12 relative min-h-[80vh]">
-        
-        {}
-        <ResultHeader 
-          result={result} 
-          currentQuizData={currentQuizData} 
-          passed={passed} 
+
+        <ResultHeader
+          result={result}
+          currentQuizData={currentQuizData}
+          passed={passed}
         />
 
-        {}
-        <ScoreSection 
-          score={result.score} 
-          hasEssay={!!hasEssay} 
+        <ScoreSection
+          score={result.score}
+          hasEssay={!!hasEssay}
         />
 
-        {}
-        <AnswerList 
-          answers={result.answers} 
-          currentQuizData={currentQuizData} 
+        <AnswerList
+          result={result}
+          answers={result.answers}
+          currentQuizData={currentQuizData}
         />
 
         <Link href={`/quiz/${result.quizSlug}`}>

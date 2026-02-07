@@ -38,6 +38,7 @@ export default function EssayAICheck({ question, userAnswer, answerKey }: EssayA
         4. Jangan menyalahkan jawaban hanya karena kurang lengkap sedikit, selama inti utamanya sudah kena.
 
         Format Respon:
+        - Gunakan emoji checklist kalo benar, dan emoji silang kalo salah
         - Jika Benar (Secara Konsep): Berikan validasi/pujian singkat (Contoh: "Pemahaman konsep sudah tepat.", "Logika benar meskipun bahasanya berbeda.").
         - Jika Salah/Melenceng: Koreksi bagian fatalnya saja.
         - Wajib SINGKAT & PADAT (Maksimal 2 kalimat). Gunakan Bahasa Indonesia yang santai tapi edukatif.

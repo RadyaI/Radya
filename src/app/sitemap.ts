@@ -63,6 +63,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // BLOG
   const blogSlugs = [
     'kuliah-informatika-gimana',
+    'kenapa-pengen-jadi-data-engineer'
   ]
 
   const toolsRoutes: MetadataRoute.Sitemap = tools.map(tool => ({

@@ -10,7 +10,7 @@ import NoiseBackground from '@/components/quiz/ui/NoiseBackground';
 import { redirect } from 'next/navigation';
 
 export default function QuizDashboard() {
-  redirect("/broken")
+  // redirect("/broken")
   const containerRef = useRef(null);
 
   useGSAP(() => {

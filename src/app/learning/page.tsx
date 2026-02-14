@@ -13,10 +13,10 @@ export const metadata: Metadata = {
 }
 
 export default function LearningPage() {
-  redirect("/broken")
-  // return (
-  //   <main className="min-h-screen bg-black text-white selection:bg-blue-500/30 selection:text-blue-200">
-  //     <LearningDashboard />
-  //   </main>
-  // )
+  // redirect("/broken")
+  return (
+    <main className="min-h-screen bg-black text-white selection:bg-blue-500/30 selection:text-blue-200">
+      <LearningDashboard />
+    </main>
+  )
 }

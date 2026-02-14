@@ -68,6 +68,7 @@ export default function QuizPlay() {
 
   const handleNext = () => {
     if (!quiz) return;
+
     if (currentIndex < quiz.questions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     } else {
@@ -83,50 +84,71 @@ export default function QuizPlay() {
 
   const handleSubmit = async () => {
     if (!quiz || !user || isSubmitting) return;
+
     setIsSubmitting(true);
 
-    const formattedAnswers = quiz.questions.map((q, idx) => {
-      const userAnswer = answers[idx] || "Skipped";
-      let isCorrect = false;
-      let correctAnswerText = "";
+    try {
+      const formattedAnswers = quiz.questions.map((q, idx) => {
+        const userAnswer = answers[idx] || "Skipped";
+        let isCorrect = false;
+        let correctAnswerText = "";
 
-      if (q.type === 'essay') {
-        const userString = String(userAnswer).toLowerCase().trim();
-        const keyString = (q.answerKey || "").toLowerCase().trim();
-        isCorrect = userString === keyString;
-        correctAnswerText = q.answerKey || "";
+        if (q.type === 'essay') {
+          const userString = String(userAnswer).toLowerCase().trim();
+          const keyString = (q.answerKey || "").toLowerCase().trim();
+
+          isCorrect = userString === keyString;
+          correctAnswerText = q.answerKey || "";
+        } else {
+          const correctOpt = q.options && q.correctIndex !== undefined
+            ? q.options[q.correctIndex]
+            : "";
+
+          isCorrect = userAnswer === correctOpt;
+          correctAnswerText = correctOpt || "";
+        }
+
+        return {
+          questionId: q.id,
+          selectedOption: userAnswer,
+          isCorrect: isCorrect,
+          correctAnswer: correctAnswerText,
+
+          explanation: q.explanation || null,
+
+          type: q.type || "multiple-choice"
+        };
+      });
+
+      const scorableQuestions = quiz.questions.filter(q => q.type !== 'essay');
+
+      const correctCount = formattedAnswers.filter(a => {
+        const originalQ = quiz.questions.find(q => q.id === a.questionId);
+        return originalQ?.type !== 'essay' && a.isCorrect;
+      }).length;
+
+      const finalScore = scorableQuestions.length > 0
+        ? Math.round((correctCount / scorableQuestions.length) * 100)
+        : 0;
+
+      const resultId = await saveQuizResult(
+        user.uid,
+        user.displayName,
+        user.email,
+        slug as string,
+        finalScore,
+        quiz.questions.length,
+        formattedAnswers
+      );
+
+      if (resultId) {
+        router.push(`/quiz/${slug}/result?id=${resultId}`);
       } else {
-        const correctOpt = q.options && q.correctIndex !== undefined ? q.options[q.correctIndex] : "";
-        isCorrect = userAnswer === correctOpt;
-        correctAnswerText = correctOpt;
+        setIsSubmitting(false);
       }
 
-      return {
-        questionId: q.id,
-        selectedOption: userAnswer,
-        isCorrect: isCorrect,
-        correctAnswer: correctAnswerText,
-        explanation: q.explanation,
-        type: q.type
-      };
-    });
-
-    const scorableQuestions = quiz.questions.filter(q => q.type !== 'essay');
-
-    const correctCount = formattedAnswers.filter(a => {
-      const originalQ = quiz.questions.find(q => q.id === a.questionId);
-      return originalQ?.type !== 'essay' && a.isCorrect;
-    }).length;
-
-    const finalScore = scorableQuestions.length > 0
-      ? Math.round((correctCount / scorableQuestions.length) * 100)
-      : 0;
-
-    const resultId = await saveQuizResult(user.uid, user.displayName, user.email, slug as string, finalScore, quiz.questions.length, formattedAnswers);
-
-    if (resultId) {
-      router.push(`/quiz/${slug}/result?id=${resultId}`);
-    } else {
+    } catch (error) {
+      console.error("Error submitting quiz:", error);
       setIsSubmitting(false);
     }
   };

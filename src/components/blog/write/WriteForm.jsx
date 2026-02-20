@@ -1,5 +1,6 @@
 import MDEditor from "@uiw/react-md-editor";
 import { Save, PenTool, Loader2 } from "lucide-react";
+import BlogArticleHTML from "@/app/blog/[slug]/BlogArticleHTML"; 
 
 export default function WriteForm({
     title,
@@ -12,56 +13,121 @@ export default function WriteForm({
     loading,
     isEditMode
 }) {
+    const renderPreview = (markdown) => {
+        return (
+            <div className="p-8 bg-[#0a0a0a] text-[#e5e5e5]">
+                <div style={{
+                    '--bg-primary': '#0a0a0a',
+                    '--text-primary': '#e5e5e5',
+                    '--text-secondary': '#a3a3a3',
+                    '--border-color': '#262626',
+                    '--code-bg': '#111',
+                    '--accent': '#fff',
+                }}>
+                    <BlogArticleHTML content={markdown} />
+                </div>
+            </div>
+        );
+    };
+
     return (
-        <div className="space-y-6 bg-[#0a0a0a] p-8 rounded-3xl border border-white/5 shadow-2xl">
-                    
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-1">Title</label>
+        <div className="space-y-12">
+            
+            <div className="space-y-8">
+                <div className="group">
+                    <label className="block text-xs font-bold uppercase tracking-widest text-[#525252] mb-3">Judul Artikel</label>
                     <input
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Article Title..."
-                        className="w-full bg-[#151515] border border-white/10 rounded-xl p-4 text-white focus:ring-2 focus:ring-blue-500/50 outline-none font-bold text-lg transition-all"
+                        placeholder="Tulis judul yang menarik..."
+                        className="w-full bg-transparent border-b-2 border-[#262626] py-4 text-4xl md:text-5xl font-black text-[#e5e5e5] placeholder-[#333] focus:border-[#e5e5e5] focus:outline-none transition-colors"
                     />
                 </div>
-                <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-1">Tags</label>
+
+                <div className="group">
+                    <label className="block text-xs font-bold uppercase tracking-widest text-[#525252] mb-3">Tags / Kategori</label>
                     <input
                         type="text"
                         value={tags}
                         onChange={(e) => setTags(e.target.value)}
-                        placeholder="React, Firebase..."
-                        className="w-full bg-[#151515] border border-white/10 rounded-xl p-4 text-sm text-blue-400 focus:ring-2 focus:ring-blue-500/50 outline-none font-mono"
+                        placeholder="Contoh: react, curhat, tutorial (pisahkan dengan koma)"
+                        className="w-full bg-[#111] border-2 border-[#262626] p-4 text-sm text-[#e5e5e5] focus:border-[#e5e5e5] outline-none transition-colors"
                     />
                 </div>
             </div>
 
-            <div className="space-y-2" data-color-mode="dark">
-                <label className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-1">Content (Markdown)</label>
-                <MDEditor
-                    value={content}
-                    onChange={setContent}
-                    height={500}
-                    preview="live"
-                    hideToolbar={true}
-                    visibleDragbar={false} 
-                    className="rounded-xl border border-white/10 overflow-hidden shadow-inner !bg-[#111]"
-                />
+            <div className="space-y-3" data-color-mode="dark">
+                <label className="block text-xs font-bold uppercase tracking-widest text-[#525252]">Konten Artikel</label>
+                
+                <div className="border-2 border-[#262626] focus-within:border-[#e5e5e5] transition-colors">
+                    <MDEditor
+                        value={content}
+                        onChange={setContent}
+                        height={600}
+                        preview="live"
+                        visibleDragbar={false}
+                        components={{
+                            preview: (source) => renderPreview(source)
+                        }}
+                        className="!bg-[#0a0a0a] !text-[#e5e5e5]"
+                        textareaProps={{
+                            placeholder: "Mulai menulis cerita...",
+                            className: "!text-[#e5e5e5] !bg-[#0a0a0a] p-6 leading-relaxed"
+                        }}
+                    />
+                </div>
             </div>
 
-            <button
-                onClick={handleSave}
-                disabled={loading}
-                className="cursor-pointer w-full py-4 mt-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg shadow-blue-900/20 flex items-center justify-center gap-3 transition-all transform hover:scale-[1.01]"
-            >
-                {loading ? (
-                    <><Loader2 className="w-5 h-5 animate-spin" /> Processing...</>
-                ) : (
-                    isEditMode ? <><PenTool className="w-5 h-5" /> UPDATE SYSTEM</> : <><Save className="w-5 h-5" /> PUBLISH</>
-                )}
-            </button>
+            <div className="flex justify-end pt-8">
+                <button
+                    onClick={handleSave}
+                    disabled={loading}
+                    className="cursor-pointer px-8 py-4 bg-[#e5e5e5] text-[#0a0a0a] font-black uppercase tracking-widest border-2 border-transparent hover:bg-white hover:scale-[1.01] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-[4px_4px_0px_0px_#262626] flex items-center gap-3"
+                >
+                    {loading ? (
+                        <><Loader2 className="w-5 h-5 animate-spin" /> Menyimpan...</>
+                    ) : (
+                        isEditMode ? <><PenTool className="w-5 h-5" /> Simpan Perubahan</> : <><Save className="w-5 h-5" /> Terbitkan Sekarang</>
+                    )}
+                </button>
+            </div>
+
+            <style jsx global>{`
+                .w-md-editor {
+                    background-color: #0a0a0a !important;
+                    color: #e5e5e5 !important;
+                    border: none !important;
+                    box-shadow: none !important;
+                    border-radius: 0px !important;
+                }
+                .w-md-editor-toolbar {
+                    background-color: #111 !important;
+                    border-bottom: 2px solid #262626 !important;
+                    padding: 10px !important;
+                    border-radius: 0px !important;
+                }
+                .w-md-editor-toolbar li > button {
+                    color: #a3a3a3 !important;
+                    border-radius: 0px !important;
+                }
+                .w-md-editor-toolbar li > button:hover, .w-md-editor-toolbar li > button.active {
+                    background-color: #262626 !important;
+                    color: #e5e5e5 !important;
+                }
+                .w-md-editor-content { 
+                    background-color: #0a0a0a !important;
+                }
+                .w-md-editor-preview {
+                    background-color: #0a0a0a !important;
+                    box-shadow: inset 1px 0 0 0 #262626 !important; 
+                    padding: 0 !important;
+                }
+                .w-md-editor ::-webkit-scrollbar { width: 8px; height: 8px; }
+                .w-md-editor ::-webkit-scrollbar-track { background: #0a0a0a; }
+                .w-md-editor ::-webkit-scrollbar-thumb { background: #262626; border-radius: 0; }
+                .w-md-editor ::-webkit-scrollbar-thumb:hover { background: #525252; }
+            `}</style>
         </div>
     );
 }

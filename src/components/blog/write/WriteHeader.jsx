@@ -7,20 +7,25 @@ export default function WriteHeader({ isEditMode }) {
     const router = useRouter()
 
     return (
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-end mb-12 border-b-2 border-[#262626] pb-6">
+            <div>
+                <h1 className="text-4xl md:text-6xl font-black text-[#e5e5e5] tracking-tight mb-2">
+                    {isEditMode ? "Edit Artikel" : "Tulis Artikel"}
+                </h1>
+                <p className="font-bold text-[#525252] text-sm uppercase tracking-widest">
+                    Dashboard Penulis
+                </p>
+            </div>
+
             <button
                 onClick={() => router.push('/')}
-                className="cursor-pointer flex items-center gap-2 text-gray-500 hover:text-white transition group"
+                className="group flex items-center gap-2 text-[#525252] hover:text-[#e5e5e5] transition-colors pb-2"
             >
-                <div className="p-2 rounded-full bg-white/5 group-hover:bg-white/10 transition">
+                <div className="p-2 border border-transparent group-hover:border-[#e5e5e5] transition-all">
                     <ArrowLeft className="w-5 h-5" />
                 </div>
-                <span className="font-bold">Cancel</span>
+                <span className="font-bold text-sm hidden md:inline">Batal & Kembali</span>
             </button>
-
-            <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-                {isEditMode ? "Edit Blog" : "New Blog"}
-            </h1>
         </div>
     )
 }

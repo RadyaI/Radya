@@ -1,9 +1,57 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { X, Send, Bot, Loader2, Sparkles, Zap, Cat, MessageCircleCode } from "lucide-react";
+import { X, Send, Bot, Loader2, Sparkles, Zap, Cat, MessageCircleCode, Triangle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import './custom.css'
+
+const PROVIDERS = [
+    {
+        id: "groq",
+        label: "Llama 3.3",
+        title: "Groq",
+        color: "text-orange-400",
+        bg: "bg-orange-500/20",
+        btnBg: "bg-orange-600 hover:bg-orange-500",
+        windowBg: "bg-[#1a0a0a]",
+        ring: "focus:ring-orange-500/50",
+        thinking: "Groq lagi ngetik...",
+        placeholder: "Tanya Llama...",
+        icon: (cls) => <Zap className={`w-5 h-5 ${cls} animate-pulse`} />,
+        avatarIcon: (cls) => <Cat className={`w-4 h-4 ${cls}`} />,
+        floatIcon: (cls) => <MessageCircleCode className={`w-7 h-7 ${cls}`} />,
+    },
+    {
+        id: "gemini",
+        label: "Gemini 2.5",
+        title: "Gemini",
+        color: "text-blue-400",
+        bg: "bg-blue-500/20",
+        btnBg: "bg-blue-600 hover:bg-blue-500",
+        windowBg: "bg-[#0a0a0a]",
+        ring: "focus:ring-blue-500/50",
+        thinking: "Gemini lagi mikir...",
+        placeholder: "Tanya Gemini...",
+        icon: (cls) => <Sparkles className={`w-5 h-5 ${cls} animate-pulse`} />,
+        avatarIcon: (cls) => <Bot className={`w-4 h-4 ${cls}`} />,
+        floatIcon: (cls) => <Bot className={`w-7 h-7 ${cls}`} />,
+    },
+    {
+        id: "claude",
+        label: "Haiku 4.5",
+        title: "Claude",
+        color: "text-amber-400",
+        bg: "bg-amber-500/20",
+        btnBg: "bg-amber-600 hover:bg-amber-500",
+        windowBg: "bg-[#0f0a00]",
+        ring: "focus:ring-amber-500/50",
+        thinking: "Claude lagi mikir...",
+        placeholder: "Tanya Claude...",
+        icon: (cls) => <Triangle className={`w-5 h-5 ${cls} animate-pulse`} />,
+        avatarIcon: (cls) => <Triangle className={`w-4 h-4 ${cls}`} />,
+        floatIcon: (cls) => <Triangle className={`w-7 h-7 ${cls}`} />,
+    },
+];
 
 export default function Assistant() {
     const [isOpen, setIsOpen] = useState(false);
@@ -12,66 +60,42 @@ export default function Assistant() {
     ]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [providerIndex, setProviderIndex] = useState(0);
 
-    const [provider, setProvider] = useState("groq");
-
+    const provider = PROVIDERS[providerIndex];
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages, isOpen]);
 
-    const fetchAIResponse = async (history, provider) => {
-        const endpoint =
-            provider === "gemini"
-                ? "/api/chat/gemini"
-                : "/api/chat/groq";
+    const cycleProvider = () => {
+        setProviderIndex(i => (i + 1) % PROVIDERS.length);
+    };
+
+    const fetchAIResponse = async (history, providerId) => {
+        const endpoint = `/api/chat/${providerId}`;
 
         const response = await fetch(endpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                history,
-                persona: "radya",
-            }),
+            body: JSON.stringify({ history, persona: "radya" }),
         });
 
-        // HANDLE ERROR RESPONSE
         if (!response.ok) {
             let errorMessage = "Terjadi kesalahan pada server.";
-
             try {
                 const errorData = await response.json();
-
                 switch (response.status) {
-                    case 400:
-                        errorMessage = "Format pesan tidak valid.";
-                        break;
-
-                    case 413:
-                        errorMessage =
-                            "Pesan sudah terlalu panjang. refresh dulu yaa.";
-                        break;
-
-                    case 429:
-                        errorMessage =
-                            "Kamu terlalu cepat kirim pesan. Tunggu sebentar ya ⏳";
-                        break;
-
-                    case 500:
-                        errorMessage =
-                            "Waduh AInya lagi bermasalah. Coba lagi nanti.";
-                        break;
-
-                    default:
-                        errorMessage =
-                            errorData?.error ??
-                            "Terjadi kesalahan tidak diketahui.";
+                    case 400: errorMessage = "Format pesan tidak valid."; break;
+                    case 413: errorMessage = "Pesan sudah terlalu panjang. refresh dulu yaa."; break;
+                    case 429: errorMessage = "Kamu terlalu cepat kirim pesan. Tunggu sebentar ya ⏳"; break;
+                    case 500: errorMessage = "Waduh AInya lagi bermasalah. Coba lagi nanti."; break;
+                    default: errorMessage = errorData?.error ?? "Terjadi kesalahan tidak diketahui.";
                 }
             } catch {
                 errorMessage = "Server error. Coba lagi nanti.";
             }
-
             const error = new Error(errorMessage);
             error.status = response.status;
             throw error;
@@ -81,72 +105,58 @@ export default function Assistant() {
         return data.text;
     };
 
-
     const handleSend = async () => {
         if (!input.trim() || isLoading) return;
 
         const userText = input.trim();
         const userMessage = { role: "user", text: userText };
-
         const updatedHistory = [...messages, userMessage];
+
         setMessages(updatedHistory);
         setInput("");
         setIsLoading(true);
 
+        const currentProviderId = provider.id;
+
         try {
             let replyText = "";
 
-            if (provider === "gemini") {
-                try {
-                    replyText = await fetchAIResponse(updatedHistory, "gemini");
-                } catch (geminiError) {
-                    console.warn("Gemini Error:", geminiError);
+            try {
+                replyText = await fetchAIResponse(updatedHistory, currentProviderId);
+            } catch (primaryError) {
+                console.warn(`${currentProviderId} Error:`, primaryError);
 
+                // Fallback ke groq kalau provider utama gagal
+                if (currentProviderId !== "groq") {
                     setMessages(prev => [
                         ...prev,
                         {
                             role: "model",
-                            text:
-                                "⚠️ **Gemini lagi bermasalah / kena limit.**\n\n" +
-                                "*Aku pindahin ke model lain ya, bentar...*",
+                            text: `⚠️ **${provider.title} lagi bermasalah / kena limit.**\n\n*Aku pindahin ke Groq ya, bentar...*`,
                         },
                     ]);
-
-                    setProvider("groq");
-
+                    setProviderIndex(0); // reset ke groq
                     replyText = await fetchAIResponse(updatedHistory, "groq");
+                } else {
+                    throw primaryError;
                 }
-            } else {
-                replyText = await fetchAIResponse(updatedHistory, "groq");
             }
 
             if (replyText) {
-                setMessages(prev => [
-                    ...prev,
-                    { role: "model", text: replyText },
-                ]);
+                setMessages(prev => [...prev, { role: "model", text: replyText }]);
             }
 
         } catch (finalError) {
             console.error("Final Error:", finalError);
+            const friendlyMessage = finalError.status === 429
+                ? "⏳ Kamu terlalu cepat kirim pesan. Tunggu sebentar ya."
+                : "Yah, lagi ada masalah di server. Coba lagi nanti ya 😥";
 
-            let friendlyMessage =
-                "Yah, lagi ada masalah di server. Coba lagi nanti ya 😥";
-
-            if (finalError.status === 429) {
-                friendlyMessage =
-                    "⏳ Kamu terlalu cepat kirim pesan. Tunggu sebentar ya.";
-            }
-
-            setMessages(prev => [
-                ...prev,
-                { role: "model", text: friendlyMessage },
-            ]);
+            setMessages(prev => [...prev, { role: "model", text: friendlyMessage }]);
         } finally {
             setIsLoading(false);
         }
     };
-
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') handleSend();
@@ -165,18 +175,14 @@ export default function Assistant() {
                 <div className="cursor-pointer p-4 bg-white/5 border-b border-white/10 flex justify-between items-center">
                     <div
                         className="flex items-center gap-2 cursor-pointer group select-none"
-                        onClick={() => setProvider(provider === 'gemini' ? 'groq' : 'gemini')}
+                        onClick={cycleProvider}
                         title="Klik buat ganti Model AI"
                     >
-                        {provider === 'gemini' ? (
-                            <Sparkles className="w-5 h-5 text-blue-400 animate-pulse" />
-                        ) : (
-                            <Zap className="w-5 h-5 text-orange-400 animate-pulse" />
-                        )}
+                        {provider.icon(provider.color)}
                         <div className="flex flex-col">
                             <span className="font-bold text-xs text-gray-500">MODEL RadyAI</span>
-                            <span className={`font-bold text-sm ${provider === 'gemini' ? 'text-blue-400' : 'text-orange-400'}`}>
-                                {provider === 'gemini' ? 'Gemini 2.5' : 'Llama 3.3'}
+                            <span className={`font-bold text-sm ${provider.color}`}>
+                                {provider.label}
                             </span>
                         </div>
                     </div>
@@ -185,15 +191,15 @@ export default function Assistant() {
                     </button>
                 </div>
 
+                {/* MESSAGES */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar">
                     {messages.map((msg, idx) => (
                         <div key={idx} className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                             {msg.role === 'model' && (
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${provider === 'gemini' ? 'bg-blue-500/20' : 'bg-orange-500/20'}`}>
-                                    {provider === 'gemini' ? <Bot className="w-4 h-4 text-blue-400" /> : <Cat className="w-4 h-4 text-orange-400" />}
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${provider.bg}`}>
+                                    {provider.avatarIcon(provider.color)}
                                 </div>
                             )}
-
                             <div className={`
                                 max-w-[85%] p-3 text-sm rounded-xl leading-relaxed shadow-sm overflow-hidden
                                 ${msg.role === 'user'
@@ -220,7 +226,7 @@ export default function Assistant() {
                                 <Loader2 className="w-4 h-4 text-gray-500 animate-spin" />
                             </div>
                             <div className="bg-[#222] text-gray-400 p-3 rounded-xl rounded-tl-none text-xs border border-white/5 italic">
-                                {provider === 'gemini' ? 'Gemini lagi mikir...' : 'Groq lagi ngetik...'}
+                                {provider.thinking}
                             </div>
                         </div>
                     )}
@@ -233,14 +239,14 @@ export default function Assistant() {
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        placeholder={`Tanya ${provider === 'gemini' ? 'Gemini' : 'Llama'}...`}
-                        className="cursor-default flex-1 bg-[#222] text-white text-sm rounded-lg px-4 py-2 outline-none border border-white/5 focus:ring-1 focus:ring-blue-500/50 placeholder:text-gray-600"
+                        placeholder={provider.placeholder}
+                        className={`cursor-default flex-1 bg-[#222] text-white text-sm rounded-lg px-4 py-2 outline-none border border-white/5 focus:ring-1 ${provider.ring} placeholder:text-gray-600`}
                         disabled={isLoading}
                     />
                     <button
                         onClick={handleSend}
                         disabled={isLoading || !input.trim()}
-                        className={`p-2 text-white rounded-lg transition-colors ${provider === 'gemini' ? 'bg-blue-600 hover:bg-blue-500' : 'bg-orange-600 hover:bg-orange-500'}`}
+                        className={`p-2 text-white rounded-lg transition-colors ${provider.btnBg}`}
                     >
                         <Send className="w-4 h-4" />
                     </button>
@@ -252,12 +258,13 @@ export default function Assistant() {
                 className={`
                     w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 border border-white/10
                     hover:scale-110 active:scale-95
-                    ${isOpen ? "bg-red-500 rotate-90" : (provider === 'gemini' ? "bg-[#0a0a0a]" : "bg-[#1a0a0a]")}
+                    ${isOpen ? "bg-red-500 rotate-90" : provider.windowBg}
                 `}
             >
-                {isOpen ? <X className="w-6 h-6 text-white" /> : (
-                    provider === 'gemini' ? <Bot className="w-7 h-7 text-blue-400" /> : <MessageCircleCode className="w-7 h-7 text-orange-400" />
-                )}
+                {isOpen
+                    ? <X className="w-6 h-6 text-white" />
+                    : provider.floatIcon(provider.color)
+                }
             </button>
         </div>
     );

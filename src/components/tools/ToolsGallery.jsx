@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import { Book, Binary, Keyboard, ArrowUpRight, Palette, ScanLine, Zap, Gauge, Pen, LucideKanbanSquareDashed, File, Signature, AlertTriangle, Rocket, Search, QrCode, LucideMapPlus } from "lucide-react"; // Tambah 'Search' di sini
+import { Book, Binary, Keyboard, ArrowUpRight, Palette, ScanLine, Zap, Gauge, Pen, LucideKanbanSquareDashed, File, Signature, AlertTriangle, Rocket, Search, QrCode, LucideMapPlus, FileStack } from "lucide-react"; // Tambah 'Search' di sini
 import Cursor from "../cursor";
 import Link from "next/link";
 
@@ -17,6 +17,16 @@ export default function ToolsGallery() {
             link: "/learning",
             icon: Book,
             color: "from-blue-500 to-green-500",
+            rotate: "hover:-rotate-2",
+            delay: "animate-delay-100"
+        },
+        {
+            id: 12,
+            title: "Infix Postfix Simulation",
+            desc: "Simulasi operasi aritmatika menggunakan Infix-Postfix step by step.",
+            link: "/tools/infix-postfix",
+            icon: FileStack,
+            color: "from-red-500 to-blue-500",
             rotate: "hover:-rotate-2",
             delay: "animate-delay-100"
         },

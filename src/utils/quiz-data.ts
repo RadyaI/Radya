@@ -837,5 +837,666 @@ export const quizData: QuizSet[] = [
       }
     ]
   },
-
+  // LATIHAN UTS BASIS DATA
+  {
+    "slug": "oracle-db-foundation-uts",
+    "title": "UTS Basis Data — Oracle Database Foundation",
+    "description": "Latihan soal UTS Basis Data mencakup materi: Konsep Basis Data, CDM/LDM/PDM, Entitas & Atribut, Tipe Data, Primary Key & Foreign Key, UID, Relasi, Kardinalitas, Opsionalitas, ERDish, dan Normalisasi (1NF, 2NF, 3NF).",
+    "category": "Basis Data",
+    "level": "Medium",
+    "status": "New",
+    "color": "#E05C2A",
+    "questions": [
+      {
+        "id": 1,
+        "type": "multiple-choice",
+        "q": "Apa yang dimaksud dengan basis data (database)?",
+        "options": [
+          "Perangkat keras yang digunakan untuk menyimpan data",
+          "Kumpulan data yang terorganisir dan saling berhubungan yang disimpan secara sistematis",
+          "Bahasa pemrograman untuk mengelola data",
+          "Kumpulan program untuk mengolah data"
+        ],
+        "correctIndex": 1,
+        "explanation": "Basis data adalah kumpulan data yang terorganisir, saling berhubungan, dan disimpan secara sistematis agar mudah diakses, dikelola, dan diperbarui."
+      },
+      {
+        "id": 2,
+        "type": "multiple-choice",
+        "q": "DBMS (Database Management System) berfungsi untuk...",
+        "options": [
+          "Mengatur koneksi jaringan komputer",
+          "Mengompilasi program aplikasi",
+          "Merancang tampilan antarmuka pengguna",
+          "Mengelola, menyimpan, dan mengakses data dalam basis data"
+        ],
+        "correctIndex": 3,
+        "explanation": "DBMS adalah perangkat lunak yang berfungsi sebagai perantara antara pengguna dan basis data untuk mengelola, menyimpan, dan mengakses data."
+      },
+      {
+        "id": 3,
+        "type": "multiple-choice",
+        "q": "Manakah berikut ini yang merupakan contoh DBMS?",
+        "options": [
+          "Adobe Photoshop",
+          "Google Chrome",
+          "Oracle Database",
+          "Microsoft Word"
+        ],
+        "correctIndex": 2,
+        "explanation": "Oracle Database adalah salah satu contoh DBMS. Contoh lain adalah MySQL, PostgreSQL, dan Microsoft SQL Server."
+      },
+      {
+        "id": 4,
+        "type": "multiple-choice",
+        "q": "Salah satu keunggulan menggunakan basis data dibandingkan sistem file biasa adalah...",
+        "options": [
+          "Menghindari redundansi dan inkonsistensi data",
+          "Ukuran file lebih besar",
+          "Data lebih sulit diakses",
+          "Tidak memerlukan keahlian khusus"
+        ],
+        "correctIndex": 0,
+        "explanation": "Salah satu keunggulan utama basis data adalah kemampuannya mengurangi redundansi (duplikasi data) dan menjaga konsistensi data."
+      },
+      {
+        "id": 5,
+        "type": "multiple-choice",
+        "q": "Model basis data yang menyimpan data dalam bentuk tabel dengan baris dan kolom disebut...",
+        "options": [
+          "Network Model",
+          "Relational Model",
+          "Object-Oriented Model",
+          "Hierarchical Model"
+        ],
+        "correctIndex": 1,
+        "explanation": "Relational Model adalah model basis data yang menyimpan data dalam bentuk tabel (relasi) dengan baris (tuple) dan kolom (atribut)."
+      },
+      {
+        "id": 6,
+        "type": "multiple-choice",
+        "q": "CDM (Conceptual Data Model) menggambarkan...",
+        "options": [
+          "Gambaran tingkat tinggi dari data tanpa mempertimbangkan implementasi teknis",
+          "Indeks dan partisi tabel database",
+          "Query SQL yang akan digunakan",
+          "Struktur fisik tabel di dalam database"
+        ],
+        "correctIndex": 0,
+        "explanation": "CDM adalah model data level tertinggi yang menggambarkan konsep bisnis dan entitas secara umum tanpa memikirkan detail teknis atau DBMS tertentu."
+      },
+      {
+        "id": 7,
+        "type": "multiple-choice",
+        "q": "Perbedaan utama antara CDM dan PDM adalah...",
+        "options": [
+          "CDM hanya untuk diagram, PDM hanya untuk dokumen",
+          "PDM sudah mempertimbangkan platform DBMS tertentu, sedangkan CDM bersifat independen",
+          "CDM menggunakan SQL sedangkan PDM tidak",
+          "Tidak ada perbedaan, keduanya sama"
+        ],
+        "correctIndex": 1,
+        "explanation": "CDM bersifat platform-independent (tidak bergantung DBMS tertentu), sedangkan PDM sudah disesuaikan dengan DBMS spesifik seperti Oracle, MySQL, dll."
+      },
+      {
+        "id": 8,
+        "type": "multiple-choice",
+        "q": "LDM (Logical Data Model) berada di antara CDM dan PDM. Ciri khas LDM adalah...",
+        "options": [
+          "Sudah memiliki atribut dan relasi detail namun belum terikat platform DBMS tertentu",
+          "Berisi kode SQL lengkap untuk membuat tabel",
+          "Sudah menentukan tipe data spesifik sesuai DBMS",
+          "Hanya memuat nama entitas tanpa atribut"
+        ],
+        "correctIndex": 0,
+        "explanation": "LDM lebih detail dari CDM dengan menampilkan atribut dan relasi, namun masih bersifat independen dari DBMS tertentu seperti CDM."
+      },
+      {
+        "id": 9,
+        "type": "multiple-choice",
+        "q": "Pada tahap PDM, hal yang sudah ditentukan secara spesifik adalah...",
+        "options": [
+          "Nama entitas bisnis",
+          "Tipe data kolom sesuai DBMS yang digunakan",
+          "Kardinalitas relasi",
+          "Proses bisnis organisasi"
+        ],
+        "correctIndex": 1,
+        "explanation": "PDM sudah menentukan tipe data kolom secara spesifik sesuai DBMS yang digunakan, misalnya VARCHAR2 untuk Oracle, atau DATETIME untuk MySQL."
+      },
+      {
+        "id": 10,
+        "type": "multiple-choice",
+        "q": "Urutan yang benar dalam proses perancangan basis data adalah...",
+        "options": [
+          "CDM → LDM → PDM",
+          "CDM → PDM → LDM",
+          "PDM → LDM → CDM",
+          "LDM → CDM → PDM"
+        ],
+        "correctIndex": 0,
+        "explanation": "Urutan perancangan basis data yang benar dimulai dari CDM (konseptual), kemudian LDM (logis), dan terakhir PDM (fisik)."
+      },
+      {
+        "id": 11,
+        "type": "multiple-choice",
+        "q": "Dalam model basis data relasional, entitas direpresentasikan sebagai...",
+        "options": [
+          "Tabel itu sendiri",
+          "Kolom dalam tabel",
+          "Kunci asing",
+          "Baris dalam tabel"
+        ],
+        "correctIndex": 0,
+        "explanation": "Dalam model relasional, sebuah entitas direpresentasikan sebagai tabel. Setiap baris (row) dalam tabel merepresentasikan satu instance dari entitas tersebut."
+      },
+      {
+        "id": 12,
+        "type": "multiple-choice",
+        "q": "Atribut yang nilainya dapat membedakan satu instance entitas dari instance lainnya secara unik disebut...",
+        "options": [
+          "Atribut komposit",
+          "Atribut turunan",
+          "Atribut kunci (key attribute)",
+          "Atribut multi-nilai"
+        ],
+        "correctIndex": 2,
+        "explanation": "Atribut kunci (key attribute) adalah atribut yang nilainya unik untuk setiap instance entitas sehingga dapat membedakan satu record dari yang lain."
+      },
+      {
+        "id": 13,
+        "type": "multiple-choice",
+        "q": "Atribut yang terdiri dari beberapa sub-atribut disebut...",
+        "options": [
+          "Atribut multi-nilai",
+          "Atribut turunan",
+          "Atribut tunggal",
+          "Atribut komposit"
+        ],
+        "correctIndex": 3,
+        "explanation": "Atribut komposit adalah atribut yang dapat dipecah menjadi beberapa sub-atribut. Contoh: Atribut 'Alamat' bisa terdiri dari Jalan, Kota, dan Kode Pos."
+      },
+      {
+        "id": 14,
+        "type": "multiple-choice",
+        "q": "Atribut yang nilainya dihitung dari atribut lain disebut...",
+        "options": [
+          "Atribut multi-nilai",
+          "Atribut kunci",
+          "Atribut turunan",
+          "Atribut komposit"
+        ],
+        "correctIndex": 2,
+        "explanation": "Atribut turunan (derived attribute) adalah atribut yang nilainya diperoleh dari perhitungan atau derivasi atribut lain. Contoh: 'Usia' yang diturunkan dari 'Tanggal Lahir'."
+      },
+      {
+        "id": 15,
+        "type": "multiple-choice",
+        "q": "Atribut yang dapat memiliki lebih dari satu nilai untuk satu instance entitas disebut...",
+        "options": [
+          "Atribut tunggal",
+          "Atribut komposit",
+          "Atribut kunci",
+          "Atribut multi-nilai"
+        ],
+        "correctIndex": 3,
+        "explanation": "Atribut multi-nilai (multivalued attribute) adalah atribut yang bisa memiliki lebih dari satu nilai. Contoh: atribut 'Nomor Telepon' seseorang yang bisa lebih dari satu."
+      },
+      {
+        "id": 16,
+        "type": "multiple-choice",
+        "q": "Tipe data yang digunakan untuk menyimpan teks dengan panjang yang bervariasi di Oracle Database adalah...",
+        "options": [
+          "DATE",
+          "CHAR",
+          "VARCHAR2",
+          "NUMBER"
+        ],
+        "correctIndex": 2,
+        "explanation": "VARCHAR2 adalah tipe data Oracle untuk menyimpan string karakter dengan panjang variabel. Berbeda dengan CHAR yang panjangnya tetap."
+      },
+      {
+        "id": 17,
+        "type": "multiple-choice",
+        "q": "Tipe data yang paling tepat untuk menyimpan nilai gaji karyawan yang memiliki desimal adalah...",
+        "options": [
+          "DATE",
+          "CHAR",
+          "NUMBER(10,2)",
+          "VARCHAR2"
+        ],
+        "correctIndex": 2,
+        "explanation": "NUMBER(10,2) cocok untuk nilai gaji karena bisa menyimpan angka dengan 2 digit desimal, total 10 digit. Format NUMBER(presisi, skala)."
+      },
+      {
+        "id": 18,
+        "type": "multiple-choice",
+        "q": "Tipe data yang digunakan untuk menyimpan tanggal dan waktu di Oracle Database adalah...",
+        "options": [
+          "VARCHAR2",
+          "BOOLEAN",
+          "TIMESTAMP",
+          "NUMBER"
+        ],
+        "correctIndex": 2,
+        "explanation": "TIMESTAMP digunakan untuk menyimpan tanggal dan waktu dengan presisi tinggi di Oracle. DATE juga bisa, namun TIMESTAMP lebih lengkap karena menyimpan fraksi detik."
+      },
+      {
+        "id": 19,
+        "type": "multiple-choice",
+        "q": "Tipe data CHAR(10) berbeda dari VARCHAR2(10) karena...",
+        "options": [
+          "Keduanya sama persis",
+          "VARCHAR2 tidak bisa menyimpan huruf",
+          "CHAR selalu menggunakan panjang tetap 10 karakter meski datanya lebih pendek",
+          "CHAR hanya menyimpan angka"
+        ],
+        "correctIndex": 2,
+        "explanation": "CHAR memiliki panjang tetap (fixed-length). Jika data yang disimpan lebih pendek dari ukuran yang ditentukan, sisanya akan diisi spasi. VARCHAR2 hanya menggunakan ruang sesuai panjang data aktual."
+      },
+      {
+        "id": 20,
+        "type": "multiple-choice",
+        "q": "Tipe data yang tepat untuk kolom 'foto_profil' yang menyimpan gambar biner berukuran besar adalah...",
+        "options": [
+          "VARCHAR2",
+          "NUMBER",
+          "BLOB",
+          "CHAR"
+        ],
+        "correctIndex": 2,
+        "explanation": "BLOB (Binary Large Object) digunakan untuk menyimpan data biner berukuran besar seperti gambar, audio, atau video."
+      },
+      {
+        "id": 21,
+        "type": "multiple-choice",
+        "q": "Primary Key (PK) dalam sebuah tabel berfungsi untuk...",
+        "options": [
+          "Menghubungkan dua tabel yang berbeda",
+          "Menyimpan data dalam format tertentu",
+          "Membatasi nilai yang boleh dimasukkan",
+          "Mengidentifikasi setiap baris secara unik dalam tabel"
+        ],
+        "correctIndex": 3,
+        "explanation": "Primary Key adalah satu atau lebih kolom yang nilainya secara unik mengidentifikasi setiap baris dalam sebuah tabel."
+      },
+      {
+        "id": 22,
+        "type": "multiple-choice",
+        "q": "Syarat yang HARUS dipenuhi oleh sebuah Primary Key adalah...",
+        "options": [
+          "Nilainya boleh NULL dan boleh duplikat",
+          "Harus terdiri dari lebih dari satu kolom",
+          "Harus berupa angka",
+          "Nilainya harus unik dan tidak boleh NULL"
+        ],
+        "correctIndex": 3,
+        "explanation": "Primary Key harus memiliki nilai yang unik (tidak boleh sama antar baris) dan tidak boleh bernilai NULL karena digunakan sebagai identifikasi unik tiap record."
+      },
+      {
+        "id": 23,
+        "type": "multiple-choice",
+        "q": "Foreign Key (FK) adalah...",
+        "options": [
+          "Kolom di satu tabel yang mereferensikan Primary Key di tabel lain",
+          "Kolom tambahan untuk menyimpan catatan",
+          "Kunci enkripsi untuk mengamankan data",
+          "Kolom yang nilainya selalu unik dalam satu tabel"
+        ],
+        "correctIndex": 0,
+        "explanation": "Foreign Key adalah kolom atau kumpulan kolom dalam suatu tabel yang nilainya mereferensikan Primary Key pada tabel lain, menciptakan hubungan antar tabel."
+      },
+      {
+        "id": 24,
+        "type": "multiple-choice",
+        "q": "Jika tabel 'Mahasiswa' memiliki kolom 'id_prodi' yang mereferensikan tabel 'Prodi', maka 'id_prodi' pada tabel Mahasiswa adalah...",
+        "options": [
+          "Foreign Key",
+          "Composite Key",
+          "Primary Key",
+          "Candidate Key"
+        ],
+        "correctIndex": 0,
+        "explanation": "Kolom 'id_prodi' pada tabel Mahasiswa merupakan Foreign Key karena mereferensikan Primary Key 'id_prodi' yang ada di tabel Prodi."
+      },
+      {
+        "id": 25,
+        "type": "multiple-choice",
+        "q": "Composite Key adalah...",
+        "options": [
+          "Kunci yang bersifat opsional",
+          "Kunci yang terdiri dari satu kolom saja",
+          "Kunci yang terdiri dari kombinasi dua kolom atau lebih",
+          "Kunci yang mereferensikan tabel lain"
+        ],
+        "correctIndex": 2,
+        "explanation": "Composite Key (kunci komposit) adalah Primary Key yang terdiri dari kombinasi dua kolom atau lebih. Kombinasi tersebut harus unik meskipun masing-masing kolom boleh tidak unik."
+      },
+      {
+        "id": 26,
+        "type": "multiple-choice",
+        "q": "UID (Unique Identifier) dalam Oracle Designer digunakan untuk...",
+        "options": [
+          "Mengidentifikasi secara unik setiap instance dari sebuah entitas",
+          "Menentukan opsionalitas sebuah atribut",
+          "Menentukan tipe data sebuah atribut",
+          "Mendefinisikan kardinalitas relasi"
+        ],
+        "correctIndex": 0,
+        "explanation": "UID (Unique Identifier) digunakan di level CDM/LDM untuk mengidentifikasi instance entitas secara unik. UID akan menjadi Primary Key saat ditransformasi ke PDM."
+      },
+      {
+        "id": 27,
+        "type": "multiple-choice",
+        "q": "UID Primer (Primary UID) berbeda dengan UID Sekunder (Secondary UID) karena...",
+        "options": [
+          "UID Primer hanya untuk tabel kecil",
+          "UID Sekunder tidak boleh null",
+          "UID Primer adalah identifier utama yang dipilih, sedangkan UID Sekunder adalah alternatif lain yang juga unik",
+          "UID Primer terdiri dari lebih banyak atribut"
+        ],
+        "correctIndex": 2,
+        "explanation": "UID Primer adalah identifier yang dipilih sebagai identifier utama entitas (setara PK), sedangkan UID Sekunder adalah atribut atau kombinasi atribut lain yang juga bersifat unik (setara Candidate Key/Unique Constraint)."
+      },
+      {
+        "id": 28,
+        "type": "multiple-choice",
+        "q": "Sebuah UID dapat terdiri dari...",
+        "options": [
+          "Hanya atribut numerik",
+          "Hanya Foreign Key",
+          "Hanya satu atribut saja",
+          "Satu atau lebih atribut, atau kombinasi atribut dan relasi"
+        ],
+        "correctIndex": 3,
+        "explanation": "UID dapat terdiri dari satu atribut, kombinasi beberapa atribut (composite UID), atau bahkan kombinasi atribut dengan relasi ke entitas lain."
+      },
+      {
+        "id": 29,
+        "type": "multiple-choice",
+        "q": "Relasi dalam basis data relasional menggambarkan...",
+        "options": [
+          "Jumlah baris dalam sebuah tabel",
+          "Hubungan atau asosiasi antara dua entitas atau lebih",
+          "Format penyimpanan fisik data di disk",
+          "Tipe data sebuah kolom"
+        ],
+        "correctIndex": 1,
+        "explanation": "Relasi menggambarkan hubungan atau asosiasi yang bermakna antara dua entitas atau lebih dalam model data."
+      },
+      {
+        "id": 30,
+        "type": "multiple-choice",
+        "q": "Relasi antara entitas 'Mahasiswa' dan 'Mata Kuliah' di mana satu mahasiswa bisa mengambil banyak mata kuliah dan satu mata kuliah bisa diambil banyak mahasiswa adalah relasi...",
+        "options": [
+          "One-to-One (1:1)",
+          "One-to-Many (1:N)",
+          "Many-to-Many (M:N)",
+          "Self-referencing"
+        ],
+        "correctIndex": 2,
+        "explanation": "Relasi Many-to-Many (M:N) terjadi ketika satu instance dari entitas A bisa berelasi dengan banyak instance entitas B, dan sebaliknya. Dalam implementasi PDM, relasi M:N biasanya dipecah dengan tabel asosiatif."
+      },
+      {
+        "id": 31,
+        "type": "multiple-choice",
+        "q": "Relasi antara entitas 'Pegawai' dan 'Kartu Pegawai' di mana satu pegawai hanya memiliki satu kartu pegawai adalah relasi...",
+        "options": [
+          "One-to-One (1:1)",
+          "Many-to-Many (M:N)",
+          "Self-referencing",
+          "One-to-Many (1:N)"
+        ],
+        "correctIndex": 0,
+        "explanation": "Relasi One-to-One (1:1) terjadi ketika satu instance entitas A hanya berelasi dengan tepat satu instance entitas B, dan sebaliknya."
+      },
+      {
+        "id": 32,
+        "type": "multiple-choice",
+        "q": "Dalam pemodelan data, relasi yang menghubungkan sebuah entitas dengan dirinya sendiri disebut...",
+        "options": [
+          "Recursive Relationship / Unary Relationship",
+          "Identifying Relationship",
+          "Ternary Relationship",
+          "Binary Relationship"
+        ],
+        "correctIndex": 0,
+        "explanation": "Recursive Relationship atau Unary Relationship adalah relasi yang melibatkan satu entitas yang berelasi dengan dirinya sendiri. Contoh: entitas 'Pegawai' dengan relasi 'memiliki atasan' juga ke 'Pegawai'."
+      },
+      {
+        "id": 33,
+        "type": "multiple-choice",
+        "q": "Kardinalitas dalam pemodelan data mendefinisikan...",
+        "options": [
+          "Apakah atribut boleh bernilai NULL atau tidak",
+          "Jumlah maksimum instance yang dapat berpartisipasi dalam sebuah relasi",
+          "Urutan pemrosesan data",
+          "Jenis tipe data atribut"
+        ],
+        "correctIndex": 1,
+        "explanation": "Kardinalitas mendefinisikan jumlah maksimum instance dari satu entitas yang dapat berelasi dengan instance dari entitas lain dalam sebuah relasi."
+      },
+      {
+        "id": 34,
+        "type": "multiple-choice",
+        "q": "Pada notasi kardinalitas, simbol 'N' atau 'M' pada relasi berarti...",
+        "options": [
+          "Tepat satu instance yang berelasi",
+          "Maksimal dua instance yang berelasi",
+          "Tidak ada instance yang boleh berelasi",
+          "Banyak instance yang dapat berelasi (lebih dari satu)"
+        ],
+        "correctIndex": 3,
+        "explanation": "Simbol 'N' atau 'M' dalam kardinalitas menunjukkan bahwa banyak (lebih dari satu) instance entitas dapat berpartisipasi dalam relasi tersebut."
+      },
+      {
+        "id": 35,
+        "type": "multiple-choice",
+        "q": "Jika satu departemen dapat memiliki banyak pegawai, namun satu pegawai hanya bekerja di satu departemen, maka kardinalitas relasi antara Departemen dan Pegawai adalah...",
+        "options": [
+          "1:N (One-to-Many)",
+          "N:1 (Many-to-One)",
+          "1:1 (One-to-One)",
+          "M:N (Many-to-Many)"
+        ],
+        "correctIndex": 0,
+        "explanation": "Departemen (satu) memiliki banyak Pegawai, sehingga relasi dari Departemen ke Pegawai adalah 1:N (One-to-Many)."
+      },
+      {
+        "id": 36,
+        "type": "multiple-choice",
+        "q": "Opsionalitas dalam pemodelan data menentukan...",
+        "options": [
+          "Apakah partisipasi sebuah entitas dalam relasi bersifat wajib atau opsional",
+          "Tipe data kolom dalam tabel",
+          "Urutan atribut dalam entitas",
+          "Jumlah maksimum instance yang berelasi"
+        ],
+        "correctIndex": 0,
+        "explanation": "Opsionalitas menentukan apakah sebuah instance entitas HARUS (mandatory/wajib) atau BOLEH TIDAK (optional) berpartisipasi dalam sebuah relasi."
+      },
+      {
+        "id": 37,
+        "type": "multiple-choice",
+        "q": "Dalam notasi ERDish/Oracle Designer, tanda 'O' (lingkaran kecil) pada garis relasi biasanya berarti...",
+        "options": [
+          "Relasi bersifat opsional (may be)",
+          "Relasi bersifat wajib (mandatory)",
+          "Relasi memiliki kardinalitas satu",
+          "Relasi memiliki kardinalitas banyak"
+        ],
+        "correctIndex": 0,
+        "explanation": "Tanda 'O' atau lingkaran kecil pada garis relasi menandakan opsionalitas, artinya partisipasi entitas dalam relasi tersebut bersifat opsional (may be / boleh tidak ada)."
+      },
+      {
+        "id": 38,
+        "type": "multiple-choice",
+        "q": "Tanda garis tegak lurus (|) pada ujung relasi dalam notasi ERDish menunjukkan...",
+        "options": [
+          "Opsionalitas (boleh kosong)",
+          "Wajib tepat satu (mandatory one)",
+          "Banyak instance (many)",
+          "Tidak ada relasi"
+        ],
+        "correctIndex": 1,
+        "explanation": "Garis tegak lurus (|) pada ujung relasi menunjukkan bahwa partisipasi bersifat wajib dan jumlahnya tepat satu (exactly one / mandatory)."
+      },
+      {
+        "id": 39,
+        "type": "multiple-choice",
+        "q": "Notasi ERDish adalah...",
+        "options": [
+          "Cara penulisan ERD dalam format teks atau notasi yang digunakan Oracle Designer",
+          "Bahasa query untuk mengambil data",
+          "Format file khusus Oracle",
+          "Tipe diagram alur data"
+        ],
+        "correctIndex": 0,
+        "explanation": "ERDish adalah notasi tekstual atau diagram yang digunakan dalam Oracle Designer untuk merepresentasikan hubungan antar entitas dalam basis data secara ekspresif."
+      },
+      {
+        "id": 40,
+        "type": "multiple-choice",
+        "q": "Pernyataan ERDish: 'Each MAHASISWA must be enrolled in one and only one PRODI' menunjukkan relasi dari Mahasiswa ke Prodi dengan kardinalitas dan opsionalitas...",
+        "options": [
+          "Mandatory, Many",
+          "Mandatory, One",
+          "Opsional, One",
+          "Opsional, Many"
+        ],
+        "correctIndex": 1,
+        "explanation": "'must be' berarti mandatory (wajib), 'one and only one' berarti kardinalitas satu. Jadi relasi dari Mahasiswa ke Prodi adalah Mandatory One."
+      },
+      {
+        "id": 41,
+        "type": "multiple-choice",
+        "q": "Normalisasi basis data bertujuan untuk...",
+        "options": [
+          "Mengubah format tipe data",
+          "Mengurangi redundansi data dan mencegah anomali pada operasi insert, update, dan delete",
+          "Mempercepat penulisan query SQL",
+          "Menambah jumlah kolom pada tabel"
+        ],
+        "correctIndex": 1,
+        "explanation": "Normalisasi bertujuan untuk mengurangi redundansi (pengulangan data) dan mencegah anomali yang terjadi saat melakukan operasi insert, update, dan delete pada tabel."
+      },
+      {
+        "id": 42,
+        "type": "multiple-choice",
+        "q": "Sebuah tabel dikatakan sudah memenuhi 1NF (First Normal Form) jika...",
+        "options": [
+          "Tidak ada ketergantungan parsial",
+          "Semua nilai atribut bersifat atomik (tidak ada atribut multi-nilai atau komposit) dan ada Primary Key",
+          "Tidak ada ketergantungan transitif",
+          "Setiap kolom hanya berisi angka"
+        ],
+        "correctIndex": 1,
+        "explanation": "1NF mensyaratkan bahwa setiap sel tabel hanya berisi nilai atomik (satu nilai per sel), tidak ada group berulang, dan tabel memiliki Primary Key."
+      },
+      {
+        "id": 43,
+        "type": "multiple-choice",
+        "q": "Ketergantungan parsial (partial dependency) yang harus dihilangkan pada 2NF terjadi ketika...",
+        "options": [
+          "Tabel tidak memiliki Primary Key",
+          "Atribut non-kunci hanya bergantung pada sebagian dari composite key, bukan seluruhnya",
+          "Atribut non-kunci bergantung pada atribut non-kunci lainnya",
+          "Atribut non-kunci bergantung pada seluruh composite key"
+        ],
+        "correctIndex": 1,
+        "explanation": "Partial dependency terjadi saat atribut non-key bergantung pada sebagian (tidak semua) kolom dari composite primary key. 2NF mensyaratkan tidak ada partial dependency."
+      },
+      {
+        "id": 44,
+        "type": "multiple-choice",
+        "q": "Sebuah tabel sudah memenuhi 2NF jika...",
+        "options": [
+          "Setiap tabel memiliki minimal dua kolom",
+          "Sudah dalam 1NF dan tidak ada ketergantungan transitif",
+          "Tidak ada atribut komposit",
+          "Sudah dalam 1NF dan semua atribut non-kunci bergantung sepenuhnya pada seluruh Primary Key"
+        ],
+        "correctIndex": 3,
+        "explanation": "2NF mensyaratkan tabel sudah dalam 1NF dan setiap atribut non-key bergantung sepenuhnya (full functional dependency) pada keseluruhan Primary Key, bukan hanya sebagian."
+      },
+      {
+        "id": 45,
+        "type": "multiple-choice",
+        "q": "Ketergantungan transitif (transitive dependency) yang harus dihilangkan pada 3NF adalah kondisi ketika...",
+        "options": [
+          "Atribut non-kunci bergantung pada sebagian Primary Key",
+          "Atribut non-kunci bergantung pada Primary Key melalui atribut non-kunci lain",
+          "Primary Key terdiri dari satu kolom",
+          "Tabel memiliki terlalu banyak kolom"
+        ],
+        "correctIndex": 1,
+        "explanation": "Transitive dependency terjadi ketika atribut non-key A bergantung pada atribut non-key B, dan B bergantung pada Primary Key. 3NF mensyaratkan tidak ada transitive dependency."
+      },
+      {
+        "id": 46,
+        "type": "multiple-choice",
+        "q": "Sebuah tabel sudah memenuhi 3NF jika...",
+        "options": [
+          "Memiliki lebih dari satu Primary Key",
+          "Sudah dalam 2NF dan tidak ada ketergantungan transitif antar atribut non-kunci",
+          "Setiap atribut berisi nilai unik",
+          "Sudah dalam 1NF dan tidak ada composite key"
+        ],
+        "correctIndex": 1,
+        "explanation": "3NF mensyaratkan tabel sudah dalam 2NF dan tidak ada ketergantungan transitif, yaitu tidak ada atribut non-key yang bergantung pada atribut non-key lainnya."
+      },
+      {
+        "id": 47,
+        "type": "multiple-choice",
+        "q": "Tabel dengan kolom (id_nilai, id_mahasiswa, id_matkul, nama_mahasiswa, nama_matkul, nilai) memiliki masalah karena...",
+        "options": [
+          "Kolom nilai seharusnya bertipe teks",
+          "Ada redundansi: nama_mahasiswa bergantung pada id_mahasiswa, bukan pada seluruh key, melanggar 2NF",
+          "id_nilai bukan Primary Key yang baik",
+          "Terlalu sedikit kolom"
+        ],
+        "correctIndex": 1,
+        "explanation": "Kolom nama_mahasiswa hanya bergantung pada id_mahasiswa (bukan seluruh composite key), dan nama_matkul hanya bergantung pada id_matkul. Ini adalah partial dependency yang melanggar 2NF."
+      },
+      {
+        "id": 48,
+        "type": "multiple-choice",
+        "q": "Proses dekomposisi tabel yang ber-anomali menjadi beberapa tabel yang lebih kecil dan terfokus adalah inti dari...",
+        "options": [
+          "Normalisasi",
+          "Indexing",
+          "Denormalisasi",
+          "Partitioning"
+        ],
+        "correctIndex": 0,
+        "explanation": "Normalisasi adalah proses memecah (dekomposisi) tabel yang mengandung redundansi/anomali menjadi beberapa tabel yang lebih kecil dan bebas redundansi."
+      },
+      {
+        "id": 49,
+        "type": "multiple-choice",
+        "q": "Tabel PEGAWAI(nip, nama, kode_dept, nama_dept) belum memenuhi 3NF karena...",
+        "options": [
+          "Tabel harus memiliki minimal 5 kolom",
+          "Tidak memiliki Foreign Key",
+          "nama_dept bergantung pada kode_dept (atribut non-key), bukan langsung pada nip (PK) — ini adalah transitive dependency",
+          "nip bukan Primary Key yang valid"
+        ],
+        "correctIndex": 2,
+        "explanation": "nama_dept bergantung pada kode_dept, bukan pada nip (PK). Ini adalah ketergantungan transitif: nip → kode_dept → nama_dept. Solusinya: pisahkan menjadi tabel PEGAWAI(nip, nama, kode_dept) dan DEPARTEMEN(kode_dept, nama_dept)."
+      },
+      {
+        "id": 50,
+        "type": "multiple-choice",
+        "q": "Urutan normal form dari yang terendah ke tertinggi adalah...",
+        "options": [
+          "2NF → 1NF → 3NF",
+          "1NF → 2NF → 3NF",
+          "1NF → 3NF → 2NF",
+          "3NF → 2NF → 1NF"
+        ],
+        "correctIndex": 1,
+        "explanation": "Urutan normalisasi yang benar adalah 1NF → 2NF → 3NF. Setiap level yang lebih tinggi mengasumsikan level sebelumnya sudah terpenuhi."
+      }
+    ]
+  }
 ]

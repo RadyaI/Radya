@@ -9,7 +9,6 @@ const MAX_MESSAGES = 20;
 const MAX_TOTAL_CHARS = 8_000;
 
 export async function POST(req) {
-    // IDENTIFIER (IP + USER AGENT)
     const ip =
         req.headers
             .get("x-forwarded-for")
@@ -21,16 +20,19 @@ export async function POST(req) {
     const ua = req.headers.get("user-agent") ?? "unknown";
     const identifier = `${ip}:${ua}`;
 
-    const { success } = await aiRateLimit.limit(identifier);
+    try {
+        const { success } = await aiRateLimit.limit(identifier);
 
-    if (!success) {
-        return NextResponse.json(
-            { error: "Too many requests. Please slow down." },
-            { status: 429 }
-        );
+        if (!success) {
+            return NextResponse.json(
+                { error: "Too many requests. Please slow down." },
+                { status: 429 }
+            );
+        }
+    } catch (rateLimitError) {
+        console.warn("Rate limiter gagal (Upstash offline), melanjutkan request tanpa limit:", rateLimitError.message);
     }
 
-    // API KEY CHECK
     if (!API_KEY) {
         return NextResponse.json(
             { error: "AI service not configured" },
@@ -39,7 +41,6 @@ export async function POST(req) {
     }
 
     try {
-        // PARSE & VALIDATE BODY
         const body = await req.json();
         const { history, persona = "radya" } = body ?? {};
 
@@ -95,7 +96,6 @@ export async function POST(req) {
             (Jawablah respon terakhir dari User di atas dengan singkat dan jelas sesuai persona yang ditentukan)
         `;
 
-        // CALL GEMINI
         const ai = new GoogleGenAI({ apiKey: API_KEY });
 
         const response = await ai.models.generateContent({

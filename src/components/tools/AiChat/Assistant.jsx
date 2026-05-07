@@ -84,8 +84,10 @@ export default function Assistant() {
 
         if (!response.ok) {
             let errorMessage = "Terjadi kesalahan pada server.";
+            const rawResponseText = await response.text();
+
             try {
-                const errorData = await response.json();
+                const errorData = JSON.parse(rawResponseText);
                 switch (response.status) {
                     case 400: errorMessage = "Format pesan tidak valid."; break;
                     case 413: errorMessage = "Pesan sudah terlalu panjang. refresh dulu yaa."; break;
@@ -93,8 +95,9 @@ export default function Assistant() {
                     case 500: errorMessage = "Waduh AInya lagi bermasalah. Coba lagi nanti."; break;
                     default: errorMessage = errorData?.error ?? "Terjadi kesalahan tidak diketahui.";
                 }
-            } catch {
-                errorMessage = "Server error. Coba lagi nanti.";
+            } catch (error) {
+                console.error("Gagal parse JSON. Respons mentah dari server:", rawResponseText);
+                errorMessage = `Server error (${response.status}). Coba lagi nanti.`;
             }
             const error = new Error(errorMessage);
             error.status = response.status;

@@ -108,7 +108,7 @@ export async function POST(req) {
         }
 
         const groq = new Groq({ apiKey: API_KEY });
-        const systemPrompt = PERSONAS[persona] ?? PERSONAS["default"];
+        const systemPrompt = body.systemPrompt ?? PERSONAS[persona] ?? PERSONAS["default"];
 
         const messages = [
             { role: "system", content: systemPrompt },

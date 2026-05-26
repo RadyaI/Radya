@@ -5,7 +5,7 @@ import { aiRateLimit } from "@/utils/ai-ratelimit";
 
 const API_KEY = process.env.GROQ_API_KEY;
 const MAX_MESSAGES = 20;
-const MAX_TOTAL_CHARS = 10_000;
+const MAX_TOTAL_CHARS = 15_000;
 
 const ALLOWED_ORIGINS = [
     "http://localhost:3000",

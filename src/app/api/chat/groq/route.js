@@ -9,6 +9,7 @@ const MAX_TOTAL_CHARS = 15_000;
 
 const ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://radya.my.id",
     "https://hrdai.radya.my.id",
     "https://tukarilmu.radya.my.id"
 ];

@@ -13,6 +13,39 @@ const ALLOWED_ORIGINS = [
     "https://tukarilmu.radya.my.id"
 ];
 
+const MODELS = [
+    "gemini-2.5-flash",
+    "gemini-2.5-flash-lite",
+];
+
+async function generateWithFallback(ai, prompt) {
+    for (const model of MODELS) {
+        try {
+            const response = await ai.models.generateContent({
+                model,
+                contents: prompt,
+            });
+            return response.text ?? "";
+        } catch (error) {
+            const shouldFallback =
+                error?.status === 429 ||
+                error?.status === 403 ||
+                error?.message?.includes("429") ||
+                error?.message?.includes("403") ||
+                error?.message?.toLowerCase().includes("quota") ||
+                error?.message?.toLowerCase().includes("billing") ||
+                error?.message?.toLowerCase().includes("permission");
+
+            if (shouldFallback && model !== MODELS.at(-1)) {
+                console.warn(`Error di ${model} (${error?.status ?? error?.message}), fallback ke model berikutnya...`);
+                continue;
+            }
+
+            throw error;
+        }
+    }
+}
+
 export async function OPTIONS(req) {
     const origin = req.headers.get("origin");
     const isAllowed = !origin || ALLOWED_ORIGINS.includes(origin);
@@ -125,13 +158,10 @@ export async function POST(req) {
 
         const ai = new GoogleGenAI({ apiKey: API_KEY });
 
-        const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash-lite",
-            contents: prompt,
-        });
+        const text = await generateWithFallback(ai, prompt);
 
         return NextResponse.json(
-            { text: response.text ?? "" },
+            { text },
             { headers: corsHeaders }
         );
 

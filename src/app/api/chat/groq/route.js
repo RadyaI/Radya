@@ -13,6 +13,41 @@ const ALLOWED_ORIGINS = [
     "https://tukarilmu.radya.my.id"
 ];
 
+const MODELS = [
+    "llama-3.3-70b-versatile",
+    "meta-llama/llama-4-scout-17b-16e-instruct",
+    "llama-3.1-8b-instant",
+];
+
+async function generateWithFallback(groq, messages) {
+    for (const model of MODELS) {
+        try {
+            const completion = await groq.chat.completions.create({
+                model,
+                messages,
+                temperature: 0.7,
+            });
+            return completion.choices[0]?.message?.content ?? "";
+        } catch (error) {
+            const shouldFallback =
+                error?.status === 429 ||
+                error?.status === 403 ||
+                error?.message?.includes("429") ||
+                error?.message?.includes("403") ||
+                error?.message?.toLowerCase().includes("quota") ||
+                error?.message?.toLowerCase().includes("billing") ||
+                error?.message?.toLowerCase().includes("permission");
+
+            if (shouldFallback && model !== MODELS.at(-1)) {
+                console.warn(`Error di ${model} (${error?.status ?? error?.message}), fallback ke model berikutnya...`);
+                continue;
+            }
+
+            throw error;
+        }
+    }
+}
+
 export async function OPTIONS(req) {
     const origin = req.headers.get("origin");
     const isAllowed = !origin || ALLOWED_ORIGINS.includes(origin);
@@ -118,14 +153,10 @@ export async function POST(req) {
             })),
         ];
 
-        const completion = await groq.chat.completions.create({
-            model: "llama-3.3-70b-versatile",
-            messages,
-            temperature: 0.7,
-        });
+        const text = await generateWithFallback(groq, messages);
 
         return NextResponse.json(
-            { text: completion.choices[0]?.message?.content ?? "" },
+            { text },
             { headers: corsHeaders }
         );
 

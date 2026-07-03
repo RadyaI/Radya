@@ -5,17 +5,40 @@ const baseUrl = 'https://radya.my.id';
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
-  title: 'Radya~🐱',
-  description: 'Personal web Muhammad Radya Iftikhar (Radya). Berisi portfolio, blog, dan project seputar web development dan software engineering.',
+  title: 'Muhammad Radya Iftikhar | Portfolio',
+  description: 'Website pribadi Muhammad Radya Iftikhar (Radya), mahasiswa Informatika. Berisi portfolio, blog, project, dan perjalanan belajar seputar software engineering, backend development, dan data engineering.',
   keywords: [
-    'Radya',
+    'Muhammad Radya Iftikhar',
     'Muhammad Radya',
-    'Muhammad Radya Iftikhar'
+    'Radya',
+    'Portfolio',
+    'Software Engineer',
+    'Backend Developer',
+    'Data Engineer',
+    'Web Developer',
   ],
-  authors: [{ name: 'Radya' }],
+  authors: [{ name: 'Muhammad Radya Iftikhar' }],
   robots: {
     index: true,
     follow: true,
+  },
+  openGraph: {
+    title: 'Muhammad Radya Iftikhar | Portfolio',
+    description:
+      'Website pribadi Muhammad Radya Iftikhar (Radya). Portfolio, blog, dan project.',
+    url: baseUrl,
+    siteName: 'Radya',
+    locale: 'id_ID',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Muhammad Radya Iftikhar | Portfolio',
+    description:
+      'Website pribadi Muhammad Radya Iftikhar.',
+  },
+  alternates: {
+    canonical: '/',
   },
 };
 

@@ -13,7 +13,9 @@ const ALLOWED_ORIGINS = [
     "https://hrdai.radya.my.id",
     "https://tukarilmu.radya.my.id",
     "https://tebakaku.radya.my.id",
-    "https://tebakaku.vercel.app"
+    "https://tebakaku.vercel.app",
+    "https://balesari.radya.my.id",
+    "https://potensi.balesari.id",
 ];
 
 const MODELS = [

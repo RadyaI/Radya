@@ -16,6 +16,7 @@ const ALLOWED_ORIGINS = [
     "https://tebakaku.vercel.app",
     "https://balesari.radya.my.id",
     "https://potensi.balesari.id",
+    "https://umkm.balesari.id"
 ];
 
 const MODELS = [

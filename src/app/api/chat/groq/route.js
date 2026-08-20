@@ -16,12 +16,14 @@ const ALLOWED_ORIGINS = [
     "https://tebakaku.vercel.app",
     "https://balesari.radya.my.id",
     "https://potensi.balesari.id",
+    "https://umkm.balesari.id"
+
 ];
 
 const MODELS = [
-    "llama-3.3-70b-versatile",
-    "meta-llama/llama-4-scout-17b-16e-instruct",
-    "llama-3.1-8b-instant",
+  "openai/gpt-oss-120b", // ganti dari llama-3.3-70b-versatile
+  "openai/gpt-oss-20b",
+  "qwen/qwen3.6-27b"
 ];
 
 async function generateWithFallback(groq, messages) {

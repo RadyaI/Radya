@@ -17,7 +17,7 @@ const ALLOWED_ORIGINS = [
     "https://balesari.radya.my.id",
     "https://potensi.balesari.id",
     "https://umkm.balesari.id",
-    "https://balesari.online/"
+    "https://balesari.online"
 
 ];
 

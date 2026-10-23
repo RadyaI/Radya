@@ -1,115 +1,165 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import {
-    Wrench,
-    Home,
-    User,
-    Globe,
-    Briefcase,
-    Mail,
-    BookOpen
-} from "lucide-react";
-import Loader from "./loader";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { Wrench, Home, User, Globe, Briefcase, Mail, BookOpen } from "lucide-react";
+import Loader from "./loader";
 
-export default function Menu({ onLeftSelectChange, onRightSelectChange }) {
+const LEFT_ITEMS = [
+  { val: "1", label: "HOME", Icon: Home },
+  { val: "2", label: "ABOUT", Icon: User },
+  { val: "3", label: "BLOG", Icon: Globe },
+];
 
-    const [leftSelect, setLeftSelect] = useState("1");
-    const [rightSelect, setRightSelect] = useState("1");
-    const [isLoad, setIsLoad] = useState(false);
+const RIGHT_ITEMS = [
+  { val: "1", label: "WORK", Icon: Briefcase },
+  { val: "2", label: "MAIL", Icon: Mail },
+  { val: "3", label: "GUEST", Icon: BookOpen },
+];
 
-    const router = useRouter();
+/* nav mobile: anchor ke section di dashboard */
+const MOBILE_ITEMS = [
+  { href: "#home", label: "HOME", Icon: Home },
+  { href: "#about", label: "ABOUT", Icon: User },
+  { href: "#blog", label: "BLOG", Icon: Globe },
+  { href: "#project", label: "WORK", Icon: Briefcase },
+  { href: "#contact", label: "MAIL", Icon: Mail },
+  { href: "#guestbook", label: "GUEST", Icon: BookOpen },
+];
 
-    const handleSelect = (side, val) => {
-        setIsLoad(true);
-        setTimeout(() => setIsLoad(false), 800);
+const Squiggle = ({ className = "" }) => (
+  <svg viewBox="0 0 60 8" className={className} fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
+    <path d="M2 5 C 8 0, 12 8, 18 4 S 28 0, 34 4 S 46 8, 58 3" />
+  </svg>
+);
 
-        if (side === 'left') {
-            setLeftSelect(val);
-            onLeftSelectChange(val);
-        } else {
-            setRightSelect(val);
-            onRightSelectChange(val);
-        }
-    };
+function NavButton({ item, index, active, onClick }) {
+  const { label, Icon } = item;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      aria-label={label}
+      className={`group relative flex min-h-[40px] w-full flex-1 basis-0 cursor-pointer flex-col items-center justify-center gap-0.5 border-2 border-black font-mono text-[10px] font-black uppercase tracking-wider transition-all duration-150 [@media(min-height:820px)]:max-h-[68px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dashed focus-visible:outline-black ${
+        active
+          ? "-rotate-2 bg-black text-white"
+          : "bg-white text-black hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_#000] active:translate-x-0 active:translate-y-0 active:shadow-none"
+      }`}
+    >
+      <span className={`absolute left-1 top-0.5 text-[8px] font-bold [@media(max-height:760px)]:hidden ${active ? "text-white/70" : "text-black/50"}`}>
+        0{index + 1}
+      </span>
+      <Icon className="h-5 w-5 shrink-0 stroke-[2.5px] transition-transform group-hover:scale-110" />
+      <span className="[@media(max-height:700px)]:hidden">{label}</span>
+      {active && (
+        <Squiggle className="absolute -bottom-2 left-1/2 w-9 -translate-x-1/2 text-black [@media(max-height:760px)]:hidden" />
+      )}
+    </button>
+  );
+}
 
-    const getBtnClass = (isActive, side) => {
-        const base = "group relative w-full h-12 flex flex-col justify-center items-center transition-all duration-200 cursor-pointer";
+function Group({ title, items, current, onPick }) {
+  return (
+    <div className="flex min-h-0 w-full flex-1 flex-col justify-center gap-2 px-2">
+      <p className="shrink-0 border-b-2 border-black pb-0.5 text-center font-mono text-[9px] font-black uppercase tracking-[0.2em]">
+        {title}
+      </p>
+      {items.map((item, i) => (
+        <NavButton
+          key={item.val}
+          item={item}
+          index={i}
+          active={current === item.val}
+          onClick={() => onPick(item.val)}
+        />
+      ))}
+    </div>
+  );
+}
 
-        const activeColor = side === 'left'
-            ? "bg-blue-100 text-black border-l-4 border-black font-bold"
-            : "bg-purple-100 text-black border-r-4 border-black font-bold";
+export default function Menu({
+  left = "1",
+  right = "1",
+  onLeftSelectChange,
+  onRightSelectChange,
+}) {
+  const [isLoad, setIsLoad] = useState(false);
+  const timer = useRef(null);
 
-        const inactiveColor = "text-gray-400 hover:text-black hover:bg-black/5";
+  useEffect(() => () => clearTimeout(timer.current), []);
 
-        return `${base} ${isActive ? activeColor : inactiveColor}`;
-    };
+  const handleSelect = (side, val) => {
+    const current = side === "left" ? left : right;
+    if (val === current) return;
 
-    return (
-        <>
-            {isLoad && <Loader />}
+    setIsLoad(true);
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setIsLoad(false), 800);
 
-            <div className="cursor-default w-[80px] h-[85vh] flex flex-col justify-between items-center py-4 bg-[#f4f1ea] border-2 border-black z-50 max-[700px]:hidden rounded-xl mx-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+    if (side === "left") onLeftSelectChange?.(val);
+    else onRightSelectChange?.(val);
+  };
 
-                <div className="w-full flex flex-col gap-6 items-center justify-center flex-1 border-b-2 border-dashed border-gray-400">
+  return (
+    <>
+      {isLoad && <Loader />}
 
-                    <div className={getBtnClass(leftSelect === "1", 'left')} onClick={() => handleSelect('left', "1")}>
-                        <Home className="w-5 h-5 mb-1 group-hover:scale-110 transition-transform stroke-[2px]" />
-                        <span className="text-[10px] font-bold tracking-wider font-mono">HOME</span>
-                    </div>
+      {/* ===== DESKTOP: strip vertikal di tengah ===== */}
+      <nav
+        aria-label="Navigasi utama"
+        className="relative z-50 flex min-h-0 w-[92px] shrink-0 cursor-default flex-col items-center self-stretch border-4 border-black bg-white py-3 shadow-[8px_8px_0_0_#000] max-md:hidden"
+      >
+        <Group title="◀ L" items={LEFT_ITEMS} current={left} onPick={(v) => handleSelect("left", v)} />
 
-                    <div className={getBtnClass(leftSelect === "2", 'left')} onClick={() => handleSelect('left', "2")}>
-                        <User className="w-5 h-5 mb-1 group-hover:scale-110 transition-transform stroke-[2px]" />
-                        <span className="text-[10px] font-bold tracking-wider font-mono">ABOUT</span>
-                    </div>
+        {/* tombol tools: pusat strip */}
+        <div className="relative my-2 flex w-full shrink-0 items-center justify-center">
+          <span aria-hidden className="absolute inset-x-0 top-1/2 h-[3px] bg-black" />
+          <Link
+            href="/tools"
+            aria-label="Buka halaman tools"
+            className="group relative z-10 -rotate-6 border-4 border-black bg-black p-3 text-white transition-all duration-150 hover:rotate-0 hover:bg-white hover:text-black hover:shadow-[4px_4px_0_0_#000] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dashed focus-visible:outline-black"
+          >
+            <Wrench className="h-5 w-5 stroke-[2.5px] transition-transform duration-300 group-hover:rotate-45" />
 
-                    <div className={getBtnClass(leftSelect === "3", 'left')} onClick={() => handleSelect('left', "3")}>
-                        <Globe className="w-5 h-5 mb-1 group-hover:scale-110 transition-transform stroke-[2px]" />
-                        <span className="text-[10px] font-bold tracking-wider font-mono">BLOG</span>
-                    </div>
+            {/* sticker tooltip */}
+            <span className="pointer-events-none absolute left-full top-1/2 z-[60] ml-4 w-max -translate-x-2 -translate-y-1/2 rotate-3 border-2 border-black bg-white px-2 py-1 font-mono text-[10px] font-black uppercase tracking-widest text-black opacity-0 shadow-[3px_3px_0_0_#000] transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100">
+              tools /// jangan dipencet*
+            </span>
+          </Link>
+        </div>
 
-                </div>
+        <Group title="R ▶" items={RIGHT_ITEMS} current={right} onPick={(v) => handleSelect("right", v)} />
+      </nav>
 
-                <Link
-                    href="/tools"
-                    className="relative group my-3 p-3 rounded-lg border-2 border-transparent hover:border-black hover:bg-yellow-300 hover:shadow-[2px_2px_0px_0px_black] transition-all duration-200 text-gray-500 hover:text-black cursor-pointer block hover:-rotate-3"
-                >
-                    <Wrench className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300 stroke-[2.5px]" />
-
-                    <div className="absolute left-full top-1/2 -translate-y-1/2 ml-4 w-max opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300 pointer-events-none z-[60]">
-
-                        <div className="relative px-2 py-1 bg-yellow-300 text-black border border-black text-[9px] font-black tracking-widest shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                            TOOLS
-
-                            <div className="absolute top-1/2 -translate-y-1/2 -left-[6px] w-0 h-0 border-t-[6px] border-b-[6px] border-r-[6px] border-t-transparent border-b-transparent border-r-black"></div>
-                            <div className="absolute top-1/2 -translate-y-1/2 -left-[5px] w-0 h-0 border-t-[5px] border-b-[5px] border-r-[5px] border-t-transparent border-b-transparent border-r-yellow-300"></div>
-                        </div>
-
-                    </div>
-                </Link>
-
-                <div className="w-full flex flex-col gap-6 items-center justify-center flex-1 border-t-2 border-dashed border-gray-400">
-
-                    <div className={getBtnClass(rightSelect === "1", 'right')} onClick={() => handleSelect('right', "1")}>
-                        <Briefcase className="w-5 h-5 mb-1 group-hover:scale-110 transition-transform stroke-[2px]" />
-                        <span className="text-[10px] font-bold tracking-wider font-mono">WORK</span>
-                    </div>
-
-                    <div className={getBtnClass(rightSelect === "2", 'right')} onClick={() => handleSelect('right', "2")}>
-                        <Mail className="w-5 h-5 mb-1 group-hover:scale-110 transition-transform stroke-[2px]" />
-                        <span className="text-[10px] font-bold tracking-wider font-mono">MAIL</span>
-                    </div>
-
-                    <div className={getBtnClass(rightSelect === "3", 'right')} onClick={() => handleSelect('right', "3")}>
-                        <BookOpen className="w-5 h-5 mb-1 group-hover:scale-110 transition-transform stroke-[2px]" />
-                        <span className="text-[10px] font-bold tracking-wider font-mono">GUEST</span>
-                    </div>
-
-                </div>
-
-            </div>
-        </>
-    );
+      {/* ===== MOBILE: bottom bar ===== */}
+      <nav
+        aria-label="Navigasi mobile"
+        className="fixed inset-x-0 bottom-0 z-50 border-t-4 border-black bg-white pb-[env(safe-area-inset-bottom)] md:hidden"
+      >
+        <ul className="grid grid-cols-7">
+          {MOBILE_ITEMS.map(({ href, label, Icon }) => (
+            <li key={href} className="border-r-2 border-black">
+              <a
+                href={href}
+                className="flex h-14 flex-col items-center justify-center gap-0.5 font-mono text-[8px] font-black uppercase active:bg-black active:text-white"
+              >
+                <Icon className="h-4 w-4 stroke-[2.5px]" />
+                {label}
+              </a>
+            </li>
+          ))}
+          <li>
+            <Link
+              href="/tools"
+              className="flex h-14 flex-col items-center justify-center gap-0.5 bg-black font-mono text-[8px] font-black uppercase text-white active:bg-white active:text-black"
+            >
+              <Wrench className="h-4 w-4 stroke-[2.5px]" />
+              TOOLS
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    </>
+  );
 }

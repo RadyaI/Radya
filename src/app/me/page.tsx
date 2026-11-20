@@ -3,64 +3,112 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, Plus } from "lucide-react";
 import foto from "@/assets/foto2.jpg";
+import ViewCounter from "@/components/me/ViewCounter";
 
 export const metadata: Metadata = {
-  title: "Me | Radya",
+  title: "Me",
   description:
-    "Sedikit lebih personal soal Radya: lagi ngapain, suka apa, dan proyek-proyek iseng yang dibuat di luar jam kuliah.",
+    "Informatics student at UMM currently focused on Data Engineering: journey, projects, and things beyond the screen.",
   alternates: { canonical: "/me" },
 };
 
 /* ====== DATA (edit di sini aja) ====== */
 const FACTS: [string, string][] = [
-  ["Nama", "Muhammad Radya Iftikhar"],
-  ["Panggilan", "Radya"],
-  ["Domisili", "Malang, Indonesia"],
-  ["Status", "Mahasiswa Informatika"],
-  ["Minat", "Data Engineering"],
-  ["Motto", "“In This Economy?”"],
-  ["Bahan bakar", "Ngoding apa aja dah"],
+  ["Name", "Muhammad Radya Iftikhar"],
+  ["Nickname", "Radya"],
+  ["Location", "Malang, Indonesia"],
+  ["University", "Universitas Muhammadiyah Malang"],
+  ["Status", "Informatics student, 5th semester"],
+  ["Focus", "Data Engineering"],
 ];
 
 const NOW = [
-  "Belajar data pipeline dan ETL, pelan-pelan tapi konsisten.",
-  "Merapikan personal web ini, sekarang versi tanpa warna.",
-  "Mendalami SQL supaya nggak cuma SELECT *.",
+  "Studying, while working as an Informatics laboratory assistant.",
+  "Focusing on Data Engineering, while trying out Machine Learning.",
+  "Looking for industry experience through an internship.",
 ];
 
-const LIKES = ["Kucing", "BMW", "Bikin tools aneh yang nggak diminta siapa-siapa", "Data yang rapi", "Kopi sambil debugging"];
-const DISLIKES = ["Bug yang cuma muncul di production", "Variabel bernama data2_final_fix", "Deploy hari Jumat", "Spreadsheet dengan merge cell berlebihan"];
+const JOURNEY = [
+  {
+    when: "Nov 2022 - Apr 2023",
+    title: "Junior SEO Specialist Intern",
+    note: "PT Ozami Inti Sinergi.",
+  },
+  {
+    when: "2025 - present",
+    title: "Informatics Laboratory Assistant",
+    note: "Universitas Muhammadiyah Malang.",
+  },
+];
 
-const BUGS = [
-  { id: "001", title: "Bilang “sebentar lagi selesai” padahal masih setengah", status: "Won’t fix" },
-  { id: "002", title: "Mulai proyek baru sebelum yang lama kelar", status: "Known issue" },
-  { id: "003", title: "Ketemu kucing, produktivitas turun 80%", status: "Feature" },
-  { id: "004", title: "Dependency di package.json terus bertambah", status: "In progress" },
+const EXPLORED: [string, string][] = [
+  ["Web", "Next.js, React, Tailwind CSS"],
+  ["Mobile", "React Native, Expo"],
+  ["Backend & DB", "Firebase, Firestore, Supabase"],
+  ["Languages", "JavaScript, Python"],
+  ["AI", "Gemini and Groq integration, Machine Learning exploration"],
+];
+
+const PROJECTS = [
+  {
+    title: "AI HRD Simulator",
+    tag: "Exploration",
+    desc: "Exploration of an AI-based job interview simulation app.",
+    link: "https://github.com/RadyaI/hrdai",
+  },
+  {
+    title: "Kompresin",
+    tag: "Desktop app",
+    desc: "Desktop app built with Python and FFmpeg for media compression.",
+    link: "https://github.com/RadyaI/kompresin",
+  },
+  {
+    title: "Axon",
+    tag: "Data Visualization",
+    desc: "Teacher dashboard for monitoring students' focus levels using pose estimation and facial pattern detection.",
+    link: "https://github.com/RadyaI/axon-be",
+  },
+];
+
+const INTERESTS: [string, string][] = [
+  ["Automotive", "Especially the world of cars."],
+  ["Reptiles and Amphibians", "I have a leopard gecko and a pacman frog."],
+  ["K-Drama", "I like movies about law, lawyers, and courtroom trials and stuff like that"],
+  ["Comics & novels", "Haven't read that many yet, honestly"],
+  ["Technology", "And exploring new things."],
+];
+
+const RABBIT_HOLES = [
+  { href: "/tools", label: "Tools", note: "Small tools: crypto, QR, PDF signing" },
+  { href: "/isthismap", label: "Isthismap", note: "Absurd geography experiments" },
+  { href: "/tools/signpdf", label: "Sign PDF", note: "Sign or password-protect your PDF" },
+  { href: "/quiz", label: "Quiz", note: "Self-made quizzes" },
+  { href: "/learning", label: "Learning", note: "Study plans and journal" },
 ];
 
 const FAQ = [
   {
-    q: "Kenapa webnya hitam putih?",
-    a: "Awalnya warna-warni dan terasa seperti portfolio UI/UX. Minatku sekarang data engineering, jadi aku ingin tampilan yang lebih tenang dan presisi, seperti diagram pipeline.",
+    q: "What are you focusing on?",
+    a: "Data Engineering. Besides that, I'm also interested in Data Science and Machine Learning.",
   },
   {
-    q: "Kenapa banyak tools dan game aneh?",
-    a: "Karena belajar paling cepat saat lagi iseng. Hampir semuanya lahir dari pikiran “kayaknya seru kalau ada ini”, lalu jadi.",
+    q: "Are you already working as a Data Engineer?",
+    a: "Not yet. Data Engineering is still the direction I'm learning toward and aiming for in my career. That's why I'm currently looking for industry experience through an internship.",
   },
   {
-    q: "Boleh diajak kolaborasi atau ngobrol?",
-    a: "Boleh banget. Kirim email atau tulis di guestbook di halaman utama.",
+    q: "Since when have you been coding?",
+    a: "Since vocational high school in 2021, and it has continued through university.",
+  },
+  {
+    q: "How can I contact Radya?",
+    a: "Through the email at the bottom of this page, or through Instagram, LinkedIn, and GitHub.",
   },
 ];
 
-const RABBIT_HOLES = [
-  { href: "/tools", label: "Tools", note: "Alat kecil: crypto, QR, sign PDF" },
-  { href: "/isthismap", label: "Isthismap", note: "Eksperimen geografi absurd" },
-  { href: "/3d", label: "3D", note: "Mini game 3D" },
-  { href: "/cat", label: "Cat", note: "Ya, soal kucing" },
-  { href: "/bmw", label: "BMW", note: "Ya, soal BMW" },
-  { href: "/quiz", label: "Quiz", note: "Kuis buatan sendiri" },
-  { href: "/learning", label: "Learning", note: "Rencana belajar dan jurnal" },
+const SOCIALS = [
+  { href: "https://instagram.com/radyaif", label: "Instagram" },
+  { href: "https://linkedin.com/in/radyaa", label: "LinkedIn" },
+  { href: "https://github.com/radyai", label: "GitHub" },
 ];
 
 /* ====== util ====== */
@@ -101,12 +149,12 @@ export default function MePage() {
       <div className="mx-auto w-full max-w-[1400px] p-3 md:p-5">
         {/* ===== top bar ===== */}
         <nav
-          aria-label="Navigasi halaman"
+          aria-label="Page navigation"
           className="mb-3 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.12em]"
         >
           <Link href="/" className={`flex items-center gap-1.5 hover:underline ${FOCUS}`}>
             <ArrowLeft className="h-3 w-3 stroke-[3px]" aria-hidden />
-            Kembali
+            Back
           </Link>
           <span className="hidden sm:inline">Personal Index</span>
           <span className="tabular-nums">Radya / 2026</span>
@@ -117,7 +165,7 @@ export default function MePage() {
           {/* hero */}
           <header className="flex min-w-0 flex-col justify-between gap-8 bg-white p-4 lg:col-span-8">
             <div className="flex justify-between text-[10px] font-bold uppercase tracking-[0.12em]">
-              <span>Tentang / Me</span>
+              <span>About / Me</span>
               <span className="tabular-nums">00</span>
             </div>
             <div>
@@ -127,8 +175,8 @@ export default function MePage() {
                 Iftikhar.
               </h1>
               <p className="mt-6 max-w-[36rem] text-base font-medium leading-tight tracking-[-0.01em] md:text-lg">
-                Halaman yang lebih santai dari portfolio. Tanpa jargon, hanya sedikit soal siapa Radya di luar
-                kode: lagi ngapain, suka apa, dan bug apa saja yang masih ada.
+                Informatics student at UMM, currently focused on Data Engineering. This page is a more personal
+                version of the portfolio: the journey, and everything besides college, basically.
               </p>
             </div>
           </header>
@@ -137,7 +185,7 @@ export default function MePage() {
           <figure className="relative min-h-[22rem] bg-white lg:col-span-4 lg:col-start-9 lg:row-span-2 lg:row-start-1 lg:min-h-0">
             <Image
               src={foto}
-              alt="Foto Radya"
+              alt="Photo of Radya"
               fill
               priority
               sizes="(min-width: 1024px) 33vw, 100vw"
@@ -149,7 +197,7 @@ export default function MePage() {
           </figure>
 
           {/* fakta */}
-          <Cell no="01" title="Fakta singkat" id="me-facts" className="lg:col-span-4">
+          <Cell no="01" title="Quick facts" id="me-facts" className="lg:col-span-4">
             <dl>
               {FACTS.map(([k, v]) => (
                 <div key={k} className="grid grid-cols-[6.5rem_1fr] gap-x-3 border-b border-black py-1.5 last:border-0">
@@ -161,7 +209,7 @@ export default function MePage() {
           </Cell>
 
           {/* now */}
-          <Cell no="02" title="Lagi ngapain" id="me-now" className="lg:col-span-4">
+          <Cell no="02" title="Currently" id="me-now" className="lg:col-span-4">
             <ol>
               {NOW.map((n, i) => (
                 <li key={n} className="grid grid-cols-[2.25rem_1fr] items-start gap-x-3 border-b border-black py-2 last:border-0">
@@ -170,58 +218,88 @@ export default function MePage() {
                 </li>
               ))}
             </ol>
-            <p className="mt-2 text-[10px] tabular-nums">Diperbarui Okt 2026.</p>
+            <p className="mt-2 text-[10px] tabular-nums">Updated Nov 2026.</p>
           </Cell>
 
-          {/* suka */}
-          <Cell no="03" title="Suka" id="me-likes" className="lg:col-span-3">
+          {/* perjalanan */}
+          <Cell no="03" title="Experience" id="me-journey" className="lg:col-span-7">
+            <ol>
+              {JOURNEY.map((j) => (
+                <li
+                  key={j.title}
+                  className="grid grid-cols-[6.5rem_1fr] gap-x-3 border-b border-black py-2 last:border-0"
+                >
+                  <span className="text-[10px] font-bold uppercase leading-tight tracking-[0.1em] tabular-nums">
+                    {j.when}
+                  </span>
+                  <div>
+                    <p className="font-bold tracking-[-0.01em]">{j.title}</p>
+                    {j.note && <p className="mt-0.5 leading-snug">{j.note}</p>}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </Cell>
+
+          {/* pernah dieksplorasi */}
+          <Cell no="04" title="Explored" id="me-explored" className="lg:col-span-5">
+            <dl>
+              {EXPLORED.map(([k, v]) => (
+                <div key={k} className="grid grid-cols-[6.5rem_1fr] gap-x-3 border-b border-black py-1.5 last:border-0">
+                  <dt className="text-[10px] font-bold uppercase tracking-[0.1em]">{k}</dt>
+                  <dd>{v}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-2 text-[10px]">
+              A list of things I&apos;ve studied and tried. Experience levels vary.
+            </p>
+          </Cell>
+
+          {/* proyek */}
+          <Cell no="05" title="Projects" id="me-projects" className="lg:col-span-7">
             <ul>
-              {LIKES.map((l) => (
-                <li key={l} className="border-b border-black py-1.5 last:border-0">
-                  {l}
+              {PROJECTS.map((p, i) => (
+                <li
+                  key={p.title}
+                  className="grid grid-cols-[2rem_1fr_auto] items-baseline gap-x-3 border-b border-black py-2 last:border-0"
+                >
+                  <span className="text-[10px] font-bold tabular-nums">{pad(i + 1)}</span>
+                  <h3 className="text-lg font-bold leading-none tracking-[-0.03em]">{p.title}</h3>
+                  <span className="text-[10px] font-bold uppercase tracking-[0.06em]">{p.tag}</span>
+                  <p className="col-span-2 col-start-2 mt-1 leading-snug">{p.desc}</p>
+                  <a
+                    href={p.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${p.title} on GitHub`}
+                    className={`group col-span-2 col-start-2 mt-2 inline-flex items-center gap-1 justify-self-start border-2 border-black px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] transition-colors hover:bg-black hover:text-white ${FOCUS}`}
+                  >
+                    GitHub
+                    <ArrowUpRight
+                      className="h-3 w-3 stroke-[3px] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                      aria-hidden
+                    />
+                  </a>
                 </li>
               ))}
             </ul>
           </Cell>
 
-          {/* tidak suka */}
-          <Cell no="04" title="Tidak suka" id="me-dislikes" className="lg:col-span-3">
+          {/* di luar kode */}
+          <Cell no="06" title="Beyond code" id="me-interests" className="lg:col-span-5">
             <ul>
-              {DISLIKES.map((d) => (
-                <li key={d} className="border-b border-black py-1.5 last:border-0">
-                  {d}
+              {INTERESTS.map(([k, note]) => (
+                <li key={k} className="border-b border-black py-1.5 last:border-0">
+                  <span className="font-bold tracking-[-0.01em]">{k}</span>
+                  {note && <span className="block text-[12px]">{note}</span>}
                 </li>
               ))}
             </ul>
-          </Cell>
-
-          {/* bugs */}
-          <Cell no="05" title="Known bugs" id="me-bugs" className="lg:col-span-6">
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[26rem] border-collapse text-left">
-                <caption className="sr-only">Daftar bug yang masih ada pada diri Radya</caption>
-                <thead>
-                  <tr className="text-[10px] uppercase tracking-[0.1em]">
-                    <th scope="col" className="w-10 pb-1.5 pr-3 font-bold">ID</th>
-                    <th scope="col" className="pb-1.5 pr-3 font-bold">Masalah</th>
-                    <th scope="col" className="w-24 pb-1.5 text-right font-bold">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {BUGS.map((b) => (
-                    <tr key={b.id} className="border-t border-black">
-                      <td className="py-1.5 pr-3 font-bold tabular-nums">{b.id}</td>
-                      <td className="py-1.5 pr-3">{b.title}</td>
-                      <td className="py-1.5 text-right text-[10px] font-bold uppercase tracking-[0.06em]">{b.status}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
           </Cell>
 
           {/* rabbit holes */}
-          <Cell no="06" title="Rabbit holes" id="me-holes" className="lg:col-span-7">
+          <Cell no="07" title="Rabbit holes" id="me-holes" className="lg:col-span-7">
             <ul>
               {RABBIT_HOLES.map((r, i) => (
                 <li key={r.href} className="border-b border-black last:border-0">
@@ -245,7 +323,7 @@ export default function MePage() {
           </Cell>
 
           {/* faq */}
-          <Cell no="07" title="FAQ" id="me-faq" className="lg:col-span-5">
+          <Cell no="08" title="FAQ" id="me-faq" className="lg:col-span-5">
             <div>
               {FAQ.map((f, i) => (
                 <details key={f.q} className="group border-b border-black last:border-0">
@@ -268,10 +346,10 @@ export default function MePage() {
           </Cell>
 
           {/* kontak: satu-satunya sel hitam sebagai jangkar */}
-          <footer className="flex min-w-0 flex-col justify-between gap-8 bg-black p-4 text-white lg:col-span-12 lg:flex-row lg:items-end">
-            <div className="flex gap-6 text-[10px] font-bold uppercase tracking-[0.12em] lg:flex-col lg:gap-1">
-              <span>Kontak</span>
-              <span className="tabular-nums">08</span>
+          <footer className="flex min-w-0 flex-col gap-8 bg-black p-4 text-white lg:col-span-12">
+            <div className="flex justify-between text-[10px] font-bold uppercase tracking-[0.12em]">
+              <span>Contact</span>
+              <span className="tabular-nums">09</span>
             </div>
             <a
               href="mailto:radyaiftikhar@gmail.com"
@@ -279,9 +357,27 @@ export default function MePage() {
             >
               radyaiftikhar@gmail.com
             </a>
-            <div className="text-[10px] font-bold uppercase tracking-[0.12em] tabular-nums lg:text-right">
-              <p>Malang, ID</p>
-              <p>© 2026</p>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <ul className="flex flex-wrap gap-x-6 gap-y-1 text-[10px] font-bold uppercase tracking-[0.12em]">
+                {SOCIALS.map((s) => (
+                  <li key={s.href}>
+                    <a
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 hover:underline focus-visible:outline-2 focus-visible:outline-white"
+                    >
+                      {s.label}
+                      <ArrowUpRight className="h-3 w-3 stroke-[3px]" aria-hidden />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <div className="text-[10px] font-bold uppercase tracking-[0.12em] tabular-nums sm:text-right">
+                <p>Malang, ID</p>
+                <p>© 2026</p>
+                <ViewCounter />
+              </div>
             </div>
           </footer>
         </div>
